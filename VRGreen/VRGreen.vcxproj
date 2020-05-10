@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ApiAvatar.cpp" />
+    <ClCompile Include="ApiWorld.cpp" />
+    <ClCompile Include="ApiWorldInstance.cpp" />
+    <ClCompile Include="Application.cpp" />
+    <ClCompile Include="ArrayList.cpp" />
+    <ClCompile Include="Assembly-CSharp\VRCUiManager.cpp" />
+    <ClCompile Include="Button.cpp" />
+    <ClCompile Include="ButtonAPI.cpp" />
+    <ClCompile Include="ButtonClickedEvent.cpp" />
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Collider.cpp" />
+    <ClCompile Include="Color.cpp" />
+    <ClCompile Include="Common.cpp" />
+    <ClCompile Include="ConsoleUtils.cpp" />
+    <ClCompile Include="Discord.cpp" />
+    <ClCompile Include="DiscordRPC\discord-rpc-master\src\connection_win.cpp" />
+    <ClCompile Include="DiscordRPC\discord-rpc-master\src\discord_register_win.cpp" />
+    <ClCompile Include="DiscordRPC\discord-rpc-master\src\discord_rpc.cpp" />
+    <ClCompile Include="DiscordRPC\discord-rpc-master\src\rpc_connection.cpp" />
+    <ClCompile Include="DiscordRPC\discord-rpc-master\src\serialization.cpp" />
+    <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="Graphic.cpp" />
+    <ClCompile Include="Hack.cpp" />
+    <ClCompile Include="IL2CPP\IL2CPP.cpp" />
+    <ClCompile Include="MethodBase.cpp" />
+    <ClCompile Include="Misc.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="QuickMenu.cpp" />
+    <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="RoomManagerBase.cpp" />
+    <ClCompile Include="Selectable.cpp" />
+    <ClCompile Include="Text.cpp" />
+    <ClCompile Include="Time.cpp" />
+    <ClCompile Include="UnityAction.cpp" />
+    <ClCompile Include="UnityEngine\Component.cpp" />
+    <ClCompile Include="UnityEngine\Object.cpp" />
+    <ClCompile Include="UnityEngine\Transform.cpp" />
+    <ClCompile Include="UnityEngine\Vector3.cpp" />
+    <ClCompile Include="UnityEvent.cpp" />
+    <ClCompile Include="VRCPlayer.cpp" />
+    <ClCompile Include="VRCPlayerApi.cpp" />
+    <ClCompile Include="VRCQuickMenu.cpp" />
+    <ClCompile Include="VRCSocialMenu.cpp" />
+    <ClCompile Include="VRCUiPage.cpp" />
+    <ClCompile Include="VRCUiPopupManager.cpp" />
+    <ClCompile Include="VRC\Core\APIUser.cpp" />
+    <ClCompile Include="VRC\PlayerManager.cpp" />
+    <ClCompile Include="VRC\SDKBase\Networking.cpp" />
+    <ClCompile Include="VRC_EventHandler.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ApiAvatar.hpp" />
+    <ClInclude Include="ApiWorld.hpp" />
+    <ClInclude Include="ApiWorldInstance.hpp" />
+    <ClInclude Include="Application.hpp" />
+    <ClInclude Include="ArrayList.hpp" />
+    <ClInclude Include="Button.hpp" />
+    <ClInclude Include="ButtonAPI.hpp" />
+    <ClInclude Include="ButtonClickedEvent.h" />
+    <ClInclude Include="Camera.hpp" />
+    <ClInclude Include="CDetour.hpp" />
+    <ClInclude Include="Collider.hpp" />
+    <ClInclude Include="Color.hpp" />
+    <ClInclude Include="Discord.hpp" />
+    <ClInclude Include="DiscordRPC\discord-rpc-master\src\backoff.h" />
+    <ClInclude Include="DiscordRPC\discord-rpc-master\src\rpc_connection.h" />
+    <ClInclude Include="DiscordRPC\discord-rpc-master\src\serialization.h" />
+    <ClInclude Include="Graphic.hpp" />
+    <ClInclude Include="Hack.hpp" />
+    <ClInclude Include="HardOffsets.hpp" />
+    <ClInclude Include="Input.hpp" />
+    <ClInclude Include="json.hpp" />
+    <ClInclude Include="List.hpp" />
+    <ClInclude Include="Assembly-CSharp\VRCUiManager.hpp" />
+    <ClInclude Include="Common.hpp" />
+    <ClInclude Include="ConsoleColor.h" />
+    <ClInclude Include="ConsoleUtils.hpp" />
+    <ClInclude Include="detours\detours.h" />
+    <ClInclude Include="detours\detver.h" />
+    <ClInclude Include="detours\syelog.h" />
+    <ClInclude Include="IL2CPP\IL2CPP.hpp" />
+    <ClInclude Include="MethodBase.hpp" />
+    <ClInclude Include="Misc.hpp" />
+    <ClInclude Include="ProperBitConverter.hpp" />
+    <ClInclude Include="QuickMenu.hpp" />
+    <ClInclude Include="RectTransform.hpp" />
+    <ClInclude Include="Renderer.hpp" />
+    <ClInclude Include="RoomManagerBase.hpp" />
+    <ClInclude Include="Selectable.hpp" />
+    <ClInclude Include="sha1.hpp" />
+    <ClInclude Include="Text.hpp" />
+    <ClInclude Include="Time.hpp" />
+    <ClInclude Include="Types.hpp" />
+    <ClInclude Include="UnityAction.hpp" />
+    <ClInclude Include="UnityEngine\Component.hpp" />
+    <ClInclude Include="UnityEngine\GameObject.hpp" />
+    <ClInclude Include="UnityEngine\Object.hpp" />
+    <ClInclude Include="UnityEngine\Quaternion.hpp" />
+    <ClInclude Include="UnityEngine\Transform.hpp" />
+    <ClInclude Include="UnityEngine\Vector3.hpp" />
+    <ClInclude Include="UnityEvent.h" />
+    <ClInclude Include="UserInteractMenu.hpp" />
+    <ClInclude Include="Utils\http.h" />
+    <ClInclude Include="Utils\Offsets.h" />
+    <ClInclude Include="Variables.hpp" />
+    <ClInclude Include="VRCPlayer.hpp" />
+    <ClInclude Include="VRCPlayerApi.h" />
+    <ClInclude Include="VRCQuickMenu.hpp" />
+    <ClInclude Include="VRCSocialMenu.hpp" />
+    <ClInclude Include="VRCUiPage.hpp" />
+    <ClInclude Include="VRCUiPopupManager.hpp" />
+    <ClInclude Include="VRCUiShadowPlate.hpp" />
+    <ClInclude Include="VRC\Core\APIUser.hpp" />
+    <ClInclude Include="VRC\Player.h" />
+    <ClInclude Include="VRC\PlayerManager.hpp" />
+    <ClInclude Include="VRC\SDKBase\Networking.hpp" />
+    <ClInclude Include="VRC_EventHandler.hpp" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <ProjectGuid>{6677DE96-ECC5-4AB6-9492-8FD77D305902}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>VRGreen</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>C:\Program Files (x86)\Steam\steamapps\common\VRChat\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>C:\Program Files (x86)\Steam\steamapps\common\VRChat\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>C:\Program Files (x86)\Steam\steamapps\common\VRChat\</OutDir>
+    <IncludePath>T:\IL2CPP\VRGreen\VRGreen\DiscordRPC\discord-rpc-master\src;T:\IL2CPP\VRGreen\VRGreen\DiscordRPC\discord-rpc-master\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>C:\Program Files (x86)\Steam\steamapps\common\VRChat\</OutDir>
+    <IncludePath>T:\IL2CPP\VRGreen\VRGreen\DiscordRPC\discord-rpc-master\src;T:\IL2CPP\VRGreen\VRGreen\DiscordRPC\discord-rpc-master\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING;_CRT_SECURE_NO_WARNINGS;WIN32;_DEBUG;VRGREEN_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions);_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+      <AdditionalDependencies>detours/detours.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING;_CRT_SECURE_NO_WARNINGS;_DEBUG;VRGREEN_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions);_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+      <AdditionalDependencies>detours/detours.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING;_CRT_SECURE_NO_WARNINGS;WIN32;NDEBUG;VRGREEN_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions);_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <Optimization>MaxSpeed</Optimization>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <AdditionalIncludeDirectories>.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+      <AdditionalDependencies>detours/detours.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <LinkTimeCodeGeneration>UseFastLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING;_CRT_SECURE_NO_WARNINGS;NDEBUG;VRGREEN_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions);_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <Optimization>MaxSpeed</Optimization>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <AdditionalIncludeDirectories>.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+      <AdditionalDependencies>detours/detours.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <LinkTimeCodeGeneration>UseFastLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
