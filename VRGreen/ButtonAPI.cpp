@@ -22,19 +22,16 @@ void ButtonBase::setActive(bool isActive)
 void ButtonBase::setLocation(int buttonXLoc, int buttonYLoc)
 {
 	auto quickMenu = QuickMenu::QuickMenuInstance();
-
 	auto transform = getGameObject()->GetTransform();
-	Vector3 transformVector;
-	transformVector.x = transform->GetLocalPosition().x + 420.f * buttonXLoc;
-	transformVector.y = transform->GetLocalPosition().y + 420.f * buttonYLoc;
-	transformVector.z = transform->GetLocalPosition().z;
+
+	Vector3 transformVector = transform->GetLocalPosition();
+	transformVector.x += 420.f * buttonXLoc;
+	transformVector.y += 420.f * buttonYLoc;
 
 	transform->SetLocalPosition(&transformVector);
 
 	btnTag = "(" + std::to_string(buttonXLoc) + std::string(",") + std::to_string(buttonYLoc) + ")";
 	SetName(button, btnQMLoc + "/" + btnType + btnTag);
-
-	
 	SetName(transform->GetComponent("UnityEngine.UI.Button"), btnType + btnTag);
 }
 
@@ -53,11 +50,6 @@ void ButtonBase::setToolTip(std::string buttonToolTip)
 UnityEngine::Transform* ButtonBase::FindInQuickMenu(std::string str)
 {
 	return QuickMenu::QuickMenuInstance()->get_transform()->Find(str);
-}
-
-void ButtonBase::TestFunc()
-{
-	ConsoleUtils::Log("nigger");
 }
 
 UnityEngine::Transform* ButtonBase::InstantiateGameobject(std::string type)
@@ -173,22 +165,21 @@ UnityEngine::Transform* ButtonBase::CreateButton(std::string name, std::string t
 	}
 
 	{
-		UI::Button* L_0 = (UI::Button*)transform->GetComponent("UnityEngine.UI.Button");
+	/*	UI::Button* L_0 = (UI::Button*)transform->GetComponent("UnityEngine.UI.Button");
 		auto L_1 = (UI::ButtonClickedEvent*)IL2CPP::NewObjectFromObject(L_0->GetOnClick(), false);
 		L_1->ButtonClickedEvent_ctor();
-		L_0->SetOnClick(L_1);
+		L_0->SetOnClick(L_1);*/
 	}
 
 	{
-		UI::Button* L_2 = (UI::Button*)transform->GetComponent("UnityEngine.UI.Button");
-		UI::ButtonClickedEvent* L_3 = L_2->GetOnClick();
-		auto L_4 = (Events::UnityAction*)IL2CPP::NewObject("UnityEngine.Events.UnityAction, UnityEngine"); // TODO: put this inside of the struct
-		Events::UnityAction::ctor(L_4, nullptr, (intptr_t)TestFunc);
-		using func_t = void(*)();
-		*((func_t*)L_4 + 2) = action;
+		/*	UI::Button* L_2 = (UI::Button*)transform->GetComponent("UnityEngine.UI.Button");
+			UI::ButtonClickedEvent* L_3 = L_2->GetOnClick();
+			auto L_4 = Events::UnityAction::ctor();
+			using func_t = void(*)();
+			*((func_t*)L_4 + 2) = action;
 
-		auto unityeven = (Events::UnityEvent*)L_3;
-		unityeven->AddListener(L_4);
+			auto unityeven = (Events::UnityEvent*)L_3;
+			unityeven->AddListener(L_4);*/
 	}
 
 	return transform;
@@ -203,31 +194,13 @@ SingleButton::SingleButton(std::string btnMenu, int btnXLocation, int btnYLocati
 
 void SingleButton::setButtonText(std::string buttonText)
 {
-	auto component = (UI::Text*)getGameObject()->GetTransform()->GetChild(0)->GetComponent("UnityEngine.UI.Text");
-	component->SetText(buttonText);
+	((UI::Text*)getGameObject()->GetTransform()->GetChild(0)->GetComponent("UnityEngine.UI.Text"))->SetText(buttonText);
 }
 
 void SingleButton::setAction(CDetour* buttonAction)
 {
-	// button.GetComponent<Button>().onClick = new Button.ButtonClickedEvent();
-	{
-		auto L_0 = (UI::Button*)getGameObject()->GetTransform()->GetComponent("UnityEngine.UI.Button");
-		
-		auto L_1 = (UI::ButtonClickedEvent*)IL2CPP::NewObjectFromObject(L_0->GetOnClick(), false);
-		L_1->ButtonClickedEvent_ctor();
-		L_0->SetOnClick(L_1);
-	}
-	//button.GetComponent<Button>().onClick.AddListener(buttonAction);
-	{
-		UI::Button* L_2 = (UI::Button*)getGameObject()->GetTransform()->GetComponent("UnityEngine.UI.Button");
-		UI::ButtonClickedEvent* L_3 = L_2->GetOnClick();
-		auto L_4 = (Events::UnityAction*)IL2CPP::NewObject("UnityEngine.Events.UnityAction, UnityEngine");
-		Events::UnityAction::ctor(L_4, nullptr, (intptr_t)TestFunc);
-		using func_t = void(*)();
-		*((func_t*)L_4 + 2) = buttonAction->GetFuncPointer();
-		auto unityevent = (Events::UnityEvent*)L_3;
-		unityevent->AddListener(L_4);
-	}
+	((UI::Button*)button->GetTransform()->GetComponent("UnityEngine.UI.Button"))->SetOnClick(UI::ButtonClickedEvent::ctor());
+	((UI::Button*)button->GetComponent("UnityEngine.UI.Button"))->GetOnClick()->AddListener(Events::UnityAction::ctor(buttonAction));
 }
 
 void SingleButton::setBackgroundColor(Color* buttonBackgroundColor)
@@ -269,62 +242,34 @@ ToggleButton::ToggleButton(std::string btnMenu, int btnXLocation, int btnYLocati
 
 void ToggleButton::setAction(CDetour* buttonOnAction, CDetour* buttonOffAction)
 {
-	//button.GetComponent<Button>().onClick = new Button.ButtonClickedEvent();
+	((UI::Button*)button->GetComponent("UnityEngine.UI.Button"))->SetOnClick(UI::ButtonClickedEvent::ctor());
+	((UI::Button*)button->GetComponent("UnityEngine.UI.Button"))->GetOnClick()->AddListener(Events::UnityAction::ctor(new CDetour([=]()
 	{
-		UI::Button* L_0 = (UI::Button*)getGameObject()->GetTransform()->GetComponent("UnityEngine.UI.Button");
-		auto L_1 = (UI::ButtonClickedEvent*)IL2CPP::NewObjectFromObject(L_0->GetOnClick(), false);
-		L_1->ButtonClickedEvent_ctor();
-		L_0->SetOnClick(L_1);
-	}
-
-	{
-		UI::Button* L_2 = (UI::Button*)getGameObject()->GetTransform()->GetComponent("UnityEngine.UI.Button");
-		UI::ButtonClickedEvent* L_3 = L_2->GetOnClick();
-		auto L_4 = (Events::UnityAction*)IL2CPP::NewObject("UnityEngine.Events.UnityAction, UnityEngine");
-		Events::UnityAction::ctor(L_4, nullptr, (intptr_t)TestFunc);
-
-
-		auto detour = new CDetour([=]()
-			{
-				if (btnOn->GetActiveSelf())
-				{
-					buttonOnAction->GetFuncPointer()();
-					btnOn->SetActive(false);
-					btnOff->SetActive(true);
-				}
-				else
-				{
-					buttonOffAction->GetFuncPointer()();
-					btnOff->SetActive(false);
-					btnOn->SetActive(true);
-				}
-			});
-		auto func = detour->GetFuncPointer();
-
-		using func_t = void(*)();
-		*((func_t*)L_4 + 2) = func;
-		auto unityevent = (Events::UnityEvent*)L_3;
-		unityevent->AddListener(L_4);
-	}
+		if (btnOn->GetActiveSelf())
+		{
+			buttonOnAction->GetFuncPointer()();
+			btnOn->SetActive(false);
+			btnOff->SetActive(true);
+		}
+		else
+		{
+			buttonOffAction->GetFuncPointer()();
+			btnOn->SetActive(true);
+			btnOff->SetActive(false);
+		}
+	})));
 }
 
 void ToggleButton::setOnText(std::string buttonOnText)
 {
-	auto a = (UI::Text*)btnOn->GetTransform()->GetChild(0)->GetComponent("UnityEngine.UI.Text");
-	a->SetText(buttonOnText);
-	auto b = (UI::Text*)btnOff->GetTransform()->GetChild(0)->GetComponent("UnityEngine.UI.Text");
-	b->SetText(buttonOnText);
-	//UI::SetText((UI::Text*)GetComponent(((GetChild(GetTransform(btnOff), 0))), "UnityEngine.UI.Text"), buttonOnText);
+	((UI::Text*)btnOn->GetTransform()->GetChild(0)->GetComponent("UnityEngine.UI.Text"))->SetText(buttonOnText);
+	((UI::Text*)btnOff->GetTransform()->GetChild(0)->GetComponent("UnityEngine.UI.Text"))->SetText(buttonOnText);
 }
 
 void ToggleButton::setOffText(std::string buttonOffText)
 {
-	auto a = (UI::Text*)btnOn->GetTransform()->GetChild(1)->GetComponent("UnityEngine.UI.Text");
-	a->SetText(buttonOffText);
-	auto b = (UI::Text*)btnOff->GetTransform()->GetChild(1)->GetComponent("UnityEngine.UI.Text");
-	b->SetText(buttonOffText);
-	//UI::SetText((UI::Text*)GetComponent(((GetChild(GetTransform(btnOn), 1))), "UnityEngine.UI.Text"), buttonOffText);
-	//UI::SetText((UI::Text*)GetComponent(((GetChild(GetTransform(btnOff), 1))), "UnityEngine.UI.Text"), buttonOffText);
+	((UI::Text*)btnOn->GetTransform()->GetChild(1)->GetComponent("UnityEngine.UI.Text"))->SetText(buttonOffText);
+	((UI::Text*)btnOff->GetTransform()->GetChild(1)->GetComponent("UnityEngine.UI.Text"))->SetText(buttonOffText);
 }
 
 void ToggleButton::setBackgroundColor(Color* buttonBackgroundColor)
@@ -351,19 +296,9 @@ void ToggleButton::initButton(int btnXLocation, int btnYLocation, std::string bt
 	initShift[0] = -4;
 	initShift[1] = 0;
 	setLocation(btnXLocation, btnYLocation);
-
 	setOnText(btnTextOn);
 	setOffText(btnTextOff);
-	/*Text[] btnTextsOn = btnOn.GetComponentsInChildren<Text>();
-	btnTextsOn[0].name = "Text_ON";
-	btnTextsOn[1].name = "Text_OFF";
-	Text[] btnTextsOff = btnOff.GetComponentsInChildren<Text>();
-	btnTextsOff[0].name = "Text_ON";
-	btnTextsOff[1].name = "Text_OFF";*/
-
 	setToolTip(btnToolTip);
-	//button.transform.GetComponentInChildren<UiTooltip>().SetToolTipBasedOnToggle();
-
 	setAction(btnActionOff, btnActionOn);
 	btnOn->SetActive(false);
 	btnOff->SetActive(true);

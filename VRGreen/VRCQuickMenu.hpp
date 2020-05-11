@@ -7,8 +7,6 @@
 namespace VRCQuickMenu
 {
 	inline std::vector<ButtonBase*> QuickMenuButtons;
-	inline float delta_x;
-	inline float delta_y;
 
 	void SetupButtons();
 

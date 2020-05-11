@@ -1,14 +1,14 @@
 #pragma once
 
-#include "UnityEngine/Component.hpp"
+#include "UnityEvent.h"
 
 namespace UnityEngine::UI
 {
 
-	struct ButtonClickedEvent : UnityEngine::Component
+	struct ButtonClickedEvent : UnityEngine::Events::UnityEvent
 	{
 		NOIMPLEMENT(ButtonClickedEvent);
 
-		void ButtonClickedEvent_ctor();
+		static ButtonClickedEvent* ctor();
 	};
 }

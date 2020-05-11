@@ -13,7 +13,7 @@ Object* UnityEngine::Instantiate(Object* original)
 	return func(original);
 }
 
-std::string UnityEngine::GetName(Object* _this)
+std::string UnityEngine::GetName(Object* _this) // TODO: Refactor _this
 {
 	using func_t = IL2CPP::String* (*)(Object* _this);
 
@@ -22,7 +22,7 @@ std::string UnityEngine::GetName(Object* _this)
 	return IL2CPP::StringChars(func(_this));
 }
 
-void UnityEngine::SetName(Object* _this, std::string value)
+void UnityEngine::SetName(Object* _this, std::string value) // TODO: Refactor _this
 {
 	using func_t = void (*)(Object* _this, IL2CPP::String* value);
 
@@ -31,7 +31,7 @@ void UnityEngine::SetName(Object* _this, std::string value)
 	func(_this, IL2CPP::StringNew(value));
 }
 
-void UnityEngine::Destroy(Object* obj, float t)
+void UnityEngine::Destroy(Object* obj, float t) // TODO: Refactor _this
 {
 	if (obj == nullptr)
 	{

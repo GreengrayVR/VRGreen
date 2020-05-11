@@ -1504,7 +1504,7 @@ void Hack::Update(void* _this)
 		{
 			List<VRC::Player*> players(VRC::PlayerManager::GetPlayers());
 
-						for (size_t i = 0; i < players.arrayLength; i++)
+			for (size_t i = 0; i < players.arrayLength; i++)
 			{
 				auto apiuser = players[i]->GetAPIUser();
 				auto displayName = apiuser->displayName();
@@ -1704,8 +1704,13 @@ void Hack::Update(void* _this)
 
 		if (::GetAsyncKeyState(VK_END) & 1)
 		{
-			Misc::DropPortal("wrld_d0b62423-fd59-48f7-9e4b-e6fece81b7ed", "2416");
 
+			auto Button = QuickMenu::QuickMenuInstance()->get_transform()->Find("ShortcutMenu/WorldsButton")->GetComponent("UnityEngine.UI.Button");
+
+			if (Button == nullptr)
+				ConsoleUtils::Log(1);
+			else
+				ConsoleUtils::Log(2);
 		}
 	}
 
@@ -1731,7 +1736,8 @@ void Hack::Update(void* _this)
 			auto vrcplayer = VRCPlayer::GetCurrentVRCPlayer()->get_transform();
 			auto vrcplayerPos = vrcplayer->GetPosition();
 
-			auto c = (Component*)Camera::MainCamera(); Vector3 forward = c->get_transform()->GetRight();
+			auto c = (Component*)Camera::MainCamera();
+			Vector3 forward = c->get_transform()->GetRight();
 
 			vrcplayerPos.x += forward.x * (Variables::flySpeed / 100.f) * GetAxis("Horizontal");
 			vrcplayerPos.y += forward.y * (Variables::flySpeed / 100.f) * GetAxis("Horizontal");

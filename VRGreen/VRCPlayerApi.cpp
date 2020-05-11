@@ -2,7 +2,7 @@
 
 #include "ConsoleUtils.hpp"
 
-VRC::SDKBase::VRCPlayerApi* VRC::SDKBase::VRCPlayerApi::GetCurrentVRCPlayerApi()
+VRC::SDKBase::VRCPlayerApi* VRC::SDKBase::VRCPlayerApi::GetCurrentVRCPlayerApi() // TODO: Remove VRCPlayerApi from name
 {
 	auto currentPlayer = VRC::Player::CurrentPlayer();
 
@@ -40,7 +40,7 @@ inline UnityEngine::Quaternion* VRC::SDKBase::VRCPlayerApi::GetRotation()
 	return func(this);
 }
 
-inline void VRC::SDKBase::VRCPlayerApi::TeleportTo(VRC::SDKBase::VRCPlayerApi* who, VRC::SDKBase::VRCPlayerApi* to)
+void VRC::SDKBase::VRCPlayerApi::TeleportTo(VRC::SDKBase::VRCPlayerApi* who, VRC::SDKBase::VRCPlayerApi* to)
 {
 	using get_position = UnityEngine::Vector3(*)(__int64);
 	get_position pos = GetMethod<get_position>(GETPLAYERPOSITION);
@@ -78,13 +78,22 @@ void VRC::SDKBase::VRCPlayerApi::TeleportTo(VRC::SDKBase::VRCPlayerApi* player)
 	using teleport_fn = void(*)(__int64, UnityEngine::Vector3, UnityEngine::Quaternion);
 	teleport_fn function = GetMethod<teleport_fn>(TELEPORTTO);
 
-	auto position = pos((__int64)player);
-	auto rotation = rot((__int64)player);
 
-	if (&position == nullptr || &rotation == nullptr)
+	__try
+	{
+		auto position = pos((__int64)player);
+		auto rotation = rot((__int64)player);
+
+		function((__int64)this, position, rotation);
+
+
+	}
+	__except (EXCEPTION_EXECUTE_HANDLER)
+	{
+		ConsoleUtils::Log("EXCEPTION");
 		return;
+	}
 
-	function((__int64)this, position, rotation);
 }
 
 void VRC::SDKBase::VRCPlayerApi::SetRunSpeed(float speed)

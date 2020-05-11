@@ -15,106 +15,105 @@ using namespace UnityEngine;
 void VRCQuickMenu::SetupButtons()
 {
 	QuickMenuButtons.push_back(new ToggleButton("UIElementsMenu", -2, -1, "Force Mute", CreateDetour([=]()
-		{
-			Variables::forceMute = true; // TODO: move to Hack.cpp
+	{
+		Variables::forceMute = true; // TODO: move to Hack.cpp
 
-		}), "OFF", CreateDetour([=]()
-			{
-				Variables::forceMute = false;
+	}), "OFF", CreateDetour([=]()
+	{
+		Variables::forceMute = false;
 
-			}), "kill youserlf fag"));
+	}), "kill youserlf fag"));
 
 	QuickMenuButtons.push_back(new ToggleButton("UIElementsMenu", 0, 0, "Speed Hack", CreateDetour([=]()
-		{
-			Variables::speedHack = true;
+	{
+		Variables::speedHack = true;
 
-		}), "NO", CreateDetour([=]()
-			{
+	}), "NO", CreateDetour([=]()
+	{
 
-				Variables::speedHack = false;
+		Variables::speedHack = false;
 
-			}), "find me a gf"));
+	}), "find me a gf"));
 
 	QuickMenuButtons.push_back(new ToggleButton("UIElementsMenu", -3, -1, "Auto Destroy", CreateDetour([=]()
-		{
-			Variables::autoDestroy = true;
+	{
+		Variables::autoDestroy = true;
 
-		}), "OFF", CreateDetour([=]()
-			{
+	}), "OFF", CreateDetour([=]()
+	{
 
-				Variables::autoDestroy = false;
+		Variables::autoDestroy = false;
 
-			}), "gray is a cunt"));
+	}), "gray is a cunt"));
 
 	QuickMenuButtons.push_back(new ToggleButton("UIElementsMenu", -1, -1, "World Triggers", CreateDetour([=]()
-		{
-			Variables::worldTriggers = true;
+	{
+		Variables::worldTriggers = true;
 
-		}), "OFF", CreateDetour([=]()
-			{
+	}), "OFF", CreateDetour([=]()
+	{
 
-				Variables::worldTriggers = false;
+		Variables::worldTriggers = false;
 
-			}), "kiwi is stupid"));
+	}), "kiwi is stupid"));
 
 	QuickMenuButtons.push_back(new ToggleButton("UIElementsMenu", -1, 0, "Fly", CreateDetour([=]()
+	{
+		{ // TODO: Fix this bug
+			Variables::fly = !Variables::fly;
+			auto collider = (UnityEngine::Collider*)VRCPlayer::GetCurrentVRCPlayer()->get_gameObject()->GetComponent(IL2CPP::GetType("UnityEngine.CharacterController, UnityEngine.PhysicsModule"));
+			collider->SetEnabled(!Variables::fly);
+		}
 		{
 			Variables::fly = !Variables::fly;
-
 			auto collider = (UnityEngine::Collider*)VRCPlayer::GetCurrentVRCPlayer()->get_gameObject()->GetComponent(IL2CPP::GetType("UnityEngine.CharacterController, UnityEngine.PhysicsModule"));
-
 			collider->SetEnabled(!Variables::fly);
-
-			/*UnityEngine::SetEnabled(
-				(UnityEngine::Collider*)UnityEngine::GetComponent(UnityEngine::get_gameObject(GetCurrentVRCPlayer()),
-					IL2CPP::GetType("UnityEngine.CharacterController, UnityEngine.PhysicsModule")),
-				!Variables::fly);*/
-			ConsoleUtils::Log(magenta, "Fly ", (Variables::fly ? green : red), (Variables::fly ? "ON" : "OFF"));
-		}), "OFF", CreateDetour([=]()
-			{
-				auto collider = (UnityEngine::Collider*)VRCPlayer::GetCurrentVRCPlayer()->get_gameObject()->GetComponent(IL2CPP::GetType("UnityEngine.CharacterController, UnityEngine.PhysicsModule"));
-
-				collider->SetEnabled(!Variables::fly);
-
-				/*Variables::fly = !Variables::fly;
-				UnityEngine::SetEnabled(
-					(UnityEngine::Collider*)UnityEngine::GetComponent(UnityEngine::get_gameObject(GetCurrentVRCPlayer()),
-						IL2CPP::GetType("UnityEngine.CharacterController, UnityEngine.PhysicsModule")),
-					!Variables::fly);*/
-				ConsoleUtils::Log(magenta, "Fly ", (Variables::fly ? green : red), (Variables::fly ? "ON" : "OFF"));
-			}), "nigger"));
+		}
+	}), "OFF", CreateDetour([=]()
+	{
+		{
+			Variables::fly = !Variables::fly;
+			auto collider = (UnityEngine::Collider*)VRCPlayer::GetCurrentVRCPlayer()->get_gameObject()->GetComponent(IL2CPP::GetType("UnityEngine.CharacterController, UnityEngine.PhysicsModule"));
+			collider->SetEnabled(!Variables::fly);
+		}
+		{
+			Variables::fly = !Variables::fly;
+			auto collider = (UnityEngine::Collider*)VRCPlayer::GetCurrentVRCPlayer()->get_gameObject()->GetComponent(IL2CPP::GetType("UnityEngine.CharacterController, UnityEngine.PhysicsModule"));
+			collider->SetEnabled(!Variables::fly);
+		}
+	}), "nigger"));
 
 	QuickMenuButtons.push_back(new ToggleButton("UIElementsMenu", 0, -1, "OFF", CreateDetour([=]()
-		{
-			Variables::g_Discord->Shutdown();
+	{
+		Variables::g_Discord->Shutdown();
 
-		}), "DiscordRPC", CreateDetour([=]()
-			{
+	}), "DiscordRPC", CreateDetour([=]()
+	{
 
-				Variables::g_Discord->Initalize();
+		Variables::g_Discord->Initalize();
 
-			}), "why do you even read this?"));
+	}), "why do you even read this?"));
 
 	QuickMenuButtons.push_back(new ToggleButton("UIElementsMenu", -3, -2, "OFF", CreateDetour([=]()
-		{
-			Variables::antiPortal = false;
-		}), "Anti-Portal", CreateDetour([=]()
-			{
-				Variables::antiPortal = true;
-			}), "nigger"));
+	{
+		Variables::antiPortal = false;
+	}), "Anti-Portal", CreateDetour([=]()
+	{
+		Variables::antiPortal = true;
+	}), "nigger"));
 
 	QuickMenuButtons.push_back(new ToggleButton("UIElementsMenu", -1, -2, "OFF", CreateDetour([=]()
-		{
-			Variables::offlineMode = false;
-		}), "Offline", CreateDetour([=]()
-			{
-				Variables::offlineMode = true;
-			}), "nigger"));
+	{
+		Variables::offlineMode = false;
+	}), "Offline", CreateDetour([=]()
+	{
+		Variables::offlineMode = true;
+	}), "nigger"));
 
 	QuickMenuButtons.push_back(new SingleButton("UIElementsMenu", 1, -2, "Destroy\nPortals", CreateDetour([=]()
-		{
-			Misc::DestroyPortals();
-		}), "dont play this trash game"));
+	{
+		Misc::DestroyPortals();
+	}), "dont play this trash game"));
 }
 
 void VRCQuickMenu::SetupVRGreenText()

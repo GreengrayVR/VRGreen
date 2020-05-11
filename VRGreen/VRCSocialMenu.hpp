@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 namespace UnityEngine { struct Transform; }
 namespace VRC::Core { struct APIUser; }
@@ -8,21 +9,13 @@ struct CDetour;
 
 namespace VRCSocialMenu
 {
-	static UnityEngine::Transform* FindInVRCUiManager(std::string str);
-
-	void SetAction(UnityEngine::Transform* transform, CDetour* action);
-
-	VRC::Core::APIUser* CurrentUser();
+	inline std::vector<UnityEngine::Transform*> SocialButtons;
 
 	static UnityEngine::Transform* InstantiateGameobject(std::string type);
 
-	inline UnityEngine::Transform* TeleportButton;
-	inline UnityEngine::Transform* DownloadVRCAButton;
-	inline UnityEngine::Transform* VRChatProfileButton;
-	inline UnityEngine::Transform* TeleportPickupsButton;
-	inline UnityEngine::Transform* SteamPageButton;
-	inline UnityEngine::Transform* WhiteListButton;
-	inline UnityEngine::Transform* DropPortalOnPlayer;
+	VRC::Core::APIUser* CurrentUser();
+
+	UnityEngine::Transform* CreateButton(std::string btnText, int btnXLocation, int btnYLocation, CDetour* btnAction);
 
 	void SetupButtons();
 
