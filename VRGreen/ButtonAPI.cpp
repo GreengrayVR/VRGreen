@@ -23,21 +23,13 @@ void ButtonBase::setLocation(int buttonXLoc, int buttonYLoc)
 {
 	auto quickMenu = QuickMenu::QuickMenuInstance();
 
-
-
-	auto v1 = quickMenu->get_transform()->Find("UserInteractMenu/ForceLogoutButton")->GetLocalPosition().x; // TODO: DELETE THIS
-	auto v2 = quickMenu->get_transform()->Find("UserInteractMenu/ForceLogoutButton")->GetLocalPosition().x;
-	float num = v1 - v2;
-	float num2 = v1 - v2;
-
 	auto transform = getGameObject()->GetTransform();
 	Vector3 transformVector;
-	transformVector.x = transform->GetLocalPosition().x + num * buttonXLoc;
-	transformVector.y = transform->GetLocalPosition().y + num2 * buttonYLoc;
+	transformVector.x = transform->GetLocalPosition().x + 420.f * buttonXLoc;
+	transformVector.y = transform->GetLocalPosition().y + 420.f * buttonYLoc;
 	transformVector.z = transform->GetLocalPosition().z;
 
 	transform->SetLocalPosition(&transformVector);
-
 
 	btnTag = "(" + std::to_string(buttonXLoc) + std::string(",") + std::to_string(buttonYLoc) + ")";
 	SetName(button, btnQMLoc + "/" + btnType + btnTag);
