@@ -43,6 +43,7 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Graphic.cpp" />
     <ClCompile Include="Hack.cpp" />
+    <ClCompile Include="HighlightsFX.cpp" />
     <ClCompile Include="IL2CPP\IL2CPP.cpp" />
     <ClCompile Include="MethodBase.cpp" />
     <ClCompile Include="Misc.cpp" />
@@ -90,6 +91,7 @@
     <ClInclude Include="Graphic.hpp" />
     <ClInclude Include="Hack.hpp" />
     <ClInclude Include="HardOffsets.hpp" />
+    <ClInclude Include="HighlightsFX.hpp" />
     <ClInclude Include="Input.hpp" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="List.hpp" />
@@ -218,6 +220,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <AdditionalIncludeDirectories>.</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -236,6 +239,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <AdditionalIncludeDirectories>.</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -258,7 +262,7 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <Optimization>MaxSpeed</Optimization>
       <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -284,7 +288,7 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <Optimization>MaxSpeed</Optimization>
       <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

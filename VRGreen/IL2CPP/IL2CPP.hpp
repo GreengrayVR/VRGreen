@@ -38,7 +38,7 @@ namespace IL2CPP
 	
 
 	// https://git.kpi.fei.tuke.sk/tg206vc/liveitprojects/-/blob/283bff797d9dc1cf3ae0b5bc12830233b3c19250/Il2CppOutputProject/IL2CPP/libil2cpp/il2cpp-api.cpp#L1049
-	String *StringNew(const char* str);
+	//String *StringNew(const char* str);
 
 	std::string utf16_to_utf8(std::u16string str);
 

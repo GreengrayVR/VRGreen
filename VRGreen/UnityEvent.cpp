@@ -6,7 +6,7 @@ void UnityEngine::Events::UnityEvent::AddListener(UnityEngine::Events::UnityActi
 {
 	using func_t = void (*)(UnityEngine::Events::UnityEvent* _this, UnityEngine::Events::UnityAction* call);
 
-	func_t func = GetMethod<func_t>(0x1A00910);
+	func_t func = GetMethod<func_t>(ADDLISTENER);
 
 	func(this, call);
 }

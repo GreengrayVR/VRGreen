@@ -45,7 +45,7 @@ Object* UnityEngine::Component::GetComponent(IL2CPP::Type* type)
 {
 	using func_t = Object * (*)(Component* _this, IL2CPP::Type* type);
 
-	func_t func = GetMethod<func_t>(0x19F6FE0);
+	func_t func = GetMethod<func_t>(GETCOMPONENT_TYPE_TYPE);
 
 	return func(this, type);
 }

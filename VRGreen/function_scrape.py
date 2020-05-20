@@ -49,7 +49,7 @@ def function_format(text, class_name):
     return (class_format(class_name) + '_' + text.split('(')[0].upper().replace(' ', '_') + '____' + parameters).replace('[', '0').replace(']', '1').replace('*', 'PTR')
 
 
-f = open('dump2.cs', "r") #  file to open
+f = open('T:\\IL2CPP\\VRGreen\\VRGreen\\dump2.cs', "r") #  file to open
 
 f2 = open('AllOffsets.h', 'w') # file to write to
 

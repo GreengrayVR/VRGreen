@@ -16,7 +16,7 @@ ButtonClickedEvent* ButtonClickedEvent::ctor()
 	auto buttonClickedEvent = (ButtonClickedEvent*)IL2CPP::NewObjectFromObject(((Button*)onclickTemplate)->GetOnClick(), false);
 
 	using func_t = void (*)(ButtonClickedEvent* _this);
-	func_t func = GetMethod<func_t>(0x14B7810);
+	func_t func = GetMethod<func_t>(BUTTONCLICKCTOR);
 	func(buttonClickedEvent);
 
 	return buttonClickedEvent;

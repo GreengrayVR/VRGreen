@@ -12,7 +12,7 @@ namespace UnityEngine
 
 	Object* Instantiate(Object* original);
 
-	Object* Instantiate(Object* original, Object* paremt);
+	//Object* Instantiate(Object* original, Object* paremt);
 
 	Object* Instantiate(Object* original, Transform* parent, bool instantiateInWorldSpace);
 

@@ -15,11 +15,11 @@ void IL2CPP::Free(void* memory)
 
 IL2CPP::String* IL2CPP::StringNew(std::string str)
 {
-	using CreateStringFunc_t = String * (*)(const char* str_t);
+	using func_t = String * (*)(const char* str_t);
 
-	CreateStringFunc_t CreateStringFunc = (CreateStringFunc_t)GetProcAddress(::GameAssemblyHandle, "il2cpp_string_new_wrapper");
+	func_t func = (func_t)GetProcAddress(::GameAssemblyHandle, "il2cpp_string_new");
 
-	return CreateStringFunc(str.c_str());
+	return func(str.c_str());
 }
 
 std::string IL2CPP::utf16_to_utf8(std::u16string str)
@@ -30,6 +30,12 @@ std::string IL2CPP::utf16_to_utf8(std::u16string str)
 
 std::string IL2CPP::StringChars(String* str)
 {
+	if (str == nullptr)
+	{
+		ConsoleUtils::Log(red, "stringchars nullptr");
+		return "stringchars nullptr";
+	}
+
 	using GetCharsFunc_t = const char16_t* (*)(String* str_t);
 
 	GetCharsFunc_t GetCharsFunc = (GetCharsFunc_t)GetProcAddress(::GameAssemblyHandle, "il2cpp_string_chars"); // _0 possibly
@@ -77,7 +83,7 @@ Type* IL2CPP::GetType(std::string name, bool throwOnError, bool ignoreCase)
 {
 	using func_t = Type * (*)(String* name, bool throwOnError, bool ignoreCase);
 
-	func_t func = GetMethod<func_t>(0x1AE55E0);
+	func_t func = GetMethod<func_t>(GETTYPE_TYPE_BOOL_BOOL);
 
 	return func(StringNew(name), throwOnError, ignoreCase);
 }
@@ -721,13 +727,4 @@ void IL2CPP::FieldSetValue(Object* objectInstance, FieldInfo* field, float value
 	func_t func = (func_t)GetProcAddress(::GameAssemblyHandle, "il2cpp_field_set_value");
 
 	func(objectInstance, field, value);
-}
-
-IL2CPP::String* IL2CPP::StringNew(const char* str)
-{
-	using CreateStringFunc_t = String * (*)(const char* str_t);
-
-	CreateStringFunc_t CreateStringFunc = (CreateStringFunc_t)GetProcAddress(::GameAssemblyHandle, "il2cpp_string_new_wrapper");
-
-	return CreateStringFunc(str);
 }

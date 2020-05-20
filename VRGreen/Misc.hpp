@@ -21,6 +21,8 @@ struct Misc
 
     static void DropPortal(VRC::Player* player);
 
+    static void DropPortalBlock(VRC::Player* player);
+
     static void SpawnEmoji(int index);
 
     static void PlayEmote(int index);

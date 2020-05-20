@@ -1,241 +1,241 @@
 #pragma once
 
 // public static void SendPutRequest(string target, ApiContainer responseContainer, Dictionary<string, object> requestParams, API.CredentialsBundle credentials) { }
-#define OFFLINE_MODE 0x732130
+#define OFFLINE_MODE 0xC4ABC0
 
 // public int get_RoundTripTime() { }
-#define FAKE_PING 0x186A720
+#define FAKE_PING 0x166B0A0
 
 // private void InternalTriggerEvent(VRC_EventHandler.VrcEvent e, VRC_EventHandler.VrcBroadcastType broadcast, int instagatorId, float fastForward) { }
-#define WORLD_TRIGGERS 0x16DCEB0
+#define WORLD_TRIGGERS 0x1463900
 
 // private void ConfigurePortal(string
-#define CONFIGURE_PORTAL 0x2DB7470
+#define CONFIGURE_PORTAL 0x2509BB0
 
 // private void WarnUserRPC(string
-#define WARNUSERRPC 0x2A3FFB0
+#define WARNUSERRPC 0x1F3A8B0
 
 // private void KickUserRPC(string
-#define KICKUSERRPC 0x2A2CEC0
+#define KICKUSERRPC 0x1F25C50
 
 // private void BlockStateChangeRPC
-#define BLOCKSTATECHANGERPC 0x2A2CB10
+#define BLOCKSTATECHANGERPC 0x1F258A0
 
 // private void OnTriggerEnter ( PortalTrigger : MonoBehaviour )
-#define ANTI_PORTAL 0x33A50E0
+#define ANTI_PORTAL 0x2C325B0
 
 // public List<Action>
-#define RECEIVEAUDIO 0x2BEDF80
+#define RECEIVEAUDIO 0x1F83A60
 
 // public static string get_DeviceID() { }
-#define DEVICEID 0x732F00
+#define DEVICEID 0xC4B9C0
 
 // ForceLogoutRPC
-#define FORCELOGOUTRPC 0x2A2CC00
+#define FORCELOGOUTRPC 0x1F25990
 
 // FriendStateChangeRPC
-#define FRIENDSTATECHANGERPC 0x2A2CDA0
+#define FRIENDSTATECHANGERPC 0x1F25B30
 
 // BanPublicOnlyRPC
-#define BANPUBLICONLYRPC 0x2A2C580
+#define BANPUBLICONLYRPC 0x1F25310
 
 // ResetShowUserAvatarToDefaultRPC
-#define RESETSHOWUSERAVATARTODEFAULTRPC 0x2A2E370
+#define RESETSHOWUSERAVATARTODEFAULTRPC 0x1F27100
 
 // ModMicGainChangeRPC
-#define MODMICGAINCHANGERPC 0x2A2D420
+#define MODMICGAINCHANGERPC 0x1F261B0
 
 // BanRPC
-#define BANRPC 0x2A2C880
+#define BANRPC 0x1F25610
 
 // MuteChangeRPC
-#define MUTECHANGERPC 0x2A2D5F0
+#define MUTECHANGERPC 0x1F26380
 
 // ModForceOffMicRPC
-#define MODFORCEOFFMICRPC 0x2A2D260
+#define MODFORCEOFFMICRPC 0x1F25FF0
 
 // ShowUserAvatarChangedRPC
-#define SHOWUSERAVATARCHANGERPC 0x2A2E450
+#define SHOWUSERAVATARCHANGERPC 0x1F271E0
 
 // SpawnEmojiRPC
-#define SPAWNEMOJIRPC 0x289BB60
+#define SPAWNEMOJIRPC 0x1E311A0
 
 // ShowSocialRankRPC
-#define SHOWSOCIALRANKRPC 0x289BA20
+#define SHOWSOCIALRANKRPC 0x1E31060
 
 // GotoRoomTargetUserRPC
-#define GOTOROOMTARGETUSERRPC 0x289B370
+#define GOTOROOMTARGETUSERRPC 0x1E309B0
 
 // PlayEmoteRPC
-#define PLAYEMOTERPC 0x289B7F0
+#define PLAYEMOTERPC 0x1E30E30
 
 // GotoRoomRPC
-#define GOTOROOMRPC 0x289B1B0
+#define GOTOROOMRPC 0x1E307F0
 
 // TakePhotoRPC
-#define TAKEPHOTORPC 0x35AED30
+#define TAKEPHOTORPC 0x293D640
 
 // private void _DestroyObject(int 
-#define _DESTROYOBJECT 0x2ED0EE0
+#define _DESTROYOBJECT 0x2014A20
 
 // public static bool IsFriendsWith(string userId) { }
-#define ISFRIENDSWITH 0x72BCE0
+#define ISFRIENDSWITH 0xC44860
 
 // public bool HasTag(string tag) { } ( APIUser : ApiModel )
-#define HASTAG 0x72B7B0
+#define HASTAG 0xC44330
 
 // public static APIUser get_CurrentUser() { }
-#define CURRENTUSER 0x72F1F0
+#define CURRENTUSER 0xC47DB0
 
 // public string get_displayName() { } ( APIUser : ApiModel )
 #define DISPLAYNAME 0x4E4C70
 
 // public override void xxxx(float xxxx) { } ( VRCPlayer : VRCNetworkBehaviour )
-#define VRCPLAYERCUSTOMPLATES 0x28A2F30
+#define VRCPLAYERCUSTOMPLATES 0x1E34090
 
 // public void Update() { } ( UserInteractMenu : MonoBehaviour )
-#define USERINTERACTMENU 0x2EA02F0
+#define USERINTERACTMENU 0x20CD770
 
 // public\sPlayer\s\w+\(\)\s{\s} ( VRCPlayer : VRCNetworkBehaviour )
-#define PLAYER_FROM_VRCPLAYER 0x289CDE0
+#define PLAYER_FROM_VRCPLAYER 0x1E32EC0
 
 // internal\sstatic\sPlayer\s\w+\(\)\s{\s} ( class Player : MonoBehaviour )
-#define PLAYERCURRENTUSER 0x298CD30
+#define PLAYERCURRENTUSER 0x1F56900
 
 // public override string ToString() { } ( class Player : MonoBehaviour )
-#define PLAYERTOSTRING 0x298BE90
+#define PLAYERTOSTRING 0x1F566C0
 
-// public string get_Id() { } ( ApiGroup : ApiModel )
+// public string get_id() { } ( ApiGroup : ApiModel )
 #define GETID 0x432E80
 
 // public static bool GoToRoom(string roomID) { }
-#define GOTOROOM 0x16D2BA0
+#define GOTOROOM 0x145CC90
 
 // public int get_playerId() { }
-#define GETPLAYERID 0x16D6F70
+#define GETPLAYERID 0x1461330
 
 // public static float get_deltaTime() { }
-#define DELTATIME 0x1AC3960
+#define DELTATIME 0x1830B10
 
 // public Transform Find(string
-#define TRANSFORM_FIND 0x1AC5730
+#define TRANSFORM_FIND 0x18328E0
 
 // public void SetParent(Transform
-#define TRANSFORM_SETPARENT 0x1AC7810
+#define TRANSFORM_SETPARENT 0x18349C0
 
 // public void SetRunSpeed(float speed = 4) { }
-#define SETRUNSPEED 0x16D60A0
+#define SETRUNSPEED 0x1460460
 
 // public void TeleportTo(Vector3 teleportPos, Quaternion teleportRot) { }
-#define TELEPORTTO 0x16D6450
+#define TELEPORTTO 0x1460810
 
 // public void SetWalkSpeed(float speed = 2) { }
-#define SETWALKSPEED 0x16D6330
+#define SETWALKSPEED 0x14606F0
 
 // private static bool GetKeyDownString(string name) { }
-#define GETKEYDOWNSTRING 0x1C9FEE0
+#define GETKEYDOWNSTRING 0x19657E0
 
 // public static Color get_cyan() { }
-#define GETCYAN 0x19F6340
+#define GETCYAN 0x342BD00
 
 // public static Color get_red() { }
-#define GETRED 0x19F65C0
+#define GETRED 0x342BF80
 
 // public void SetNamePlateColor(Color col) { }
-#define SETNAMEPLATECOLOR 0x16D5ED0
+#define SETNAMEPLATECOLOR 0x1460290
 
 // public void SetMuteStatus(bool canSpeak, bool canHear) { }
-#define SETMUTESTATUS 0x16E3590
+#define SETMUTESTATUS 0x146A050
 
 // public void SetActive(bool value) { }
-#define SETACTIVE 0x1C9B140
+#define SETACTIVE 0x19608D0
 
 // public void set_interactable(bool value) { } ( public class Selectable )
-#define SETINTERACTABLE 0x19B06B0
+#define SETINTERACTABLE 0x17797B0
 
 // public virtual void set_color(Color value) { }
-#define SETCOLOR 0x18C6260
+#define SETCOLOR 0x16925C0
 
 // public void SetJumpImpulse(float impulse = 3) { }
-#define SETJUMPIMPULSE 0x16D5E40
+#define SETJUMPIMPULSE 0x1460200
 
 // public\sulong\s\w+\(\)\s{\s} ( VRCPlayer : VRCNetworkBehaviour )
-#define GETSTEAMID 0x28A1AE0
+#define GETSTEAMID 0x1E372D0
 
 // public\sstatic\sVRCUiPopupManager\s\w+\(\)\s{\s} ( VRCUiPopupManager : MonoBehaviour )
-#define VRCUIPOPUPMANAGER 0x31D7A30
+#define VRCUIPOPUPMANAGER 0x22F2FA0
 
 // public\svoid\s\w+\(string\s\w+,\sstring\s\w+,\sfloat\s\w+\s=\s10\)\s{\s} ( VRCUiPopupManager : MonoBehaviour )
-#define SHOWALERT 0x31D7AE0
+#define SHOWALERT 0x22F5A30
 
 // public\sstatic\sstring\s\w+\(APIUser\s\w+\)\s{\s} ( VRCPlayer : VRCNetworkBehaviour )
-#define SOCIALMENURANK 0x289C1F0
+#define SOCIALMENURANK 0x1E39490
 
 // public GameObject get_gameObject() { } ( Component : Object )
-#define GETGAMEOBJECT 0x19F7530
+#define GETGAMEOBJECT 0x342CCE0
 
 // private void Update() { } ( VRCHandGrasper : MonoBehaviour )
-#define VRCHANDGRASPER 0x2FCF930
+#define VRCHANDGRASPER 0x23B87E0
 
 // public static int ToInt32(byte[] buffer, int index) { } ( static class ProperBitConverter )
-#define TOINT32 0x1636760
+#define TOINT32 0x15099C0
 
 // public void set_localPosition(Vector3 value) { } ( class Transform : Component )
-#define SETLOCALPOSITION 0x1AC9940
+#define SETLOCALPOSITION 0x1836AF0
 
 // public Transform get_transform() { } ( Component : Object )
-#define GETTRANSFORM_COMPONENT 0x19F7600
+#define GETTRANSFORM_COMPONENT 0x342CDB0
 
 // public Transform get_transform() { } ( GameObject : Object )
-#define GETTRANSFORM_GAMEOBJECT 0x1C9B7D0
+#define GETTRANSFORM_GAMEOBJECT 0x1960F70
 
 // public void set_localScale(Vector3 value) { } ( Transform : Component )
-#define SETLOCALSCALE 0x1AC9B00
+#define SETLOCALSCALE 0x1836CB0
 
 // ReceiveVoteToKickInitiation
-#define VOTEKICKINIT 0x2A2D810
+#define VOTEKICKINIT 0x1F265A0
 
 // public Component GetComponent(string type) { } ( Component : Object )
-#define GETCOMPONENT_COMPONENT 0x19F7060
+#define GETCOMPONENT_COMPONENT 0x342C810
 
 // public static Object Instantiate(Object original) { } ( public class Object )
-#define INSTANTIATE1 0x1CBEE50
+#define INSTANTIATE1 0x390ACC0
 
 // public static Object Instantiate(Object original, Transform parent, bool instantiateInWorldSpace) { } ( public class Object )
-#define INSTANTIATE2 0x1CBEFD0
+#define INSTANTIATE2 0x390AE40
 
 // public string get_name() { } ( public class Object )
-#define GETOBJECTNAME 0x1CBFA10
+#define GETOBJECTNAME 0x390B880
 
 // public\sstatic\sVRCUiManager\s\w+\(\)\s{\s} ( VRCUiManager : MonoBehaviour )
-#define VRCUIMANAGER 0x2C2E2F0
+#define VRCUIMANAGER 0x26ED190
 
 // public\svoid\s\w+\(string\s\w+\)\s{\s} ( VRCUiManager : MonoBehaviour )
-#define HUDMSG 0x2C2C550
+#define HUDMSG 0x26EC1B0
 
 // public\sstatic\sQuickMenu\s\w+\(\)\s{\s} ( QuickMenu : MonoBehaviour )
-#define QUICKMENU 0x28ECA40
+#define QUICKMENU 0x1E5FF20
 
 // public\sVRCPlayerApi\s\w+\(\)\s{\s} ( class Player : MonoBehaviour )
 #define GETVRCPLAYERAPI 0x4F6EA0
 
 // public static void Destroy(Object obj, float t) { } ( public class Object )
-#define DESTROY 0x1CBE810
+#define DESTROY 0x390A690
 
 // public Vector3 GetPosition() { } ( public class VRCPlayerApi )
-#define GETPLAYERPOSITION 0x16D52F0
+#define GETPLAYERPOSITION 0x145F6B0
 
 // public Quaternion GetRotation() { } ( public class VRCPlayerApi )
-#define GETPLAYERROTATION 0x16D5390
+#define GETPLAYERROTATION 0x145F750
 
 // public static Type GetType(string typeName) { } ( public abstract class Type : MemberInfo )
-#define GETTYPE 0x1AE5840
+#define GETTYPE 0x1852D90
 
 // public virtual Type[] GetTypes() { } ( public class Assembly : ICustomAttributeProvider )
-#define GETTYPES 0x1A90060
+#define GETTYPES 0x1811520
 
 // public override string ToString() { } ( public abstract class Type : MemberInfo )
-#define TYPETOSTRING 0x1AE6B20
+#define TYPETOSTRING 0x1854070
 
 // public string get_name() { } ( public class ApiAvatar : ApiModel )
 #define APIAVATARNAME 0x430620
@@ -244,13 +244,13 @@
 #define APIWORLDNAME 0x430620
 
 // public ApiWorldInstance.AccessType GetAccessType() { } ( public class ApiWorldInstance )
-#define GETACCESSTYPE 0x1095CF0
+#define GETACCESSTYPE 0x12624E0
 
 // public string get_authorName() { } ( public class ApiAvatar : ApiModel )
 #define AUTHORNAME 0x442DD0
 
 // public T GetComponentInChildren() { } ( public class Component : Object )
-#define COMPONENTINCHILDREN 0x29D1DF0
+#define COMPONENTINCHILDREN 0x2095730
 
 // public void .ctor(object object, IntPtr method) { } ( public sealed class UnityAction : MulticastDelegate )
 #define UNITYACTIONCTOR 0x50B060
@@ -259,38 +259,116 @@
 #define VRCAURL 0x442CC0
 
 // public void set_name(string value) { } ( Instantiate failed because the clone was destroyed during creation. This can happen )
-#define OBJECTSETNAME 0x1CBFCB0
+#define OBJECTSETNAME 0x390BB20
 
 // public Vector3 get_localPosition() { } ( public class Transform : Component )
-#define GETLOCALPOS 0x1AC8B00
+#define GETLOCALPOS 0x1835CB0
 
 // public Transform GetChild(int index) { } ( public class Transform : Component )
-#define GETCHILD 0x1AC58D0
+#define GETCHILD 0x1832A80
 
 // public int get_childCount() { } ( public class Transform : Component )
-#define GETCHILDCOUNT 0x1AC8640
+#define GETCHILDCOUNT 0x18357F0
 
 // public void SetParent(Transform parent, bool worldPositionStays) { } ( public class Transform : Component )
-#define SETPARENTBOOL 0x1AC7790
+#define SETPARENTBOOL 0x1834940
 
 // public\sApiAvatar\s\w+\(\)\s{\s} ( VRCPlayer : VRCNetworkBehaviour )
-#define GETAPIAVATAR 0x289CA80
+#define GETAPIAVATAR 0x1E330E0
 
 // public string get_assetUrl() { } ( public class ApiAvatar : ApiModel )
 #define GETASSETURL 0x5A3B20
 
-#define GETHWID 0x1ABF420
+// static string get_deviceUniqueIdentifier ( public sealed class SystemInfo // )
+#define GETHWID 0x182C580
 
-#define FINDOBJECTSOFTYPEALL 0x1AB7360
+// public static Object[] FindObjectsOfTypeAll(Type type) { } ( public sealed class Resources )
+#define FINDOBJECTSOFTYPEALL 0x18244C0
 
-#define ISFOCUSED 0x19E9320
+// public static bool get_isFocused() { } ( None )
+#define ISFOCUSED 0x341EE60
 
-#define CREATEPRIMITIVE 0x1C9A4F0
+// static GameObject CreatePrimitive(PrimitiveType ( class GameObject : Object )
+#define CREATEPRIMITIVE 0x195FC80
 
-#define GETCOMPONENT_GAMEOBJECT 0x1C9A660
+// Component GetComponent(string type) { } ( class GameObject : Object )
+#define GETCOMPONENT_GAMEOBJECT 0x195FDF0
 
-#define SETPOSITION_TRANSFORM 0x1AC9CB0
+// public void set_position(Vector3 value) { } ( Transform : Component )
+#define SETPOSITION_TRANSFORM 0x1836E60
 
-#define GETPOSITION_TRANSFORM 0x1AC9010
+// public Vector3 get_position() { } ( Transform : Component )
+#define GETPOSITION_TRANSFORM 0x18361C0
 
-#define SETENABLED_RENDERER 0x1CD4CD0
+// public void set_enabled(bool value) { } ( public class Renderer : Component )
+#define SETENABLED_RENDERER 0x3920B30
+
+// public void .ctor() { } ( class ArrayList : IList )
+#define ARRAYLIST_CTOR 0x17AAF80
+
+// public virtual int Add(object value) { } ( class ArrayList : IList )
+#define ARRAYLIST_ADD 0x17A9A80
+
+// public virtual object[] ToArray() { } ( class ArrayList : IList )
+#define ARRAYLIST_TOARRAY 0x17AAC60
+
+// public Button.ButtonClickedEvent get_onClick() { } ( class Button : Selectable )
+#define GETONCLICK 0x13ED860
+
+// public void set_onClick(Button.ButtonClickedEvent value) { } ( class Button : Selectable )
+#define SETONCLICK 0xABE230
+
+// void .ctor() ( public class Button.ButtonClickedEvent : UnityEvent )
+#define BUTTONCLICKCTOR 0x13ED5D0
+
+// public static void RPC(RPC.Destination targetClients, GameObject targetObject, string methodName, object[] parameters) { } ( public static class Networking )
+#define NETWORKING_RPC 0x145D150
+
+// public static GameObject Instantiate(VRC_EventHandler.VrcBroadcastType broadcast, string prefabPathOrDynamicPrefabName, Vector3 position, Quaternion rotation) { } ( public static class Networking )
+#define NETWORKING_INSTANTIATE 0x145CD40
+
+// public static Type GetType(string typeName, bool throwOnError, bool ignoreCase) { } ( abstract class Type : MemberInfo )
+#define GETTYPE_TYPE_BOOL_BOOL 0x1852B30
+
+// public void AddListener(UnityAction call) { } ( public class UnityEvent : UnityEventBase )
+#define ADDLISTENER 0x3435D30
+
+// public virtual void set_text(string value) { } ( public class Text : MaskableGraphic )
+#define SET_TEXT 0x177F100
+
+// public static Camera get_main() { } ( public sealed class Camera : Behaviour )
+#define CAMERA_GET_MAIN 0x3427EC0
+
+// public void set_enabled(bool value) { } ( public class Collider : Component )
+#define SETENABLED_COLLIDER 0x1D86940
+
+// public Component GetComponent(Type type) { } ( public class Component : Object )
+#define GETCOMPONENT_TYPE_TYPE 0x342C790
+
+// public Component AddComponent(Type componentType) { } ( public sealed class GameObject : Object )
+#define ADDCOMPONENT 0x195FAB0
+
+// public bool get_activeSelf() { } ( public sealed class GameObject : Object )
+#define GET_ACTIVESELF 0x1960C40
+
+// public static GameObject Find(string name) { } ( public sealed class GameObject : Object )
+#define GAMEOBJECT_FIND 0x195FD90
+
+// public Component GetComponent(Type type) { } ( public sealed class GameObject : Object )
+#define GAMEOBJECT_GETCOMPONENT 0x1960040
+
+// public static bool GetKey(KeyCode key) { } ( public class Input // )
+#define GETKEYPRESSED 0x1965840
+
+// public static float GetAxis(string axisName) { } ( public class Input // )
+#define INPUT_GETAXIS 0x19655C0
+
+// public Vector3 get_forward() { } ( public class Transform : Component )
+#define GET_FORWARD 0x1835900
+
+// public Vector3 get_right() { } ( public class Transform : Component )
+#define GET_RIGHT 0x1836250
+
+// public Vector3 get_up() { } ( public class Transform : Component )
+#define GET_UP 0x18364B0
+

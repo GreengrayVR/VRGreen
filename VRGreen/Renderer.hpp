@@ -1,8 +1,10 @@
 #pragma once
 
+#include "UnityEngine/Component.hpp"
+
 namespace UnityEngine
 {
-	struct Renderer
+	struct Renderer : Component
 	{
 		void SetEnabled(bool value);
 	};

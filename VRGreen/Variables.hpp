@@ -15,6 +15,7 @@ struct Variables // TODO: move to Hack.hpp
 	inline static bool spamEmoji;
 	inline static bool testing;
 	inline static bool fly;
+	inline static bool esp;
 	inline static float flySpeed;
 	inline static std::list<std::string> whiteList;
 	inline static Discord* g_Discord;

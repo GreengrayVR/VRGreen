@@ -25,7 +25,7 @@ UnityEngine::Component* UnityEngine::GameObject::AddComponent(std::string type)
 {
 	using func_t = UnityEngine::Component* (*)(GameObject* component, IL2CPP::Type* type);
 
-	func_t func = GetMethod<func_t>(0x1C9A320);
+	func_t func = GetMethod<func_t>(ADDCOMPONENT);
 
 	return func(this, IL2CPP::GetType(type));
 }
@@ -61,7 +61,7 @@ bool UnityEngine::GameObject::GetActiveSelf()
 {
 	using func_t = bool (*)(GameObject* _this);
 
-	func_t func = GetMethod<func_t>(0x1C9B4B0);
+	func_t func = GetMethod<func_t>(GET_ACTIVESELF);
 
 	return func(this);
 }
@@ -70,7 +70,7 @@ UnityEngine::GameObject* UnityEngine::GameObject::Find(std::string name)
 {
 	using func_t = GameObject * (*)(IL2CPP::String* _this);
 
-	func_t func = GetMethod<func_t>(0x1C9A600);
+	func_t func = GetMethod<func_t>(GAMEOBJECT_FIND);
 
 	return func(IL2CPP::StringNew(name));
 }
@@ -79,7 +79,7 @@ Object* UnityEngine::GameObject::GetComponent(IL2CPP::Type* type)
 {
 	using func_t = Object * (*)(GameObject* _this, IL2CPP::Type* type);
 
-	func_t func = GetMethod<func_t>(0x1C9A8B0);
+	func_t func = GetMethod<func_t>(GAMEOBJECT_GETCOMPONENT);
 
 	return func(this, type);
 }

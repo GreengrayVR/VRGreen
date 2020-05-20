@@ -42,6 +42,22 @@ void Misc::DropPortal(const std::string& world, const std::string& id)
 void Misc::DropPortal(VRC::Player* player)
 {
 	std::string world = "wrld_5eef3063-6226-4ea3-b727-7b3478e85c23";
+	std::string id = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nCringe\0";
+
+	auto pos = player->GetVRCPlayer()->get_transform()->GetPosition();
+	UnityEngine::Quaternion q{ 0.5f,0.5,0.5f,0.5f };
+
+
+	auto gameObject = VRC::SDKBase::Networking::Instantiate(0, "Portals/PortalInternalDynamic", pos, q);
+
+	int nothing = 0;
+	auto objs = System::Collections::CreateObjectArray(IL2CPP::StringNew(world), IL2CPP::StringNew(id), IL2CPP::ValueBox("System.Int32", &nothing));
+	VRC::SDKBase::Networking::RPC(7, gameObject, "ConfigurePortal", objs);
+}
+
+void Misc::DropPortalBlock(VRC::Player* player)
+{
+	std::string world = "wrld_5eef3063-6226-4ea3-b727-7b3478e85c23";
 	std::string id = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nWhy you block me?\0";
 
 	auto pos = player->GetVRCPlayer()->get_transform()->GetPosition();

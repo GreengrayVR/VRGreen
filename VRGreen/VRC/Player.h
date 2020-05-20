@@ -1,8 +1,7 @@
 #pragma once
-#include "../Common.hpp"
 #include <string>
 
-
+#include "UnityEngine/Component.hpp"
 
 namespace VRC::SDKBase { struct VRCPlayerApi; }
 struct VRCPlayer;
@@ -10,7 +9,7 @@ namespace VRC::Core { struct APIUser; }
 
 namespace VRC
 {
-	struct Player : Object 
+	struct Player : UnityEngine::Component 
 	{ 
 		NOIMPLEMENT(Player);
 

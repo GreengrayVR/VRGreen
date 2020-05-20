@@ -219,6 +219,9 @@
     <ClCompile Include="Time.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="HighlightsFX.cpp">
+      <Filter>Assembly-CSharp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IL2CPP\IL2CPP.hpp">
@@ -418,6 +421,9 @@
     </ClInclude>
     <ClInclude Include="UnityEvent.h">
       <Filter>UnityEngine\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="HighlightsFX.hpp">
+      <Filter>Assembly-CSharp</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

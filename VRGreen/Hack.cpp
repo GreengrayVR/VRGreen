@@ -276,6 +276,7 @@ void Hack::setupVariables()
 	disableTriggers = false;
 	Variables::worldTriggers = true;
 	Variables::fly = false;
+	Variables::esp = true;
 	Variables::antiPortal = true;
 	Variables::offlineMode = true;
 	Variables::spamEmoji = true;
@@ -328,13 +329,6 @@ void Hack::setupSettings()
 	m.detourFunc = (mode::lambda_t) & get_RoundTripTimeDetour;
 	settings.push_back(m);
 
-	//m.name = "Serialize"; // People can't see you move
-	//m.offset = 0x22EC310;
-	//m.set = false;
-	//m.trueFunc = GetMethod(m.offset);
-	//m.detourFunc = []() {};
-	//settings.push_back(m);
-
 	// private void InternalTriggerEvent(VRC_EventHandler.VrcEvent e, VRC_EventHandler.VrcBroadcastType broadcast, int instagatorId, float fastForward) { }
 	m.name = "World Triggers"; // Globally turn on/off triggers like mirrors
 	m.offset = WORLD_TRIGGERS;
@@ -358,7 +352,6 @@ void Hack::setupSettings()
 	m.detourFunc = (mode::lambda_t) & Update;
 	settings.push_back(m);
 
-	// private void WarnUserRPC(string 
 	m.name = "WarnUserRPC"; // Anti Warn (Can't get warned by the instance owner)
 	m.offset = WARNUSERRPC;
 	m.set = true;
@@ -366,7 +359,6 @@ void Hack::setupSettings()
 	m.detourFunc = (mode::lambda_t) & WarnUserRPC;
 	settings.push_back(m);
 
-	// private void KickUserRPC(string
 	m.name = "KickUserRPC"; // Anti Kick (Can't get kicked by the instance owner)
 	m.offset = KICKUSERRPC;
 	m.set = true;
@@ -382,44 +374,21 @@ void Hack::setupSettings()
 	m.detourFunc = (mode::lambda_t) & OnTriggerEnter;
 	settings.push_back(m);
 
-	// public List<Action> xxxx(byte[] xxxx, int xxxx) { }
-	m.name = "ReceiveAudio";
-	m.offset = RECEIVEAUDIO;
-	m.set = true;
-	m.trueFunc = GetMethod(m.offset);
-	m.detourFunc = (mode::lambda_t) & ReceiveAudio;
-	settings.push_back(m);
-
-	// e9 ? ? ? ? 48 89 74 24 ? 57 48 83 ec ? 80 3d ? ? ? ? ? 48 8b f2 48 8b f9 75 ? 8b 0d ? ? ? ? e8 ? ? ? ? c6 05 ? ? ? ? ? 48 8b 0d ? ? ? ? e8 ? ? ? ? 33 d2 48 8b c8 48 8b d8 e8 ? ? ? ? 48 85 db 0f 84 ? ? ? ? 48 89 7b ? 48 89 73 ? 48 8b 0d
+	//// e9 ? ? ? ? 48 89 74 24 ? 57 48 83 ec ? 80 3d ? ? ? ? ? 48 8b f2 48 8b f9 75 ? 8b 0d ? ? ? ? e8 ? ? ? ? c6 05 ? ? ? ? ? 48 8b 0d ? ? ? ? e8 ? ? ? ? 33 d2 48 8b c8 48 8b d8 e8 ? ? ? ? 48 85 db 0f 84 ? ? ? ? 48 89 7b ? 48 89 73 ? 48 8b 0d
 	m.name = "PlayerJoined";
-	m.offset = 0x29F7B30;
+	m.offset = PLAYERJOINED;
 	m.set = true;
 	m.trueFunc = GetMethod(m.offset);
 	m.detourFunc = (mode::lambda_t) & PlayerJoined;
 	settings.push_back(m);
 
-	// e9 ? ? ? ? 48 89 74 24 ? 57 48 83 ec ? 80 3d ? ? ? ? ? 48 8b f2 48 8b f9 75 ? 8b 0d ? ? ? ? e8 ? ? ? ? c6 05 ? ? ? ? ? 48 8b 0d ? ? ? ? e8 ? ? ? ? 33 d2 48 8b c8 48 8b d8 e8 ? ? ? ? 48 85 db 0f 84 ? ? ? ? 48 89 7b ? 48 89 73 ? 48 83 bf
+	//// e9 ? ? ? ? 48 89 74 24 ? 57 48 83 ec ? 80 3d ? ? ? ? ? 48 8b f2 48 8b f9 75 ? 8b 0d ? ? ? ? e8 ? ? ? ? c6 05 ? ? ? ? ? 48 8b 0d ? ? ? ? e8 ? ? ? ? 33 d2 48 8b c8 48 8b d8 e8 ? ? ? ? 48 85 db 0f 84 ? ? ? ? 48 89 7b ? 48 89 73 ? 48 83 bf
 	m.name = "PlayerLeft"; // 0x29F78B0
-	m.offset = 0x29F78B0;
+	m.offset = PLAYERLEFT;
 	m.set = true;
 	m.trueFunc = GetMethod(m.offset);
 	m.detourFunc = (mode::lambda_t) & PlayerLeft;
 	settings.push_back(m);
-
-	// e9 ? ? ? ? 48 89 74 24 ? 57 48 83 ec ? 80 3d ? ? ? ? ? 48 8b f2 48 8b f9 75 ? 8b 0d ? ? ? ? e8 ? ? ? ? c6 05 ? ? ? ? ? 48 8b 0d ? ? ? ? e8 ? ? ? ? 33 d2 48 8b c8 48 8b d8 e8 ? ? ? ? 48 85 db 0f 84 ? ? ? ? 48 89 7b ? 48 89 73 ? 48 83 bf
-	m.name = "Wtf";
-	m.offset = 0x29F9C50;
-	m.set = true;
-	m.trueFunc = GetMethod(m.offset);
-	m.detourFunc = (mode::lambda_t) & Wtf;
-	settings.push_back(m);
-
-	//m.name = "DeviceId"; // Change HWID
-	//m.offset = DEVICEID;
-	//m.set = true;
-	//m.trueFunc = GetMethod(m.offset);
-	//m.detourFunc = (mode::lambda_t)&get_DeviceId;
-	//settings.push_back(m);	
 
 	// ForceLogoutRPC
 	m.name = "ForceLogoutRPC";
@@ -549,60 +518,51 @@ void Hack::setupSettings()
 	m.detourFunc = (mode::lambda_t) & BlockStateChangeRPC;
 	settings.push_back(m);
 
-	// private void _DestroyObject(int\s
-	m.name = "_DestroyObject";
-	m.offset = _DESTROYOBJECT;
-	m.set = true;
-	m.trueFunc = GetMethod(m.offset);
-	m.detourFunc = []() { ConsoleUtils::Log("_DestroyObject"); };
-	settings.push_back(m);
-
-	//// 48 89 5c 24 ? 57 48 83 ec ? 80 3d ? ? ? ? ? 0f b6 fa 48 8b d9 75 ? 8b 0d ? ? ? ? e8 ? ? ? ? c6 05 ? ? ? ? ? 48 8b 05 ? ? ? ? f6 80 ? ? ? ? ? 74 ? 83 b8 ? ? ? ? ? 75 ? 48 8b c8 e8 ? ? ? ? 48 8b 05 ? ? ? ? 48 8b 80 ? ? ? ? 48 83 78
-	//m.name = "NoKickTrue"; 
-	//m.offset = 0x2A31010;
+	//// private void _DestroyObject(int\s
+	//m.name = "_DestroyObject";
+	//m.offset = _DESTROYOBJECT;
 	//m.set = true;
 	//m.trueFunc = GetMethod(m.offset);
-	//m.detourFunc = (mode::lambda_t) & NoKickTrue;
-	//settings.push_back(m);	
-	//
-	// 40 53 48 83 ec ? 80 3d ? ? ? ? ? 48 8b d9 75 ? 8b 0d ? ? ? ? e8 ? ? ? ? c6 05 ? ? ? ? ? 80 bb ? ? ? ? ? 0f 84 ? ? ? ? 48 8b 0d ? ? ? ? f6 81 ? ? ? ? ? 74 ? 83 b9 ? ? ? ? ? 75 ? e8 ? ? ? ? 48 89 74 24
+	//m.detourFunc = []() { ConsoleUtils::Log("_DestroyObject"); };
+	//settings.push_back(m);
+
 	m.name = "CustomPlates";
 	m.offset = VRCPLAYERCUSTOMPLATES;
 	m.set = true;
 	m.trueFunc = GetMethod(m.offset);
 	m.detourFunc = (mode::lambda_t) & CustomPlates;
 	settings.push_back(m);
-	//
-	//// e9 ? ? ? ? 48 89 6c 24 ? 48 89 74 24 ? 48 89 7c 24 ? 41 56 48 83 ec ? 80 3d ? ? ? ? ? 49 8b f9 49 8b f0 48 8b ea 4c 8b f1 75 ? 8b 0d ? ? ? ? e8 ? ? ? ? c6 05 ? ? ? ? ? 48 8b 0d ? ? ? ? e8 ? ? ? ? 33 d2 48 8b c8 48 8b d8 e8 ? ? ? ? 48 85 db 74 ? 48 89 73 ? 48 89 7b ? 48 89 6b ? 48 8b 0d ? ? ? ? 49 8b 7e ? e8 ? ? ? ? 4c 8b 0d ? ? ? ? 48 8b d3 4c 8b 05 ? ? ? ? 48 8b c8 48 8b f0 e8 ? ? ? ? 48 85 ff 74 ? 4c 8b 05 ? ? ? ? 48 8b d6 48 8b cf 48 8b 5c 24 ? 48 8b 6c 24 ? 48 8b 74 24 ? 48 8b 7c 24 ? 48 83 c4 ? 41 5e e9 ? ? ? ? 33 c9 e8 ? ? ? ? cc 48 83 ec
-	//m.name = "IsKickedFromWorld"; 
-	//m.offset = 0x208D100;
-	//m.set = true;
-	//m.trueFunc = GetMethod(m.offset);
-	//m.detourFunc = (mode::lambda_t) & IsKickedFromWorld;
-	//settings.push_back(m);
-	//
-	//// 48 89 5c 24 ? 48 89 6c 24 ? 48 89 74 24 ? 57 48 83 ec ? 80 3d ? ? ? ? ? 49 8b f9 48 8b f2
-	//m.name = "IsKicked"; 
-	//m.offset = 0x2A3CD50; // 0x2A6AA80
-	//m.set = true;
-	//m.trueFunc = GetMethod(m.offset);
-	//m.detourFunc = (mode::lambda_t) & JoinWorld;
-	//settings.push_back(m);
-	//
-	//// 48 89 5c 24 ? 48 89 6c 24 ? 48 89 74 24 ? 48 89 7c 24 ? 41 56 48 83 ec ? 80 3d ? ? ? ? ? 49 8b f9 49 8b f0 48 8b ea 4c 8b f1 75 ? 8b 0d ? ? ? ? e8 ? ? ? ? c6 05 ? ? ? ? ? 48 8b 0d ? ? ? ? e8 ? ? ? ? 33 d2 48 8b c8 48 8b d8 e8 ? ? ? ? 48 85 db 74 ? 48 89 73 ? 48 89 7b ? 48 89 6b ? 48 8b 0d ? ? ? ? 49 8b 7e ? e8 ? ? ? ? 4c 8b 0d ? ? ? ? 48 8b d3 4c 8b 05 ? ? ? ? 48 8b c8 48 8b f0 e8 ? ? ? ? 48 85 ff 74 ? 4c 8b 05 ? ? ? ? 48 8b d6 48 8b cf 48 8b 5c 24 ? 48 8b 6c 24 ? 48 8b 74 24 ? 48 8b 7c 24 ? 48 83 c4 ? 41 5e e9 ? ? ? ? 33 c9 e8 ? ? ? ? cc 48 89 5c 24 ? 48 89 74 24
-	//m.name = "IsKicked2";
-	//m.offset = 0x2094C20;
-	//m.set = true;
-	//m.trueFunc = GetMethod(m.offset);
-	//m.detourFunc = (mode::lambda_t) & IsKicked2;
-	//settings.push_back(m);
+	////
+	////// e9 ? ? ? ? 48 89 6c 24 ? 48 89 74 24 ? 48 89 7c 24 ? 41 56 48 83 ec ? 80 3d ? ? ? ? ? 49 8b f9 49 8b f0 48 8b ea 4c 8b f1 75 ? 8b 0d ? ? ? ? e8 ? ? ? ? c6 05 ? ? ? ? ? 48 8b 0d ? ? ? ? e8 ? ? ? ? 33 d2 48 8b c8 48 8b d8 e8 ? ? ? ? 48 85 db 74 ? 48 89 73 ? 48 89 7b ? 48 89 6b ? 48 8b 0d ? ? ? ? 49 8b 7e ? e8 ? ? ? ? 4c 8b 0d ? ? ? ? 48 8b d3 4c 8b 05 ? ? ? ? 48 8b c8 48 8b f0 e8 ? ? ? ? 48 85 ff 74 ? 4c 8b 05 ? ? ? ? 48 8b d6 48 8b cf 48 8b 5c 24 ? 48 8b 6c 24 ? 48 8b 74 24 ? 48 8b 7c 24 ? 48 83 c4 ? 41 5e e9 ? ? ? ? 33 c9 e8 ? ? ? ? cc 48 83 ec
+	////m.name = "IsKickedFromWorld"; 
+	////m.offset = 0x208D100;
+	////m.set = true;
+	////m.trueFunc = GetMethod(m.offset);
+	////m.detourFunc = (mode::lambda_t) & IsKickedFromWorld;
+	////settings.push_back(m);
+	////
+	////// 48 89 5c 24 ? 48 89 6c 24 ? 48 89 74 24 ? 57 48 83 ec ? 80 3d ? ? ? ? ? 49 8b f9 48 8b f2
+	////m.name = "IsKicked"; 
+	////m.offset = 0x2A3CD50; // 0x2A6AA80
+	////m.set = true;
+	////m.trueFunc = GetMethod(m.offset);
+	////m.detourFunc = (mode::lambda_t) & JoinWorld;
+	////settings.push_back(m);
+	////
+	////// 48 89 5c 24 ? 48 89 6c 24 ? 48 89 74 24 ? 48 89 7c 24 ? 41 56 48 83 ec ? 80 3d ? ? ? ? ? 49 8b f9 49 8b f0 48 8b ea 4c 8b f1 75 ? 8b 0d ? ? ? ? e8 ? ? ? ? c6 05 ? ? ? ? ? 48 8b 0d ? ? ? ? e8 ? ? ? ? 33 d2 48 8b c8 48 8b d8 e8 ? ? ? ? 48 85 db 74 ? 48 89 73 ? 48 89 7b ? 48 89 6b ? 48 8b 0d ? ? ? ? 49 8b 7e ? e8 ? ? ? ? 4c 8b 0d ? ? ? ? 48 8b d3 4c 8b 05 ? ? ? ? 48 8b c8 48 8b f0 e8 ? ? ? ? 48 85 ff 74 ? 4c 8b 05 ? ? ? ? 48 8b d6 48 8b cf 48 8b 5c 24 ? 48 8b 6c 24 ? 48 8b 74 24 ? 48 8b 7c 24 ? 48 83 c4 ? 41 5e e9 ? ? ? ? 33 c9 e8 ? ? ? ? cc 48 89 5c 24 ? 48 89 74 24
+	////m.name = "IsKicked2";
+	////m.offset = 0x2094C20;
+	////m.set = true;
+	////m.trueFunc = GetMethod(m.offset);
+	////m.detourFunc = (mode::lambda_t) & IsKicked2;
+	////settings.push_back(m);
 
-	//m.name = "RPC";  // VRC_EventHandler.VrcBroadcastType q, int q, VRC_EventHandler.VrcTargetType q, GameObject q, string q, byte[] q
-	//m.offset = 0x232C6F0;
-	//m.set = true;
-	//m.trueFunc = GetMethod(m.offset);
-	//m.detourFunc = (mode::lambda_t) & EventDispatcherExecuteRPCPrefix;
-	//settings.push_back(m);
+	////m.name = "RPC";  // VRC_EventHandler.VrcBroadcastType q, int q, VRC_EventHandler.VrcTargetType q, GameObject q, string q, byte[] q
+	////m.offset = 0x232C6F0;
+	////m.set = true;
+	////m.trueFunc = GetMethod(m.offset);
+	////m.detourFunc = (mode::lambda_t) & EventDispatcherExecuteRPCPrefix;
+	////settings.push_back(m);
 
 	m.name = "GetFriendlyDetailedNameForSocialRank";
 	m.offset = SOCIALMENURANK;
@@ -615,10 +575,10 @@ void Hack::setupSettings()
 	m.offset = INFINITEPORTALS; // 0x2DB8CA0
 	m.set = true;
 	m.trueFunc = GetMethod(m.offset);
-	m.detourFunc = []() { ConsoleUtils::Log(cyan, "Portal stopped from getting deleted"); ConsoleUtils::VRLog("<color=cyan>Portal stopped from getting deleted</color>"); };
+	m.detourFunc = []() {  };
 	settings.push_back(m);
 
-	//// e9 ? ? ? ? 57 48 83 ec ? 45 33 c0
+	////// e9 ? ? ? ? 57 48 83 ec ? 45 33 c0
 	//m.name = "See Blocked";
 	//m.offset = 0x20922F0;
 	//m.set = true;
@@ -633,47 +593,47 @@ void Hack::setupSettings()
 	m.detourFunc = (mode::lambda_t) & CloneAvatar;
 	settings.push_back(m);
 
-	m.name = "ReceiveVoteToKickInitiation";
-	m.offset = VOTEKICKINIT;
-	m.set = true;
-	m.trueFunc = GetMethod(m.offset);
-	m.detourFunc = (mode::lambda_t) & ReceiveVoteToKickInitiation;
-	settings.push_back(m);
-
-	//m.name = "TriggerEvent1";
-	//m.offset = 0x2953A60;
+	//m.name = "ReceiveVoteToKickInitiation";
+	//m.offset = VOTEKICKINIT;
 	//m.set = true;
 	//m.trueFunc = GetMethod(m.offset);
-	//m.detourFunc = []() { ConsoleUtils::Log(1); };
+	//m.detourFunc = (mode::lambda_t) & ReceiveVoteToKickInitiation;
 	//settings.push_back(m);
 
-	//m.name = "TriggerEvent2";
-	//m.offset = 0x295A840;
-	//m.set = true;
-	//m.trueFunc = GetMethod(m.offset);
-	//m.detourFunc = []() { ConsoleUtils::Log(2); };
-	//settings.push_back(m);
+	////m.name = "TriggerEvent1";
+	////m.offset = 0x2953A60;
+	////m.set = true;
+	////m.trueFunc = GetMethod(m.offset);
+	////m.detourFunc = []() { ConsoleUtils::Log(1); };
+	////settings.push_back(m);
 
-	//m.name = "TriggerEvent3";
-	//m.offset = 0x2959F60;
-	//m.set = true;
-	//m.trueFunc = GetMethod(m.offset);
-	//m.detourFunc = []() { ConsoleUtils::Log(3); };
-	//settings.push_back(m);
+	////m.name = "TriggerEvent2";
+	////m.offset = 0x295A840;
+	////m.set = true;
+	////m.trueFunc = GetMethod(m.offset);
+	////m.detourFunc = []() { ConsoleUtils::Log(2); };
+	////settings.push_back(m);
 
-	//m.name = "TriggerEvent4";
-	//m.offset = 0x2C8C8E0;
-	//m.set = true;
-	//m.trueFunc = GetMethod(m.offset);
-	//m.detourFunc = []() { ConsoleUtils::Log(4); };
-	//settings.push_back(m);
+	////m.name = "TriggerEvent3";
+	////m.offset = 0x2959F60;
+	////m.set = true;
+	////m.trueFunc = GetMethod(m.offset);
+	////m.detourFunc = []() { ConsoleUtils::Log(3); };
+	////settings.push_back(m);
 
-	//m.name = "TriggerEvent5";
-	//m.offset = 0x2C8D1F0;
-	//m.set = true;
-	//m.trueFunc = GetMethod(m.offset);
-	//m.detourFunc = []() { ConsoleUtils::Log(5); };
-	//settings.push_back(m);
+	////m.name = "TriggerEvent4";
+	////m.offset = 0x2C8C8E0;
+	////m.set = true;
+	////m.trueFunc = GetMethod(m.offset);
+	////m.detourFunc = []() { ConsoleUtils::Log(4); };
+	////settings.push_back(m);
+
+	////m.name = "TriggerEvent5";
+	////m.offset = 0x2C8D1F0;
+	////m.set = true;
+	////m.trueFunc = GetMethod(m.offset);
+	////m.detourFunc = []() { ConsoleUtils::Log(5); };
+	////settings.push_back(m);
 }
 
 void Hack::OfflineMode(IL2CPP::String* target, void* responseContainer, void* requestParams, void* credentials)
@@ -723,54 +683,21 @@ void Hack::Wtf(void* _this, VRC::Player* player)
 	TrueFunc(_this, player);
 }
 
-void Hack::CloneAvatar(UserInteractMenu* __instance)
+void Hack::CloneAvatar(UserInteractMenu* __instance) // TODO: Add check for private
 {
 	if (__instance == nullptr)
 		return;
 
-	{ // sets the button to enabled
+	{
 		auto cloneAvatarButton = (UnityEngine::UI::Button*)IL2CPP::GetField((Object*)__instance, "cloneAvatarButton", true);
-		auto gameObject = cloneAvatarButton->get_gameObject();
-		gameObject->SetActive(true);
-		auto selectable = (Selectable*)cloneAvatarButton;
-		selectable->SetInteractable(true);
+		(cloneAvatarButton->get_gameObject())->SetActive(true);
+		((Selectable*)cloneAvatarButton)->SetInteractable(true);
 	}
 
 	{
 		auto text = (UnityEngine::UI::Text*)IL2CPP::GetField((Object*)__instance, "cloneAvatarButtonText", true);
-		auto m_Text = IL2CPP::ClassGetFieldFromName(text, "m_Text");
-
-
-
-		std::string newValueStd = "Force\nClone";
-		Object* newValue = IL2CPP::StringNew(newValueStd);
-		IL2CPP::FieldSetValueObject(text, m_Text, newValue);
-	}
-
-	{
-		auto text = (UnityEngine::UI::Text*)IL2CPP::GetField((Object*)__instance, "cloneAvatarButtonText", true);
-
-		//IL2CPP::GetFields(text);
-
-		//Color c{ 0.5f, 0.5f, 0.5f, 1.f };
-
-
-
-		auto color = UnityEngine::GetRed();
-
-		((UnityEngine::UI::Graphic*)text)->SetColor(&color);
-
-		//Color a{1.f,0.f,0.f}
-
-		//using func_t = void(*)(UnityEngine::UI::Graphic* _this, UnityEngine::Color* value);
-		//func_t func = GetMethod<func_t>(SETCOLOR);
-
-
-		//UnityEngine::Color color{ 0.5f, 0.5f, 0.5f, 0.5f };
-
-		//func((UnityEngine::UI::Graphic*)text, &color);
-
-		//graphictext->SetColor(UnityEngine::GetRed());
+		text->SetText("Force\nClone");
+		((UnityEngine::UI::Graphic*)text)->SetColor(&UnityEngine::GetRed());
 	}
 }
 
@@ -786,7 +713,6 @@ bool Hack::IsBlockedEitherWay(void* _this, IL2CPP::String* str)
 IL2CPP::String* Hack::GetFriendlyDetailedNameForSocialRank(VRC::Core::APIUser* apiuser)
 {
 	std::string id = apiuser->getId();
-
 
 	std::string text = "";
 	text += (VRC::Core::APIUser::isFriendsWith(id) ? "Friend (" : "");
@@ -815,10 +741,10 @@ void Hack::CustomPlates(VRCPlayer* __instance, void* aaa)
 
 	if (Variables::forceMute)
 	{
-		if (!VRC::Core::APIUser::isFriendsWith(userid) && Misc::contains(Variables::whiteList, userid))
-		{
+		//if (!VRC::Core::APIUser::isFriendsWith(userid) && Misc::contains(Variables::whiteList, userid))
+		//{
 			IL2CPP::SetField(__instance, "System.Boolean", 10, (void*)false);
-		}
+		//}
 	}
 
 	auto vipPlate = (VRCUiShadowPlate*)IL2CPP::GetField(__instance, "vipPlate", true);
@@ -877,21 +803,6 @@ void Hack::CustomPlates(VRCPlayer* __instance, void* aaa)
 
 		vipPlate->get_transform()->SetLocalScale(&v);
 	}
-
-
-	//{
-	//	auto namePlate = (VRCUiShadowPlate*)IL2CPP::GetField(__instance, "namePlate", true);
-	//	auto mainText = (UnityEngine::UI::Text*)IL2CPP::GetField(namePlate, "mainText", true);
-	//	auto m_Text = IL2CPP::ClassGetFieldFromName(mainText, "m_Text");
-
-	//	
-
-	//	std::string newValueStd = Misc::GetUserRank(player->GetAPIUser());
-	//	Object* newValue = IL2CPP::StringNew(newValueStd);
-	//	IL2CPP::FieldSetValueObject(mainText, m_Text, newValue);
-
-	//	Show(namePlate);
-	//}
 
 	Show(vipPlate);
 }
@@ -1226,6 +1137,11 @@ void Hack::BlockStateChangeRPC(void* _this, IL2CPP::String* player2, bool blockS
 	{
 		auto p1 = player->ToString();
 		auto p2 = VRC::PlayerManager::GetPlayer(player2)->ToString();
+
+		if (IL2CPP::StringChars(player2) == VRC::Core::APIUser::currentUser()->getId())
+		{
+			Misc::DropPortalBlock(VRC::PlayerManager::GetPlayer(player2));
+		}
 
 		ConsoleUtils::Log((blockState ? red : green),
 			p1,
@@ -1834,6 +1750,31 @@ void Hack::Update(void* _this)
 		Misc::SerializeAll();
 	}
 
+	/*if (Variables::esp)
+	{
+
+		auto getPlayers = VRC::PlayerManager::GetPlayers();
+
+		if (getPlayers == nullptr)
+		{
+			ConsoleUtils::Log("Get Players failed");
+			return;
+		}
+
+		List<VRC::Player*> players(getPlayers);
+
+		for (size_t i = 0; i < players.arrayLength; i++)
+		{
+			auto selectRegion = players[i]->get_gameObject()->GetTransform()->Find("SelectRegion");
+
+			if (selectRegion != nullptr)
+			{
+				((UnityEngine::Renderer*)selectRegion->GetComponent("UnityEngine.Renderer"))->
+			}
+
+		}
+	}*/
+
 	using TrueFunc_t = decltype(&Update);
 	TrueFunc_t TrueFunc = (TrueFunc_t)getInstance().getSetting("Update").trueFunc;
 	TrueFunc(_this);
@@ -1849,7 +1790,7 @@ void Hack::ConfigurePortal(void* _this, IL2CPP::String* world_id, IL2CPP::String
 
 		ConsoleUtils::Log(cyan, p, " SPAWNED A ", (modified ? "MODIFIED " : ""), "PORTAL TO:", white);
 		std::cout << worldId << "\n";
-		//(text7.Contains("<color") || text7.Contains("<size") || text7.Contains("\n") || text7.Contains("\0"))
+
 		ConsoleUtils::VRLog(p + " <color=cyan>spawned a " + (modified ? "modified " : "") + "portal to " + Misc::GetWorldTag(worldId) + "</color>");
 	}
 

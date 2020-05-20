@@ -16,7 +16,7 @@ UnityEngine::GameObject* VRC::SDKBase::Networking::Instantiate(int broadcast, st
 {
 	using func_t = UnityEngine::GameObject* (*)(int broadcast, IL2CPP::String* methodName, UnityEngine::Vector3 position, UnityEngine::Quaternion rotation);
 
-	func_t func = GetMethod<func_t>(0x16D2C50);
+	func_t func = GetMethod<func_t>(NETWORKING_INSTANTIATE);
 
 	return func(broadcast, IL2CPP::StringNew(prefabPathOrDynamicPrefabName), position, rotation);
 }
@@ -25,7 +25,7 @@ void VRC::SDKBase::Networking::RPC(int targetClients, UnityEngine::GameObject* t
 {
 	using func_t = void(*)(int targetClients, UnityEngine::GameObject* targetObject, IL2CPP::String* methodName, ObjectArray* parameters);
 
-	func_t func = GetMethod<func_t>(0x16D3060);
+	func_t func = GetMethod<func_t>(NETWORKING_RPC);
 
 	func(targetClients, targetObject, IL2CPP::StringNew(methodName), parameters);
 }

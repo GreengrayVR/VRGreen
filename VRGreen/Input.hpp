@@ -680,7 +680,7 @@ inline bool GetKey(KeyCode name)
 {
 	using func_t = bool(*)(int32_t key);
 
-	func_t func = GetMethod<func_t>(0x1C9FF40);
+	func_t func = GetMethod<func_t>(GETKEYPRESSED);
 
 	return func(name);
 }
@@ -690,7 +690,7 @@ inline float GetAxis(std::string axisName)
 {
 	using func_t = float(*)(IL2CPP::String* axisName);
 
-	func_t func = GetMethod<func_t>(0x1C9FCC0);
+	func_t func = GetMethod<func_t>(INPUT_GETAXIS);
 
 	return func(IL2CPP::StringNew(axisName));
 }

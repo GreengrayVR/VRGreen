@@ -59,11 +59,6 @@ void VRCQuickMenu::SetupButtons()
 
 	QuickMenuButtons.push_back(new ToggleButton("UIElementsMenu", -1, 0, "Fly", CreateDetour([=]()
 	{
-		{ // TODO: Fix this bug
-			Variables::fly = !Variables::fly;
-			auto collider = (UnityEngine::Collider*)VRCPlayer::GetCurrentVRCPlayer()->get_gameObject()->GetComponent(IL2CPP::GetType("UnityEngine.CharacterController, UnityEngine.PhysicsModule"));
-			collider->SetEnabled(!Variables::fly);
-		}
 		{
 			Variables::fly = !Variables::fly;
 			auto collider = (UnityEngine::Collider*)VRCPlayer::GetCurrentVRCPlayer()->get_gameObject()->GetComponent(IL2CPP::GetType("UnityEngine.CharacterController, UnityEngine.PhysicsModule"));
@@ -71,11 +66,6 @@ void VRCQuickMenu::SetupButtons()
 		}
 	}), "OFF", CreateDetour([=]()
 	{
-		{
-			Variables::fly = !Variables::fly;
-			auto collider = (UnityEngine::Collider*)VRCPlayer::GetCurrentVRCPlayer()->get_gameObject()->GetComponent(IL2CPP::GetType("UnityEngine.CharacterController, UnityEngine.PhysicsModule"));
-			collider->SetEnabled(!Variables::fly);
-		}
 		{
 			Variables::fly = !Variables::fly;
 			auto collider = (UnityEngine::Collider*)VRCPlayer::GetCurrentVRCPlayer()->get_gameObject()->GetComponent(IL2CPP::GetType("UnityEngine.CharacterController, UnityEngine.PhysicsModule"));
@@ -139,7 +129,7 @@ void VRCQuickMenu::SetupVRGreenText()
 	auto component = (UnityEngine::UI::Text*)textTemplate->GetComponent("UnityEngine.UI.Text");
 	
 	// TODO: random string
-	component->SetText("<color=purple>we fell in love in october</color>"); // Make my heart bleed
+	component->SetText("<color=purple>we fell in love in october</color>"); // Make my heart bleed // i'll make a cup of coffee for your head
 
 	UnityEngine::Vector3 v2;
 	v2.x = 1.45f;

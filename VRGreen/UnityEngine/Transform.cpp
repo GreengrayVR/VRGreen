@@ -123,7 +123,7 @@ UnityEngine::Vector3 UnityEngine::Transform::GetForward()
 {
 	using func_t = Vector3(*)(Transform* transform);
 
-	func_t func = GetMethod<func_t>(0x1AC8750);
+	func_t func = GetMethod<func_t>(GET_FORWARD);
 
 	return func(this);
 }
@@ -132,7 +132,7 @@ UnityEngine::Vector3 UnityEngine::Transform::GetRight()
 {
 	using func_t = Vector3(*)(Transform* transform);
 
-	func_t func = GetMethod<func_t>(0x1AC90A0);
+	func_t func = GetMethod<func_t>(GET_RIGHT);
 
 	return func(this);
 }
@@ -141,7 +141,7 @@ UnityEngine::Vector3 UnityEngine::Transform::GetUp()
 {
 	using func_t = Vector3(*)(Transform* transform);
 
-	func_t func = GetMethod<func_t>(0x1AC9300);
+	func_t func = GetMethod<func_t>(GET_UP);
 
 	return func(this);
 }
