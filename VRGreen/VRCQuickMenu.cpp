@@ -9,12 +9,59 @@
 #include "Text.hpp"
 #include "VRC/PlayerManager.hpp"
 #include "ConsoleUtils.hpp"
+#include "Image.hpp"
 
 using namespace UnityEngine;
 
+void VRCQuickMenu::ShowUIElements1()
+{
+	Variables::uiElementsPage1 = !Variables::uiElementsPage1;
+
+	for (auto btn : QuickMenuButtons)
+	{
+		auto btnName = GetName(btn->getGameObject());
+
+		if (btnName == "ToggleButton123(-3,0)" || btnName == "SingleButton1120(3,-1)" || btnName == "SingleButton116(1,-2)"|| btnName == "ToggleButton115(-1,-2)" || btnName == "ToggleButton114(-3,-2)" || btnName == "ToggleButton113(-1,0)" || btnName == "ToggleButton112(-1,-1)" || btnName == "ToggleButton111(-3,-1)" || btnName == "ToggleButton110(-2,-1)" || btnName == "ToggleButton121(-1,0)" || btnName == "ToggleButton122(-2,0)")
+		{
+			if (Variables::uiElementsPage1)
+			{
+				btn->setActive(false);
+				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/SingleButton1110(3,0)")->get_gameObject()->SetActive(true);
+				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton121(-1,0)")->get_gameObject()->SetActive(true);
+				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton122(-2,0)")->get_gameObject()->SetActive(true);
+				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton123(-3,0)")->get_gameObject()->SetActive(true);
+				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleHUDButton")->get_gameObject()->SetActive(false);
+				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleNameplatesButton")->get_gameObject()->SetActive(false);
+			}
+			else
+			{
+				btn->setActive(true);
+				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/SingleButton1110(3,0)")->get_gameObject()->SetActive(false);
+				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton121(-1,0)")->get_gameObject()->SetActive(false);
+				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton122(-2,0)")->get_gameObject()->SetActive(false);
+				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton123(-3,0)")->get_gameObject()->SetActive(false);
+				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleHUDButton")->get_gameObject()->SetActive(true);
+				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleNameplatesButton")->get_gameObject()->SetActive(true);
+			}
+		}
+	}
+}
+
 void VRCQuickMenu::SetupButtons()
 {
-	QuickMenuButtons.push_back(new ToggleButton("UIElementsMenu", -2, -1, "Force Mute", CreateDetour([=]()
+	Variables::uiElementsPage1 = false;
+
+	auto buttonUp1 = new SingleButton("UIElementsMenu", 1110, 3, 0, "", CreateDetour([=]() { ShowUIElements1(); }), "");
+	((UI::Image*)buttonUp1->getGameObject()->GetComponent("UnityEngine.UI.Image"))->SetSprite(((UI::Image*)QuickMenu::QuickMenuInstance()->get_transform()->Find("EmojiMenu/PageUp")->GetComponent("UnityEngine.UI.Image"))->GetSprite());
+	QuickMenuButtons.push_back(buttonUp1);
+	buttonUp1->setActive(false);
+
+	auto buttonDown1 = new SingleButton("UIElementsMenu", 1120, 3, -1, "", CreateDetour([=]() { ShowUIElements1(); }), "");
+	((UI::Image*)buttonDown1->getGameObject()->GetComponent("UnityEngine.UI.Image"))->SetSprite(((UI::Image*)QuickMenu::QuickMenuInstance()->get_transform()->Find("EmojiMenu/PageDown")->GetComponent("UnityEngine.UI.Image"))->GetSprite());
+	QuickMenuButtons.push_back(buttonDown1);
+
+#pragma region Page1
+	auto forceMuteButton = new ToggleButton("UIElementsMenu", 110, -2, -1, "Force Mute", CreateDetour([=]()
 	{
 		Variables::forceMute = true; // TODO: move to Hack.cpp
 
@@ -22,20 +69,12 @@ void VRCQuickMenu::SetupButtons()
 	{
 		Variables::forceMute = false;
 
-	}), "kill youserlf fag"));
+	}), "kill youserlf fag");
+	QuickMenuButtons.push_back(forceMuteButton);
+	forceMuteButton->btnOn->SetActive(true);
+	forceMuteButton->btnOff->SetActive(false);
 
-	QuickMenuButtons.push_back(new ToggleButton("UIElementsMenu", 0, 0, "Speed Hack", CreateDetour([=]()
-	{
-		Variables::speedHack = true;
-
-	}), "NO", CreateDetour([=]()
-	{
-
-		Variables::speedHack = false;
-
-	}), "find me a gf"));
-
-	QuickMenuButtons.push_back(new ToggleButton("UIElementsMenu", -3, -1, "Auto Destroy", CreateDetour([=]()
+	auto autoDestroyButton = new ToggleButton("UIElementsMenu", 111, -3, -1, "Auto Destroy", CreateDetour([=]()
 	{
 		Variables::autoDestroy = true;
 
@@ -44,20 +83,26 @@ void VRCQuickMenu::SetupButtons()
 
 		Variables::autoDestroy = false;
 
-	}), "gray is a cunt"));
+	}), "gray is a cunt");
+	QuickMenuButtons.push_back(autoDestroyButton);
+	autoDestroyButton->btnOn->SetActive(true);
+	autoDestroyButton->btnOff->SetActive(false);
+	
+	auto worldTriggersButton = new ToggleButton("UIElementsMenu", 112, -1, -1, "World Triggers", CreateDetour([=]()
+		{
+			Variables::worldTriggers = true;
 
-	QuickMenuButtons.push_back(new ToggleButton("UIElementsMenu", -1, -1, "World Triggers", CreateDetour([=]()
-	{
-		Variables::worldTriggers = true;
+		}), "OFF", CreateDetour([=]()
+			{
 
-	}), "OFF", CreateDetour([=]()
-	{
+				Variables::worldTriggers = false;
 
-		Variables::worldTriggers = false;
+			}), "kiwi is stupid");
+	QuickMenuButtons.push_back(worldTriggersButton);
+	worldTriggersButton->btnOn->SetActive(true);
+	worldTriggersButton->btnOff->SetActive(false);
 
-	}), "kiwi is stupid"));
-
-	QuickMenuButtons.push_back(new ToggleButton("UIElementsMenu", -1, 0, "Fly", CreateDetour([=]()
+	QuickMenuButtons.push_back(new ToggleButton("UIElementsMenu", 113, -1, 0, "Fly", CreateDetour([=]()
 	{
 		{
 			Variables::fly = !Variables::fly;
@@ -73,26 +118,18 @@ void VRCQuickMenu::SetupButtons()
 		}
 	}), "nigger"));
 
-	QuickMenuButtons.push_back(new ToggleButton("UIElementsMenu", 0, -1, "OFF", CreateDetour([=]()
-	{
-		Variables::g_Discord->Shutdown();
-
-	}), "DiscordRPC", CreateDetour([=]()
-	{
-
-		Variables::g_Discord->Initalize();
-
-	}), "why do you even read this?"));
-
-	QuickMenuButtons.push_back(new ToggleButton("UIElementsMenu", -3, -2, "OFF", CreateDetour([=]()
+	auto antiPortalButton = new ToggleButton("UIElementsMenu", 114, -3, -2, "Anti-Portal", CreateDetour([=]()
 	{
 		Variables::antiPortal = false;
-	}), "Anti-Portal", CreateDetour([=]()
+	}), "OFF", CreateDetour([=]()
 	{
 		Variables::antiPortal = true;
-	}), "nigger"));
+	}), "nigger");
+	QuickMenuButtons.push_back(antiPortalButton);
+	antiPortalButton->btnOn->SetActive(true);
+	antiPortalButton->btnOff->SetActive(false);
 
-	QuickMenuButtons.push_back(new ToggleButton("UIElementsMenu", -1, -2, "Offline", CreateDetour([=]()
+	QuickMenuButtons.push_back(new ToggleButton("UIElementsMenu", 115, -1, -2, "Offline", CreateDetour([=]()
 	{
 		Variables::offlineMode = true;
 	}), "OFF", CreateDetour([=]()
@@ -100,10 +137,45 @@ void VRCQuickMenu::SetupButtons()
 		Variables::offlineMode = false;
 	}), "nigger"));
 
-	QuickMenuButtons.push_back(new SingleButton("UIElementsMenu", 1, -2, "Destroy\nPortals", CreateDetour([=]()
+	QuickMenuButtons.push_back(new SingleButton("UIElementsMenu", 116, 1, -2, "Destroy\nPortals", CreateDetour([=]()
 	{
 		Misc::DestroyPortals();
 	}), "dont play this trash game"));
+#pragma endregion
+
+#pragma region Page2
+	auto speedHackButton = new ToggleButton("UIElementsMenu", 121, -1, 0, "Speed Hack", CreateDetour([=]()
+	{
+		Variables::speedHack = true;
+	}), "NO", CreateDetour([=]()
+	{
+		Variables::speedHack = false;
+	}), "find me a gf");
+	QuickMenuButtons.push_back(speedHackButton);
+	speedHackButton->setActive(false);
+
+	auto discordRPCButton = new ToggleButton("UIElementsMenu", 122, -2, 0, "DiscordRPC", CreateDetour([=]()
+	{
+		Variables::g_Discord->Initalize();
+	}), "OFF", CreateDetour([=]()
+	{
+		Variables::g_Discord->Shutdown();
+	}), "why do you even read this?");
+	QuickMenuButtons.push_back(discordRPCButton);
+	discordRPCButton->setActive(false);
+	discordRPCButton->btnOn->SetActive(true);
+	discordRPCButton->btnOff->SetActive(false);
+
+	auto emojiSpamButton = new ToggleButton("UIElementsMenu", 123, -3, 0, "Emoji Spam", CreateDetour([=]()
+	{
+		Variables::spamEmoji = true;
+	}), "OFF", CreateDetour([=]()
+	{
+		Variables::spamEmoji = false;
+	}), "if ur a girl u get the cliennt fofree");
+	QuickMenuButtons.push_back(emojiSpamButton);
+	emojiSpamButton->setActive(false);
+#pragma endregion
 }
 
 void VRCQuickMenu::SetupVRGreenText()

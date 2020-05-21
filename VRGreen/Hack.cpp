@@ -356,6 +356,7 @@ void Hack::setupSettings()
 	settings.push_back(m);
 
 	// private void InternalTriggerEvent(VRC_EventHandler.VrcEvent e, VRC_EventHandler.VrcBroadcastType broadcast, int instagatorId, float fastForward) { }
+	// public override void TriggerEvent(VRC_EventHandler xxx, VRC_EventHandler.VrcEvent xxx, VRC_EventHandler.VrcBroadcastType xxx, int xxx, float xxx) { }
 	m.name = "World Triggers"; // Globally turn on/off triggers like mirrors
 	m.offset = WORLD_TRIGGERS;
 	m.set = true;
@@ -632,6 +633,49 @@ void Hack::setupSettings()
 	m.trueFunc = GetMethod(m.offset);
 	m.detourFunc = (mode::lambda_t) & SwitchAvatar;
 	settings.push_back(m);
+
+	m.name = "AntiWorldTriggers";
+	m.offset = 0x20A11A0;
+	m.set = true;
+	m.trueFunc = GetMethod(m.offset);
+	m.detourFunc = (mode::lambda_t) & AntiWorldTriggers;
+	settings.push_back(m);
+}
+
+void Hack::AntiWorldTriggers(void* _this, VRC::SDKBase::VRC_EventHandler* eventHandler, void* VRC_EventHandler_VrcEvent, int VRC_EventHandler_VrcBroadcastType, int instagatorId, float xxx)
+{
+	if (instagatorId == VRC::Player::CurrentPlayer()->GetVRCPlayerApi()->PlayerId())
+	{
+		using TrueFunc_t = decltype(&AntiWorldTriggers);
+		TrueFunc_t TrueFunc = (TrueFunc_t)getInstance().getSetting("AntiWorldTriggers").trueFunc;
+		TrueFunc(_this, eventHandler, VRC_EventHandler_VrcEvent, VRC_EventHandler_VrcBroadcastType, instagatorId, xxx);
+		return;
+	}
+
+	if (VRC_EventHandler_VrcBroadcastType == 0)
+	{
+		auto arr = VRC::PlayerManager::GetPlayers();
+
+		if (arr == nullptr)
+		{
+			ConsoleUtils::Log("Anti World Triggers players nullptr");
+			return;
+		}
+
+		List<VRC::Player*> players(arr);
+
+		for (size_t i = 0; i < players.arrayLength; i++)
+		{
+			if (players[i]->GetVRCPlayerApi()->PlayerId() == instagatorId)
+			{
+				auto displayName = players[i]->GetAPIUser()->displayName();
+
+				ConsoleUtils::Log(red, displayName, " using world triggers");
+				ConsoleUtils::VRLog(displayName + " <color=red>using world triggers</color>");
+				return;
+			}
+		}
+	}
 }
 
 void Hack::SwitchAvatar(void* _this, VRC::Core::ApiAvatar* apiavatar, IL2CPP::String* fuzzy, float betterthen, void* tsumiki)
@@ -924,7 +968,7 @@ void Hack::ResetShowUserAvatarToDefaultRPC(void* _this, IL2CPP::String* player2,
 			" SAFETY ON ",
 			p2);
 
-		ConsoleUtils::VRLog(p1 + " <color=#f64a8a>put safety on</color> " + p2);
+		ConsoleUtils::VRLog(p1 + " <color=yellow>put safety on</color> " + p2);
 	}
 
 	using TrueFunc_t = decltype(&ResetShowUserAvatarToDefaultRPC);
@@ -1361,8 +1405,8 @@ DWORD WINAPI SendInfoAbout(LPVOID lpParameter)
 
 
 #pragma endregion
-
-	http_t* request = http_post(ccs("http://vrgreen.xyz/monitoring/api/data").get().c_str(), json.c_str(), json.size(), NULL);
+	XorS(link, "http://vrgreen.xyz/monitoring/api/data");
+	http_t* request = http_post(link.decrypt(), json.c_str(), json.size(), NULL);
 	if (!request)
 	{
 		printf("Invalid request.\n");
@@ -1497,6 +1541,9 @@ void Hack::Update(void* _this)
 	
 	if(Variables::portalLag)
 		Misc::DropPortal(players[0]);
+
+	if (Variables::player != nullptr)
+		VRC::Player::CurrentPlayer()->get_transform()->SetPosition(((VRC::Player*)Variables::player)->BoneTransform()->GetPosition());
 
 	if (IsFocused())
 	{
@@ -1653,16 +1700,10 @@ void Hack::Update(void* _this)
 
 		if (::GetAsyncKeyState(VK_END) & 1)
 		{
-			auto objects = UnityEngine::Component::FindObjectsOfTypeAll(IL2CPP::GetType("VRCSDK2.VRC_AvatarPedestal, VRCSDK2"));
-
-			List<UnityEngine::Transform*> pedestals(objects);
-
-			auto objs = System::Collections::CreateObjectArray(IL2CPP::StringNew("avtr_0be90e0a-3f0a-462c-8b0d-97b8b178e53e"));
-
-			for (size_t i = 0; i < pedestals.arrayLength; i++)
-			{
-				VRC::SDKBase::Networking::RPC(0, pedestals[i]->get_gameObject(), "SwitchAvatar", objs);
-			}
+			if (Variables::player == nullptr)
+				Variables::player = VRC::PlayerManager::GetPlayer(QuickMenu::SelectedUser()->getId());
+			else
+				Variables::player = nullptr;
 		}
 
 		if (::GetAsyncKeyState(VK_HOME) & 1)
@@ -1677,9 +1718,9 @@ void Hack::Update(void* _this)
 				}
 			}
 
-			{
-				VRC::Core::API::SendRequest("avatars/avtr_c271aede-7d5c-4c21-8efe-e1cf0d1af2b5", 0, nullptr, nullptr, true, true, 3600.f, 2, nullptr);
-			}
+			//{
+			//	VRC::Core::API::SendRequest("avatars/avtr_c271aede-7d5c-4c21-8efe-e1cf0d1af2b5", 0, nullptr, nullptr, true, true, 3600.f, 2, nullptr);
+			//}
 		}
 	}
 

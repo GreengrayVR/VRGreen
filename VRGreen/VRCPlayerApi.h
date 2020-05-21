@@ -15,6 +15,8 @@ namespace VRC::SDKBase
 	
 		static VRCPlayerApi* GetCurrentVRCPlayerApi();
 
+		static VRCPlayerApi* GetPlayerById(int playerId);
+
 		int PlayerId();
 
 		UnityEngine::Vector3* GetPosition();

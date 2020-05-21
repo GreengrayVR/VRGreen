@@ -47,6 +47,7 @@
     <ClCompile Include="HighlightsFX.cpp" />
     <ClCompile Include="IEnumerator.cpp" />
     <ClCompile Include="IL2CPP\IL2CPP.cpp" />
+    <ClCompile Include="Image.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="MethodBase.cpp" />
     <ClCompile Include="Misc.cpp" />
@@ -55,6 +56,7 @@
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="RoomManagerBase.cpp" />
     <ClCompile Include="Selectable.cpp" />
+    <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Text.cpp" />
     <ClCompile Include="Time.cpp" />
     <ClCompile Include="UnityAction.cpp" />
@@ -98,6 +100,7 @@
     <ClInclude Include="HardOffsets.hpp" />
     <ClInclude Include="HighlightsFX.hpp" />
     <ClInclude Include="IEnumerator.hpp" />
+    <ClInclude Include="Image.hpp" />
     <ClInclude Include="Input.hpp" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="List.hpp" />
@@ -119,6 +122,7 @@
     <ClInclude Include="RoomManagerBase.hpp" />
     <ClInclude Include="Selectable.hpp" />
     <ClInclude Include="sha1.hpp" />
+    <ClInclude Include="Sprite.hpp" />
     <ClInclude Include="Text.hpp" />
     <ClInclude Include="Time.hpp" />
     <ClInclude Include="Types.hpp" />

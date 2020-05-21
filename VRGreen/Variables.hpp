@@ -5,6 +5,11 @@
 
 struct Variables // TODO: move to Hack.hpp
 {
+#pragma region QMButtons
+	inline static bool uiElementsPage1;
+#pragma endregion
+
+	inline static void* player;
 	inline static bool speedHack;
 	inline static bool offlineMode;
 	inline static bool forceMute;
@@ -12,6 +17,7 @@ struct Variables // TODO: move to Hack.hpp
 	inline static bool worldTriggers;
 	inline static bool antiPortal;
 	inline static bool printApiRequests;
+	inline static bool stickOnHead;
 	inline static bool portalLag;
 	inline static bool spamEmoji;
 	inline static bool testing;

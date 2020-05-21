@@ -1,48 +1,100 @@
 #pragma once
 
-#include <string>
-#include <array>
+//-------------------------------------------------------------//
+// "Malware related compile-time hacks with C++11" by LeFF   //
+// You can use this code however you like, I just don't really //
+// give a shit, but if you feel some respect for me, please //
+// don't cut off this comment when copy-pasting... ;-)       //
+//-------------------------------------------------------------//
 
-class CCexprString
+////////////////////////////////////////////////////////////////////
+template <int X> struct EnsureCompileTime
+{
+	enum : int
+	{
+		Value = X
+	};
+};
+////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////
+//Use Compile-Time as seed
+#define Seed ((__TIME__[7] - '0') * 1  + (__TIME__[6] - '0') * 10  + \
+              (__TIME__[4] - '0') * 60   + (__TIME__[3] - '0') * 600 + \
+              (__TIME__[1] - '0') * 3600 + (__TIME__[0] - '0') * 36000)
+////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////
+constexpr int LinearCongruentGenerator(int Rounds)
+{
+	return 1013904223 + 1664525 * ((Rounds > 0) ? LinearCongruentGenerator(Rounds - 1) : Seed & 0xFFFFFFFF);
+}
+#define Random() EnsureCompileTime<LinearCongruentGenerator(10)>::Value //10 Rounds
+#define RandomNumber(Min, Max) (Min + (Random() % (Max - Min + 1)))
+////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////
+template <int... Pack> struct IndexList {};
+////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////
+template <typename IndexList, int Right> struct Append;
+template <int... Left, int Right> struct Append<IndexList<Left...>, Right>
+{
+	typedef IndexList<Left..., Right> Result;
+};
+////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////
+template <int N> struct ConstructIndexList
+{
+	typedef typename Append<typename ConstructIndexList<N - 1>::Result, N - 1>::Result Result;
+};
+template <> struct ConstructIndexList<0>
+{
+	typedef IndexList<> Result;
+};
+////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////
+const char XORKEY = static_cast<char>(RandomNumber(0, 0xFF));
+constexpr char EncryptCharacter(const char Character, int Index)
+{
+	return Character ^ (XORKEY + Index);
+}
+
+template <typename IndexList> class CXorString;
+template <int... Index> class CXorString<IndexList<Index...> >
 {
 private:
-
-	char* m_pStr;
-	std::size_t m_Size;
-
+	char Value[sizeof...(Index) + 1];
 public:
-
-	template <typename T>
-	CCexprString(const T& arr)
+	constexpr CXorString(const char* const String)
+		: Value{ EncryptCharacter(String[Index], Index)... }
 	{
-		m_Size = arr.size();
-		m_pStr = new char[m_Size];
-
-		for (std::size_t i = 0; i != m_Size; ++i)
-			m_pStr[i] = arr[i];
 	}
 
-	inline ~CCexprString()
+	char* decrypt()
 	{
-		delete[] m_pStr;
+		for (int t = 0; t < sizeof...(Index); t++)
+		{
+			Value[t] = Value[t] ^ (XORKEY + t);
+		}
+		Value[sizeof...(Index)] = '\0';
+		return Value;
 	}
 
-	inline std::string get() const
+	char* get()
 	{
-		std::string NewStr(m_Size, 0);
-
-		for (std::size_t i = 0; i != m_Size; ++i)
-			NewStr[i] = m_pStr[i] ^ 0x5a;
-
-		return NewStr;
+		return Value;
 	}
 };
-
-#define ccs(_Str) \
-    CCexprString([]() { \
-        constexpr std::size_t Size = sizeof(_Str); \
-        std::array<char, Size> NewStr; \
-        for (std::size_t i = 0; i != Size; ++i) \
-            NewStr[i] = (_Str)[i] ^ 0x5a; \
-        return NewStr; \
-    }())
+#define XorS(X, String) CXorString<ConstructIndexList<sizeof(String)-1>::Result> X(String)
+#define XorString( String ) ( CXorString<ConstructIndexList<sizeof( String ) - 1>::Result>( String ).decrypt() )
+////////////////////////////////////////////////////////////////////

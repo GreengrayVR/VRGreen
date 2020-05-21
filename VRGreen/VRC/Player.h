@@ -6,6 +6,7 @@
 namespace VRC::SDKBase { struct VRCPlayerApi; }
 struct VRCPlayer;
 namespace VRC::Core { struct APIUser; }
+namespace UnityEngine { struct Transform; }
 
 namespace VRC
 {
@@ -22,6 +23,8 @@ namespace VRC
 		Core::APIUser* GetAPIUser();
 
 		VRCPlayer* GetVRCPlayer();
+
+		UnityEngine::Transform* BoneTransform();
 	};
 
 }

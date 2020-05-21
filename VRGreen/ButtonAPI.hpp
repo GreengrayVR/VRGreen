@@ -31,7 +31,7 @@ public:
 
 	void setActive(bool isActive);
 
-	void setLocation(int buttonXLoc, int buttonYLoc);
+	void setLocation(int buttonPage, int buttonXLoc, int buttonYLoc);
 
 	void setToolTip(std::string buttonToolTip);
 
@@ -46,7 +46,7 @@ private:
 class SingleButton : public ButtonBase
 {
 public:
-	SingleButton(std::string btnMenu, int btnXLocation, int btnYLocation, std::string btnText, CDetour* btnAction, std::string btnToolTip, UnityEngine::Color* btnBackgroundColor = nullptr, UnityEngine::Color* btnTextColor = nullptr);
+	SingleButton(std::string btnMenu, int buttonPage, int btnXLocation, int btnYLocation, std::string btnText, CDetour* btnAction, std::string btnToolTip, UnityEngine::Color* btnBackgroundColor = nullptr, UnityEngine::Color* btnTextColor = nullptr);
 
 	void setButtonText(std::string buttonText);
 
@@ -57,7 +57,7 @@ public:
 	void setTextColor(UnityEngine::Color* buttonTextColor);
 
 private:
-	void initButton(int btnXLocation, int btnYLocation, std::string btnText, CDetour* btnAction, std::string btnToolTip, UnityEngine::Color* btnBackgroundColor = nullptr, UnityEngine::Color* btnTextColor = nullptr);
+	void initButton(int buttonPage, int btnXLocation, int btnYLocation, std::string btnText, CDetour* btnAction, std::string btnToolTip, UnityEngine::Color* btnBackgroundColor = nullptr, UnityEngine::Color* btnTextColor = nullptr);
 };
 
 class ToggleButton : public ButtonBase
@@ -66,7 +66,7 @@ public:
 	UnityEngine::GameObject* btnOn;
 	UnityEngine::GameObject* btnOff;
 
-	ToggleButton(std::string btnMenu, int btnXLocation, int btnYLocation, std::string btnTextOn, CDetour* btnActionOn, std::string btnTextOff, CDetour* btnActionOff, std::string btnToolTip, UnityEngine::Color* btnBackgroundColor = nullptr, UnityEngine::Color* btnTextColor = nullptr);;
+	ToggleButton(std::string btnMenu, int buttonPage, int btnXLocation, int btnYLocation, std::string btnTextOn, CDetour* btnActionOn, std::string btnTextOff, CDetour* btnActionOff, std::string btnToolTip, UnityEngine::Color* btnBackgroundColor = nullptr, UnityEngine::Color* btnTextColor = nullptr);;
 
 	void setAction(CDetour* buttonOnAction, CDetour* buttonOffAction);
 
@@ -79,7 +79,7 @@ public:
 	void setTextColor(UnityEngine::Color* buttonTextColor);
 
 private:
-	void initButton(int btnXLocation, int btnYLocation, std::string btnTextOn, CDetour* btnActionOn, std::string btnTextOff, CDetour* btnActionOff, std::string btnToolTip, UnityEngine::Color* btnBackgroundColor = nullptr, UnityEngine::Color* btnTextColor = nullptr);
+	void initButton(int buttonPage, int btnXLocation, int btnYLocation, std::string btnTextOn, CDetour* btnActionOn, std::string btnTextOff, CDetour* btnActionOff, std::string btnToolTip, UnityEngine::Color* btnBackgroundColor = nullptr, UnityEngine::Color* btnTextColor = nullptr);
 	
 	bool toggleState;
 };

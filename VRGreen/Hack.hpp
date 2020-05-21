@@ -73,6 +73,7 @@ private:
 	void disableDetours();
 	void setupSettings();
 
+	static void AntiWorldTriggers(void* _this, VRC::SDKBase::VRC_EventHandler* eventHandler, void* VRC_EventHandler_VrcEvent, int VRC_EventHandler_VrcBroadcastType, int instagatorId, float xxx);
 	static void SwitchAvatar(void* _this, VRC::Core::ApiAvatar* apiavatar, IL2CPP::String* fuzzy, float betterthen, void* tsumiki);
 	static void OfflineMode(IL2CPP::String* target, void* responseContainer, void* requestParams, void* credentials);
 	static void ReceiveVoteToKickInitiation(void* _this, IL2CPP::String* player2, VRC::Player* player);

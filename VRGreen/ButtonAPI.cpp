@@ -19,7 +19,7 @@ void ButtonBase::setActive(bool isActive)
 	getGameObject()->SetActive(isActive);
 }
 
-void ButtonBase::setLocation(int buttonXLoc, int buttonYLoc)
+void ButtonBase::setLocation(int buttonPage, int buttonXLoc, int buttonYLoc)
 {
 	auto quickMenu = QuickMenu::QuickMenuInstance();
 	auto transform = getGameObject()->GetTransform();
@@ -30,7 +30,7 @@ void ButtonBase::setLocation(int buttonXLoc, int buttonYLoc)
 
 	transform->SetLocalPosition(&transformVector);
 
-	btnTag = "(" + std::to_string(buttonXLoc) + std::string(",") + std::to_string(buttonYLoc) + ")";
+	btnTag = std::to_string(buttonPage) + "(" + std::to_string(buttonXLoc) + std::string(",") + std::to_string(buttonYLoc) + ")";
 	SetName(button, btnQMLoc + "/" + btnType + btnTag);
 	SetName(transform->GetComponent("UnityEngine.UI.Button"), btnType + btnTag);
 }
@@ -185,11 +185,11 @@ UnityEngine::Transform* ButtonBase::CreateButton(std::string name, std::string t
 	return transform;
 }
 
-SingleButton::SingleButton(std::string btnMenu, int btnXLocation, int btnYLocation, std::string btnText, CDetour* btnAction, std::string btnToolTip, Color* btnBackgroundColor /*= nullptr*/, Color* btnTextColor /*= nullptr*/)
+SingleButton::SingleButton(std::string btnMenu, int buttonPage, int btnXLocation, int btnYLocation, std::string btnText, CDetour* btnAction, std::string btnToolTip, Color* btnBackgroundColor /*= nullptr*/, Color* btnTextColor /*= nullptr*/)
 {
 	btnQMLoc = btnMenu;
 	btnType = "SingleButton";
-	initButton(btnXLocation, btnYLocation, btnText, btnAction, btnToolTip, btnBackgroundColor, btnTextColor);
+	initButton(buttonPage, btnXLocation, btnYLocation, btnText, btnAction, btnToolTip, btnBackgroundColor, btnTextColor);
 }
 
 void SingleButton::setButtonText(std::string buttonText)
@@ -213,7 +213,7 @@ void SingleButton::setTextColor(Color* buttonTextColor)
 	//button.GetComponentInChildren<Text>().color = buttonTextColor;
 }
 
-void SingleButton::initButton(int btnXLocation, int btnYLocation, std::string btnText, CDetour* btnAction, std::string btnToolTip, Color* btnBackgroundColor /*= nullptr*/, Color* btnTextColor /*= nullptr*/)
+void SingleButton::initButton(int buttonPage, int btnXLocation, int btnYLocation, std::string btnText, CDetour* btnAction, std::string btnToolTip, Color* btnBackgroundColor /*= nullptr*/, Color* btnTextColor /*= nullptr*/)
 {
 	Transform* btnTemplate = FindInQuickMenu("ShortcutMenu/WorldsButton");
 
@@ -221,7 +221,7 @@ void SingleButton::initButton(int btnXLocation, int btnYLocation, std::string bt
 
 	initShift[0] = -1;
 	initShift[1] = 0;
-	setLocation(btnXLocation, btnYLocation);
+	setLocation(buttonPage, btnXLocation, btnYLocation);
 	setButtonText(btnText);
 	setToolTip(btnToolTip);
 	setAction(btnAction);
@@ -233,11 +233,11 @@ void SingleButton::initButton(int btnXLocation, int btnYLocation, std::string bt
 		setTextColor(btnTextColor);
 }
 
-ToggleButton::ToggleButton(std::string btnMenu, int btnXLocation, int btnYLocation, std::string btnTextOn, CDetour* btnActionOn, std::string btnTextOff, CDetour* btnActionOff, std::string btnToolTip, Color* btnBackgroundColor /*= nullptr*/, Color* btnTextColor /*= nullptr*/)
+ToggleButton::ToggleButton(std::string btnMenu, int buttonPage, int btnXLocation, int btnYLocation, std::string btnTextOn, CDetour* btnActionOn, std::string btnTextOff, CDetour* btnActionOff, std::string btnToolTip, Color* btnBackgroundColor /*= nullptr*/, Color* btnTextColor /*= nullptr*/)
 {
 	btnQMLoc = btnMenu;
 	btnType = "ToggleButton";
-	initButton(btnXLocation, btnYLocation, btnTextOn, btnActionOn, btnTextOff, btnActionOff, btnToolTip, btnBackgroundColor, btnTextColor);
+	initButton(buttonPage, btnXLocation, btnYLocation, btnTextOn, btnActionOn, btnTextOff, btnActionOff, btnToolTip, btnBackgroundColor, btnTextColor);
 }
 
 void ToggleButton::setAction(CDetour* buttonOnAction, CDetour* buttonOffAction)
@@ -284,7 +284,7 @@ void ToggleButton::setTextColor(Color* buttonTextColor)
 	//foreach(Text btnText in btnTxtColorList) btnText.color = buttonTextColor;
 }
 
-void ToggleButton::initButton(int btnXLocation, int btnYLocation, std::string btnTextOn, CDetour* btnActionOn, std::string btnTextOff, CDetour* btnActionOff, std::string btnToolTip, Color* btnBackgroundColor /*= nullptr*/, Color* btnTextColor /*= nullptr*/)
+void ToggleButton::initButton(int buttonPage, int btnXLocation, int btnYLocation, std::string btnTextOn, CDetour* btnActionOn, std::string btnTextOff, CDetour* btnActionOff, std::string btnToolTip, Color* btnBackgroundColor /*= nullptr*/, Color* btnTextColor /*= nullptr*/)
 {
 	Transform* btnTemplate = FindInQuickMenu("UserInteractMenu/BlockButton");
 	
@@ -295,7 +295,7 @@ void ToggleButton::initButton(int btnXLocation, int btnYLocation, std::string bt
 
 	initShift[0] = -4;
 	initShift[1] = 0;
-	setLocation(btnXLocation, btnYLocation);
+	setLocation(buttonPage, btnXLocation, btnYLocation);
 	setOnText(btnTextOn);
 	setOffText(btnTextOff);
 	setToolTip(btnToolTip);
@@ -341,7 +341,7 @@ void NestedButton::initButton(int btnXLocation, int btnYLocation, std::string bt
 	menuName = "CustomMenu" + btnQMLoc + "_" + std::to_string(btnXLocation) + "_" + std::to_string(btnYLocation);
 	SetName(menu, menuName);
 
-	mainButton = new SingleButton(btnQMLoc, btnXLocation, btnYLocation, btnText, new CDetour([=]() { ShowQuickmenuPage(menuName); }), btnToolTip, btnBackgroundColor, btnTextColor);
+	//mainButton = new SingleButton(btnQMLoc, btnXLocation, btnYLocation, btnText, new CDetour([=]() { ShowQuickmenuPage(menuName); }), btnToolTip, btnBackgroundColor, btnTextColor);
 }
 
 void NestedButton::ShowQuickmenuPage(std::string pagename)

@@ -8,6 +8,8 @@ namespace VRCQuickMenu
 {
 	inline std::vector<ButtonBase*> QuickMenuButtons;
 
+	void ShowUIElements1();
+
 	void SetupButtons();
 
 	void SetupVRGreenText();

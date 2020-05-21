@@ -13,7 +13,16 @@ VRC::SDKBase::VRCPlayerApi* VRC::SDKBase::VRCPlayerApi::GetCurrentVRCPlayerApi()
 	return func(currentPlayer);
 }
 
-inline int VRC::SDKBase::VRCPlayerApi::PlayerId()
+VRC::SDKBase::VRCPlayerApi* VRC::SDKBase::VRCPlayerApi::GetPlayerById(int playerId)
+{
+	using func_t = VRC::SDKBase::VRCPlayerApi* (*)(int playerId);
+
+	func_t func = GetMethod<func_t>(0x145F520);
+
+	return func(playerId);
+}
+
+int VRC::SDKBase::VRCPlayerApi::PlayerId()
 {
 	using func_t = int(*)(VRCPlayerApi* vrcplayerapi);
 

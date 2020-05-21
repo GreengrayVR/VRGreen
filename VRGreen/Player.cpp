@@ -1,5 +1,7 @@
 #include "VRC/Player.h"
 #include "IL2CPP/IL2CPP.hpp"
+#include "UnityEngine/Transform.hpp"
+#include "ConsoleUtils.hpp"
 
 std::string VRC::Player::ToString() // public override string ToString()
 {
@@ -15,7 +17,6 @@ std::string VRC::Player::ToString() // public override string ToString()
 
 VRC::Player* VRC::Player::CurrentPlayer()
 {
-	// 
 	using func_t = Player * (*)();
 
 	func_t func = GetMethod<func_t>(PLAYERCURRENTUSER);
@@ -23,7 +24,7 @@ VRC::Player* VRC::Player::CurrentPlayer()
 	return func();
 }
 
-VRC::Core::APIUser* VRC::Player::GetAPIUser()// class Player : MonoBehaviour
+VRC::Core::APIUser* VRC::Player::GetAPIUser()
 {
 	return (Core::APIUser*)IL2CPP::GetField(this, "VRC.Core.APIUser");
 }
@@ -31,6 +32,21 @@ VRC::Core::APIUser* VRC::Player::GetAPIUser()// class Player : MonoBehaviour
 VRCPlayer* VRC::Player::GetVRCPlayer()
 {
 	return (VRCPlayer*)IL2CPP::GetField(this, "VRCPlayer");
+}
+
+UnityEngine::Transform* VRC::Player::BoneTransform()
+{
+	Object* animator = IL2CPP::GetField((Object*)this->GetVRCPlayer(), "UnityEngine.Animator");
+
+	if (animator == nullptr)
+	{
+		ConsoleUtils::Log("nullptr");
+		return nullptr;
+	}
+
+	using func_t = UnityEngine::Transform * (*)(Object* animator, int humanBoneId);
+	func_t func = GetMethod<func_t>(0x1D47E20);
+	return func(animator, 10)->get_transform();
 }
 
 VRC::SDKBase::VRCPlayerApi* VRC::Player::GetVRCPlayerApi()
