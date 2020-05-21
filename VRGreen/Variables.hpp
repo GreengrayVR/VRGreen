@@ -12,6 +12,7 @@ struct Variables // TODO: move to Hack.hpp
 	inline static bool worldTriggers;
 	inline static bool antiPortal;
 	inline static bool printApiRequests;
+	inline static bool portalLag;
 	inline static bool spamEmoji;
 	inline static bool testing;
 	inline static bool fly;

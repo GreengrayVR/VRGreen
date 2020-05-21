@@ -1,6 +1,6 @@
 #include "Color.hpp"
 
-
+#include "Utils/Offsets.h"
 
 UnityEngine::Color* UnityEngine::GetCyan()
 {

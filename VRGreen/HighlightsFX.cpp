@@ -8,3 +8,12 @@ HighlightsFX* HighlightsFX::Instance()
 
 	return func();
 }
+
+void HighlightsFX::EnableOutline(UnityEngine::Renderer* renderer, bool value)
+{
+	using func_t = HighlightsFX * (*)(UnityEngine::Renderer* renderer, bool value);
+
+	func_t func = GetMethod<func_t>(0x35B1880);
+
+	func(renderer, value);
+}

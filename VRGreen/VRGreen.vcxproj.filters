@@ -222,6 +222,15 @@
     <ClCompile Include="HighlightsFX.cpp">
       <Filter>Assembly-CSharp</Filter>
     </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>UnityEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="API.cpp">
+      <Filter>Header Files\VRC\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="IEnumerator.cpp">
+      <Filter>Assembly-CSharp\System\Collections</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IL2CPP\IL2CPP.hpp">
@@ -424,6 +433,18 @@
     </ClInclude>
     <ClInclude Include="HighlightsFX.hpp">
       <Filter>Assembly-CSharp</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.hpp">
+      <Filter>UnityEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="API.hpp">
+      <Filter>Header Files\VRC\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="ccs.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="IEnumerator.hpp">
+      <Filter>Assembly-CSharp\System\Collections</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

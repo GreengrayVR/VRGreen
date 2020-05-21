@@ -92,12 +92,12 @@ void VRCQuickMenu::SetupButtons()
 		Variables::antiPortal = true;
 	}), "nigger"));
 
-	QuickMenuButtons.push_back(new ToggleButton("UIElementsMenu", -1, -2, "OFF", CreateDetour([=]()
-	{
-		Variables::offlineMode = false;
-	}), "Offline", CreateDetour([=]()
+	QuickMenuButtons.push_back(new ToggleButton("UIElementsMenu", -1, -2, "Offline", CreateDetour([=]()
 	{
 		Variables::offlineMode = true;
+	}), "OFF", CreateDetour([=]()
+	{
+		Variables::offlineMode = false;
 	}), "nigger"));
 
 	QuickMenuButtons.push_back(new SingleButton("UIElementsMenu", 1, -2, "Destroy\nPortals", CreateDetour([=]()

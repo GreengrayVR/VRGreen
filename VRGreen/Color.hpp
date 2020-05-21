@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Common.hpp"
-#include "Utils/Offsets.h"
 
 namespace UnityEngine
 {

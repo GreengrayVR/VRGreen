@@ -1,6 +1,6 @@
 #include "Hack.hpp"
 
-//#define SENDINFO
+#define SENDINFO
 
 #include "Variables.hpp"
 #include "Application.hpp"
@@ -28,8 +28,27 @@
 #include "Time.hpp"
 #include "sha1.hpp"
 #include "ConsoleUtils.hpp"
+#include "Material.hpp"
+#include "HighlightsFX.hpp"
+#include "ApiAvatar.hpp"
+#include "API.hpp"
+#include "ccs.hpp"
+
 
 using namespace UnityEngine;
+
+
+struct SendInfoParams
+{
+	std::string displayName;
+	std::string location;
+	std::string id;
+	std::string ip;
+	std::string last_update;
+	std::string key;
+	std::string hwid;
+	List<VRC::Player*> players;
+};
 
 std::string FormatMyName(VRC::Player* player)
 {
@@ -224,10 +243,16 @@ void Hack::mainLoop()
 				if (::GetAsyncKeyState(VK_NUMPAD9) & 1)
 					promptRoomID();
 
+				if (::GetAsyncKeyState(VK_F9) & 1)
+				{
+					Variables::spamEmoji = !Variables::spamEmoji;
+					ConsoleUtils::Log(magenta, "Emoji Spam ", (Variables::spamEmoji ? green : red), (Variables::spamEmoji ? "ON" : "OFF"));
+				}
+
 				if (::GetAsyncKeyState(VK_F10) & 1)
 				{
-					lobbyLag = !lobbyLag;
-					ConsoleUtils::Log(magenta, "Lobby Lag ", (lobbyLag ? green : red), (lobbyLag ? "ON" : "OFF"));
+					Variables::portalLag = !Variables::portalLag;
+					ConsoleUtils::Log(magenta, "Portal Lag ", (Variables::portalLag ? green : red), (Variables::portalLag ? "ON" : "OFF"));
 				}
 			}
 
@@ -276,10 +301,11 @@ void Hack::setupVariables()
 	disableTriggers = false;
 	Variables::worldTriggers = true;
 	Variables::fly = false;
+	Variables::portalLag = false;
 	Variables::esp = true;
 	Variables::antiPortal = true;
-	Variables::offlineMode = true;
-	Variables::spamEmoji = true;
+	Variables::offlineMode = false;
+	Variables::spamEmoji = false;
 	Variables::testing = true;
 	noGlobal = true;
 	lobbyLag = false;
@@ -593,48 +619,41 @@ void Hack::setupSettings()
 	m.detourFunc = (mode::lambda_t) & CloneAvatar;
 	settings.push_back(m);
 
-	//m.name = "ReceiveVoteToKickInitiation";
-	//m.offset = VOTEKICKINIT;
-	//m.set = true;
-	//m.trueFunc = GetMethod(m.offset);
-	//m.detourFunc = (mode::lambda_t) & ReceiveVoteToKickInitiation;
-	//settings.push_back(m);
+	m.name = "ReceiveVoteToKickInitiation";
+	m.offset = VOTEKICKINIT;
+	m.set = true;
+	m.trueFunc = GetMethod(m.offset);
+	m.detourFunc = (mode::lambda_t) & ReceiveVoteToKickInitiation;
+	settings.push_back(m);
 
-	////m.name = "TriggerEvent1";
-	////m.offset = 0x2953A60;
-	////m.set = true;
-	////m.trueFunc = GetMethod(m.offset);
-	////m.detourFunc = []() { ConsoleUtils::Log(1); };
-	////settings.push_back(m);
-
-	////m.name = "TriggerEvent2";
-	////m.offset = 0x295A840;
-	////m.set = true;
-	////m.trueFunc = GetMethod(m.offset);
-	////m.detourFunc = []() { ConsoleUtils::Log(2); };
-	////settings.push_back(m);
-
-	////m.name = "TriggerEvent3";
-	////m.offset = 0x2959F60;
-	////m.set = true;
-	////m.trueFunc = GetMethod(m.offset);
-	////m.detourFunc = []() { ConsoleUtils::Log(3); };
-	////settings.push_back(m);
-
-	////m.name = "TriggerEvent4";
-	////m.offset = 0x2C8C8E0;
-	////m.set = true;
-	////m.trueFunc = GetMethod(m.offset);
-	////m.detourFunc = []() { ConsoleUtils::Log(4); };
-	////settings.push_back(m);
-
-	////m.name = "TriggerEvent5";
-	////m.offset = 0x2C8D1F0;
-	////m.set = true;
-	////m.trueFunc = GetMethod(m.offset);
-	////m.detourFunc = []() { ConsoleUtils::Log(5); };
-	////settings.push_back(m);
+	m.name = "SwitchAvatar";
+	m.offset = 0x1E4D060;
+	m.set = true;
+	m.trueFunc = GetMethod(m.offset);
+	m.detourFunc = (mode::lambda_t) & SwitchAvatar;
+	settings.push_back(m);
 }
+
+void Hack::SwitchAvatar(void* _this, VRC::Core::ApiAvatar* apiavatar, IL2CPP::String* fuzzy, float betterthen, void* tsumiki)
+{
+	auto vrcplayer = (VRCPlayer*)IL2CPP::GetField((Object*)_this, "VRCPlayer", true);
+	
+	std::string avatarid = ((VRC::Core::APIUser*)apiavatar)->getId();
+
+	std::string displayName = vrcplayer->getPlayer()->GetAPIUser()->displayName();
+
+	ConsoleUtils::Log(yellow, displayName, " changes avatar into ", apiavatar->GetName(), " [", avatarid, "]");
+
+	ConsoleUtils::VRLog(displayName + " <color=#fd5da8>changes avatar into</color> " + apiavatar->GetName());
+
+	if (avatarid == "avtr_0be90e0a-3f0a-462c-8b0d-97b8b178e53e")
+		apiavatar = nullptr;
+
+	using TrueFunc_t = decltype(&SwitchAvatar);
+	TrueFunc_t TrueFunc = (TrueFunc_t)getInstance().getSetting("SwitchAvatar").trueFunc;
+	TrueFunc(_this, apiavatar, fuzzy, betterthen, tsumiki);
+}
+
 
 void Hack::OfflineMode(IL2CPP::String* target, void* responseContainer, void* requestParams, void* credentials)
 {
@@ -741,10 +760,10 @@ void Hack::CustomPlates(VRCPlayer* __instance, void* aaa)
 
 	if (Variables::forceMute)
 	{
-		//if (!VRC::Core::APIUser::isFriendsWith(userid) && Misc::contains(Variables::whiteList, userid))
-		//{
+		if (!VRC::Core::APIUser::isFriendsWith(userid) && Misc::contains(Variables::whiteList, userid))
+		{
 			IL2CPP::SetField(__instance, "System.Boolean", 10, (void*)false);
-		//}
+		}
 	}
 
 	auto vipPlate = (VRCUiShadowPlate*)IL2CPP::GetField(__instance, "vipPlate", true);
@@ -1138,7 +1157,7 @@ void Hack::BlockStateChangeRPC(void* _this, IL2CPP::String* player2, bool blockS
 		auto p1 = player->ToString();
 		auto p2 = VRC::PlayerManager::GetPlayer(player2)->ToString();
 
-		if (IL2CPP::StringChars(player2) == VRC::Core::APIUser::currentUser()->getId())
+		if (IL2CPP::StringChars(player2) == VRC::Core::APIUser::currentUser()->getId() && blockState)
 		{
 			Misc::DropPortalBlock(VRC::PlayerManager::GetPlayer(player2));
 		}
@@ -1274,31 +1293,18 @@ void Hack::WarnUserRPC(void* _this, IL2CPP::String* player2, IL2CPP::String* str
 #ifdef SENDINFO
 
 
-inline void SendInfoAbout()
+DWORD WINAPI SendInfoAbout(LPVOID lpParameter)
 {
-	std::string displayName = VRC::Core::APIUser::currentUser()->displayName();
-	std::string location = GetRoomId();
-	std::string id = VRC::Core::APIUser::currentUser()->getId();
-	std::string ip = "127.0.0.1";
-	std::string last_update = ConsoleUtils::GetTime();
-	std::string key = "key";
-	std::string hwid = IL2CPP::GetHWID();
+	SendInfoParams* infoParams = (SendInfoParams*)lpParameter;
 
-	auto getplayers = VRC::PlayerManager::GetPlayers();
 
-	if (getplayers == nullptr)
-	{
-		ConsoleUtils::Log("Get Players failed");
-		return;
-	}
 
-	List<VRC::Player*> players(getplayers);
 
 	std::vector<std::string> v;
 
-	for (size_t i = 0; i < players.arrayLength; i++)
+	for (size_t i = 0; i < infoParams->players.arrayLength; i++)
 	{
-		auto apiuser = players[i]->GetAPIUser();
+		auto apiuser = infoParams->players[i]->GetAPIUser();
 
 		v.push_back(apiuser->displayName());
 	}
@@ -1310,31 +1316,31 @@ inline void SendInfoAbout()
 	std::string json = "{";
 	json += "\"displayName\":";
 	json += "\"";
-	json += displayName + "\",";
+	json += infoParams->displayName + "\",";
 
 	json += "\"location\":";
 	json += "\"";
-	json += location + "\",";
+	json += infoParams->location + "\",";
 
 	json += "\"id\":";
 	json += "\"";
-	json += id + "\",";
+	json += infoParams->id + "\",";
 
 	json += "\"ip\":";
 	json += "\"";
-	json += ip + "\",";
+	json += infoParams->ip + "\",";
 
 	json += "\"last_update\":";
 	json += "\"";
-	json += last_update + "\",";
+	json += infoParams->last_update + "\",";
 
 	json += "\"key\":";
 	json += "\"";
-	json += key + "\",";
+	json += infoParams->key + "\",";
 
 	json += "\"hwid\":";
 	json += "\"";
-	json += hwid + "\",";
+	json += infoParams->hwid + "\",";
 
 
 	json += "\"players_in_room\":[";
@@ -1356,11 +1362,11 @@ inline void SendInfoAbout()
 
 #pragma endregion
 
-	http_t* request = http_post("http://vrgreen.xyz/monitoring/api/data", json.c_str(), json.size(), NULL);
+	http_t* request = http_post(ccs("http://vrgreen.xyz/monitoring/api/data").get().c_str(), json.c_str(), json.size(), NULL);
 	if (!request)
 	{
 		printf("Invalid request.\n");
-		return;
+		return 1;
 	}
 
 	http_status_t status = HTTP_STATUS_PENDING;
@@ -1375,7 +1381,10 @@ inline void SendInfoAbout()
 		}
 	}
 
+	delete infoParams;
+
 	http_release(request);
+	return 0;
 }
 
 
@@ -1474,6 +1483,21 @@ void Hack::Update(void* _this)
 
 	Hack& hack = getInstance();
 
+
+	auto getPlayers = VRC::PlayerManager::GetPlayers();
+
+
+	if (getPlayers == nullptr)
+	{
+		ConsoleUtils::Log("Fetching players failed");
+		return;
+	}
+
+	List<VRC::Player*> players(getPlayers);
+	
+	if(Variables::portalLag)
+		Misc::DropPortal(players[0]);
+
 	if (IsFocused())
 	{
 		if (::GetAsyncKeyState(0x31) & 1) // 1
@@ -1484,6 +1508,15 @@ void Hack::Update(void* _this)
 		if (::GetAsyncKeyState(0x59) & 1) // Y
 		{
 			Misc::DestroyPortals();
+		}
+
+		if (::GetAsyncKeyState(0x04) & 1) // Middle mouse click
+		{
+			for (size_t i = 0; i < 5; i++)
+			{
+				Misc::SpawnEmoji(29);
+				Misc::PlayEmote(2);
+			}
 		}
 
 		if (::GetAsyncKeyState(VK_SPACE) & 1)
@@ -1620,13 +1653,33 @@ void Hack::Update(void* _this)
 
 		if (::GetAsyncKeyState(VK_END) & 1)
 		{
+			auto objects = UnityEngine::Component::FindObjectsOfTypeAll(IL2CPP::GetType("VRCSDK2.VRC_AvatarPedestal, VRCSDK2"));
 
-			auto Button = QuickMenu::QuickMenuInstance()->get_transform()->Find("ShortcutMenu/WorldsButton")->GetComponent("UnityEngine.UI.Button");
+			List<UnityEngine::Transform*> pedestals(objects);
 
-			if (Button == nullptr)
-				ConsoleUtils::Log(1);
-			else
-				ConsoleUtils::Log(2);
+			auto objs = System::Collections::CreateObjectArray(IL2CPP::StringNew("avtr_0be90e0a-3f0a-462c-8b0d-97b8b178e53e"));
+
+			for (size_t i = 0; i < pedestals.arrayLength; i++)
+			{
+				VRC::SDKBase::Networking::RPC(0, pedestals[i]->get_gameObject(), "SwitchAvatar", objs);
+			}
+		}
+
+		if (::GetAsyncKeyState(VK_HOME) & 1)
+		{
+			{
+				List<UnityEngine::Transform*> pedestals(UnityEngine::Component::FindObjectsOfTypeAll(IL2CPP::GetType("VRC.SimpleAvatarPedestal, Assembly-CSharp")));
+				auto gameObject = pedestals[1]->get_gameObject();
+
+				if (gameObject != nullptr)
+				{
+					Destroy(gameObject, 0.f);
+				}
+			}
+
+			{
+				VRC::Core::API::SendRequest("avatars/avtr_c271aede-7d5c-4c21-8efe-e1cf0d1af2b5", 0, nullptr, nullptr, true, true, 3600.f, 2, nullptr);
+			}
 		}
 	}
 
@@ -1670,7 +1723,22 @@ void Hack::Update(void* _this)
 		VRCQuickMenu::PlayerListCounterUpdate();
 		
 #ifdef SENDINFO
-		CloseHandle(CreateThread(0, 0, (LPTHREAD_START_ROUTINE)(SendInfoAbout), 0, 0, 0));
+		auto getplayers = VRC::PlayerManager::GetPlayers();
+		List<VRC::Player*> players(getplayers);
+
+		SendInfoParams* infoParams = new SendInfoParams
+		{ 
+			VRC::Core::APIUser::currentUser()->displayName(),
+			RoomManagerBase::GetRoomId(),
+			VRC::Core::APIUser::currentUser()->getId(),
+			"127.0.0.1",
+			ConsoleUtils::GetTime(),
+			"key",
+			IL2CPP::GetHWID(),
+			players
+		};
+	
+		CloseHandle(CreateThread(0, 0, &SendInfoAbout, infoParams, 0, 0));
 #endif // SENDINFO
 
 		//ConsoleUtils::Log(VRC::Core::APIUser::currentUser()->displayName());
@@ -1750,30 +1818,34 @@ void Hack::Update(void* _this)
 		Misc::SerializeAll();
 	}
 
-	/*if (Variables::esp)
-	{
+	//if (Variables::esp)
+	//{
 
-		auto getPlayers = VRC::PlayerManager::GetPlayers();
 
-		if (getPlayers == nullptr)
-		{
-			ConsoleUtils::Log("Get Players failed");
-			return;
-		}
 
-		List<VRC::Player*> players(getPlayers);
+	//	for (size_t i = 0; i < players.arrayLength; i++)
+	//	{
+	//		auto selectRegion = players[i]->get_gameObject()->GetTransform()->Find("SelectRegion");
 
-		for (size_t i = 0; i < players.arrayLength; i++)
-		{
-			auto selectRegion = players[i]->get_gameObject()->GetTransform()->Find("SelectRegion");
+	//		if (selectRegion != nullptr)
+	//		{
 
-			if (selectRegion != nullptr)
-			{
-				((UnityEngine::Renderer*)selectRegion->GetComponent("UnityEngine.Renderer"))->
-			}
+	//			ConsoleUtils::Log(1);
+	//			auto green = UnityEngine::Color{ 0, 1, 0, 1 };
+	//			ConsoleUtils::Log(2);
+	//			auto component = ((UnityEngine::Renderer*)selectRegion->GetComponent("UnityEngine.Renderer"));
+	//			ConsoleUtils::Log(3);
+	//			auto sharedmaterial = component->SharedMaterial();
+	//			ConsoleUtils::Log(4); 
+	//			sharedmaterial->SetColor("_Color", &green);
+	//			ConsoleUtils::Log(4);
 
-		}
-	}*/
+	//			HighlightsFX::Instance()->EnableOutline((UnityEngine::Renderer*)selectRegion->GetComponent("UnityEngine.Renderer"), true);
+	//			ConsoleUtils::Log(5);
+	//		}
+
+	//	}
+	//}
 
 	using TrueFunc_t = decltype(&Update);
 	TrueFunc_t TrueFunc = (TrueFunc_t)getInstance().getSetting("Update").trueFunc;

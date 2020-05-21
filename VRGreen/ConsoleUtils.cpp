@@ -18,6 +18,8 @@ void ConsoleUtils::CreateConsole()
 	if (HasConsole())
 		return;
 
+	LogListIndex = 0;
+
 	// Alloc console
 	if (!AllocConsole())
 	{

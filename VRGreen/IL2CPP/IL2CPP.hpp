@@ -143,4 +143,6 @@ namespace IL2CPP
 	Array* ArrayNew(Class* elementTypeInfo, size_t length);
 
 	Object* ValueBox(std::string type, void* data);
+
+	Object* ValueBoxNotSystem(std::string type, void* data);
 }

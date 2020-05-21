@@ -481,6 +481,23 @@ Object* IL2CPP::ValueBox(std::string type, void* data)
 {
 	auto klass = IL2CPP::ClassFromSystemType(IL2CPP::GetType(type));
 
+	if (klass == nullptr)
+		return nullptr;
+
+	using func_t = Object * (*)(Class* klass, void* data);
+
+	func_t func = (func_t)GetProcAddress(::GameAssemblyHandle, "il2cpp_value_box");
+
+	return func(klass, data);
+}
+
+Object* IL2CPP::ValueBoxNotSystem(std::string type, void* data)
+{
+	auto klass = IL2CPP::ClassFromType(IL2CPP::GetType(type));
+
+	if (klass == nullptr)
+		return nullptr;
+
 	using func_t = Object * (*)(Class* klass, void* data);
 
 	func_t func = (func_t)GetProcAddress(::GameAssemblyHandle, "il2cpp_value_box");

@@ -8,6 +8,8 @@
 
 namespace IL2CPP { struct String; }
 
+namespace System::Collections { struct IEnumerator; }
+
 namespace UnityEngine
 {
 	struct Vector3;
@@ -48,5 +50,7 @@ namespace UnityEngine
 		UnityEngine::Vector3 GetPosition();
 
 		void SetPosition(Vector3 value);
+
+		System::Collections::IEnumerator* GetEnumerator();
 	};
 }

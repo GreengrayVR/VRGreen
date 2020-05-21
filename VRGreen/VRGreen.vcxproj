@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="API.cpp" />
     <ClCompile Include="ApiAvatar.cpp" />
     <ClCompile Include="ApiWorld.cpp" />
     <ClCompile Include="ApiWorldInstance.cpp" />
@@ -44,7 +45,9 @@
     <ClCompile Include="Graphic.cpp" />
     <ClCompile Include="Hack.cpp" />
     <ClCompile Include="HighlightsFX.cpp" />
+    <ClCompile Include="IEnumerator.cpp" />
     <ClCompile Include="IL2CPP\IL2CPP.cpp" />
+    <ClCompile Include="Material.cpp" />
     <ClCompile Include="MethodBase.cpp" />
     <ClCompile Include="Misc.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -72,6 +75,7 @@
     <ClCompile Include="VRC_EventHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="API.hpp" />
     <ClInclude Include="ApiAvatar.hpp" />
     <ClInclude Include="ApiWorld.hpp" />
     <ClInclude Include="ApiWorldInstance.hpp" />
@@ -81,6 +85,7 @@
     <ClInclude Include="ButtonAPI.hpp" />
     <ClInclude Include="ButtonClickedEvent.h" />
     <ClInclude Include="Camera.hpp" />
+    <ClInclude Include="ccs.hpp" />
     <ClInclude Include="CDetour.hpp" />
     <ClInclude Include="Collider.hpp" />
     <ClInclude Include="Color.hpp" />
@@ -92,6 +97,7 @@
     <ClInclude Include="Hack.hpp" />
     <ClInclude Include="HardOffsets.hpp" />
     <ClInclude Include="HighlightsFX.hpp" />
+    <ClInclude Include="IEnumerator.hpp" />
     <ClInclude Include="Input.hpp" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="List.hpp" />
@@ -103,6 +109,7 @@
     <ClInclude Include="detours\detver.h" />
     <ClInclude Include="detours\syelog.h" />
     <ClInclude Include="IL2CPP\IL2CPP.hpp" />
+    <ClInclude Include="Material.hpp" />
     <ClInclude Include="MethodBase.hpp" />
     <ClInclude Include="Misc.hpp" />
     <ClInclude Include="ProperBitConverter.hpp" />

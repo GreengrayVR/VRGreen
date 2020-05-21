@@ -28,7 +28,7 @@
 struct UserInteractMenu;
 struct VRCPlayer;
 namespace VRC { struct Player; }
-namespace VRC::Core { struct APIUser; }
+namespace VRC::Core { struct APIUser; struct ApiAvatar; }
 namespace UnityEngine { struct GameObject; }
 namespace VRC::SDKBase { struct VRC_EventHandler; }
 
@@ -72,6 +72,8 @@ private:
 	void generateHWID();
 	void disableDetours();
 	void setupSettings();
+
+	static void SwitchAvatar(void* _this, VRC::Core::ApiAvatar* apiavatar, IL2CPP::String* fuzzy, float betterthen, void* tsumiki);
 	static void OfflineMode(IL2CPP::String* target, void* responseContainer, void* requestParams, void* credentials);
 	static void ReceiveVoteToKickInitiation(void* _this, IL2CPP::String* player2, VRC::Player* player);
 	static void Wtf(void* _this, VRC::Player* player);

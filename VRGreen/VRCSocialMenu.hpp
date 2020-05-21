@@ -5,7 +5,7 @@
 
 namespace UnityEngine { struct Transform; }
 namespace VRC::Core { struct APIUser; }
-struct CDetour;
+class CDetour;
 
 namespace VRCSocialMenu
 {
