@@ -12,6 +12,8 @@ namespace UnityEngine
 		float a;
 	};
 
+
+
 	Color* GetCyan();
 
 	Color GetRed();

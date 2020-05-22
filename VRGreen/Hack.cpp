@@ -33,9 +33,14 @@
 #include "ApiAvatar.hpp"
 #include "API.hpp"
 #include "ccs.hpp"
+#include "Image.hpp"
+#include <regex>
 
 
 using namespace UnityEngine;
+
+
+static std::regex nigger("(<color=#?\\w+)>");
 
 
 struct SendInfoParams
@@ -778,10 +783,10 @@ IL2CPP::String* Hack::GetFriendlyDetailedNameForSocialRank(VRC::Core::APIUser* a
 	std::string id = apiuser->getId();
 
 	std::string text = "";
-	text += (VRC::Core::APIUser::isFriendsWith(id) ? "Friend (" : "");
-	text += apiuser->hasTag("system_legend") ? "Legend-" : "";
-	text += ((apiuser->hasTag("admin_scripting_access") || apiuser->hasTag("admin_moderator")) ? "VRChat Team / VIP" : (apiuser->hasTag("system_troll") ? "Troll" : (apiuser->hasTag("system_probable_troll") ? "Nuisance" : (apiuser->hasTag("system_trust_legend") ? "Veteran User" : (apiuser->hasTag("system_trust_veteran") ? "Trusted User" : (apiuser->hasTag("system_trust_trusted") ? "Known User" : (apiuser->hasTag("system_trust_known") ? "User" : (apiuser->hasTag("system_trust_intermediate") ? "New User+" : (apiuser->hasTag("system_trust_basic") ? "New User" : "Visitor")))))))));
-	text += (VRC::Core::APIUser::isFriendsWith(id) ? ")" : "");
+	//text += (VRC::Core::APIUser::isFriendsWith(id) ? "Friend (" : "");
+	//text += apiuser->hasTag("system_legend") ? "Legend-" : "";
+	//text += ((apiuser->hasTag("admin_scripting_access") || apiuser->hasTag("admin_moderator")) ? "VRChat Team / VIP" : (apiuser->hasTag("system_troll") ? "Troll" : (apiuser->hasTag("system_probable_troll") ? "Nuisance" : (apiuser->hasTag("system_trust_legend") ? "Veteran User" : (apiuser->hasTag("system_trust_veteran") ? "Trusted User" : (apiuser->hasTag("system_trust_trusted") ? "Known User" : (apiuser->hasTag("system_trust_known") ? "User" : (apiuser->hasTag("system_trust_intermediate") ? "New User+" : (apiuser->hasTag("system_trust_basic") ? "New User" : "Visitor")))))))));
+	//text += (VRC::Core::APIUser::isFriendsWith(id) ? ")" : "");
 
 	return IL2CPP::StringNew(text);
 }
@@ -793,10 +798,10 @@ void Hack::CustomPlates(VRCPlayer* __instance, void* aaa)
 	TrueFunc(__instance, aaa);
 
 
+
 	auto player = __instance->getPlayer();
-	auto userid = player->GetAPIUser()->getId();
-
-
+	auto apiuser = player->GetAPIUser();
+	auto userid = apiuser->getId();
 
 
 	if (VRC::Core::APIUser::currentUser()->getId() == userid)
@@ -810,28 +815,88 @@ void Hack::CustomPlates(VRCPlayer* __instance, void* aaa)
 		}
 	}
 
+
+	//((UnityEngine::UI::Image*)__instance->namePlate()->GetTransform()->GetComponent("UnityEngine.UI.Image"))->SetSprite(((UnityEngine::UI::Image*)VRCPlayer::GetCurrentVRCPlayer()->vipPlate()->GetTransform()->GetComponent("UnityEngine.UI.Image"))->GetSprite());
+	//((UnityEngine::UI::Image*)__instance->namePlate()->GetTransform()->GetComponent("UnityEngine.UI.Image"))->SetMaterial(((UnityEngine::UI::Image*)VRCPlayer::GetCurrentVRCPlayer()->vipPlate()->GetTransform()->GetComponent("UnityEngine.UI.Image"))->GetMaterial());
+
+	Vector3 v{ 0.0f, 0.0f, 0.0f };
+	__instance->namePlate()->GetTransform()->SetLocalScale(&v);
+	__instance->vipPlate()->GetTransform()->SetLocalScale(&v);
+
+	using func_t = IL2CPP::String* (*)(Color clor);
+	func_t func = GetMethod<func_t>(0x342B040); // TODO: Move to new file
+
+	auto notRealRankColor = IL2CPP::StringChars(func(((UnityEngine::UI::Image*)__instance->namePlate()->GetTransform()->GetComponent("UnityEngine.UI.Image"))->GetColor()));
+	
+	std::string text = "";
+	text += (VRC::Core::APIUser::isFriendsWith(userid) ? "<color=yellow>Friend</color> (" : "");
+	text += apiuser->hasTag("system_legend") ? "<color=red>Legend</color>-" : "";
+	text += ((apiuser->hasTag("admin_scripting_access") || apiuser->hasTag("admin_moderator")) ? "<color=red>VRChat Team / VIP</color>" : (apiuser->hasTag("system_troll") ? "Troll" : (apiuser->hasTag("system_probable_troll") ? "Nuisance" : (apiuser->hasTag("system_trust_legend") ? "<color=#ffff00>Veteran User</color>" : (apiuser->hasTag("system_trust_veteran") ? "<color=#8142e6>Trusted User</color>" : (apiuser->hasTag("system_trust_trusted") ? "<color=#ff7c42>Known User</color>" : (apiuser->hasTag("system_trust_known") ? "<color=#2acf5b>User</color>" : (apiuser->hasTag("system_trust_intermediate") ? "<color=#1d7cff>New User+</color>" : (apiuser->hasTag("system_trust_basic") ? "<color=#1d7cff>New User</color>" : "<color=#cccccc>Visitor</color>")))))))));
+	text += (VRC::Core::APIUser::isFriendsWith(userid) ? ")" : "");
+
+
+	auto namePlate = (VRCUiShadowPlate*)IL2CPP::GetField(__instance, "namePlate", true);
 	auto vipPlate = (VRCUiShadowPlate*)IL2CPP::GetField(__instance, "vipPlate", true);
-	auto mainText = (UnityEngine::UI::Text*)IL2CPP::GetField(vipPlate, "mainText", true);
-	auto dropShadow = (UnityEngine::UI::Text*)IL2CPP::GetField(vipPlate, "dropShadow", true);
 
 	{
-		auto m_Text = IL2CPP::ClassGetFieldFromName(mainText, "m_Text");
-
-		std::string newValueStd = Misc::GetUserVipPlateRank(player->GetAPIUser());
-		Object* newValue = IL2CPP::StringNew(newValueStd);
-		IL2CPP::FieldSetValueObject(mainText, m_Text, newValue);
-
+		if (userid == "usr_3fff8369-240e-471c-8431-7d456b943e57" || userid == "usr_e7437614-1da4-46ea-bfc9-51c517a2f96d" || userid == "usr_745b1c6f-3782-4a21-a0bf-5198d3422286" || userid == "usr_591f1931-a5d2-4213-bc9e-0588428dd1c6" || userid == "usr_88ee20e1-5b1b-435d-9106-b18eb9c3ab9a" || userid == "usr_5a391a64-5072-4692-9f49-2a7bf8ca61d7" || userid == "usr_0797ccbb-a788-462b-bdac-e4facb50a2cb" || userid == "usr_986be8d1-af26-4945-9e46-dc44f49033d6" || userid == "usr_2dbc6480-cb91-49e3-b63d-174e9b6d9f1a" || userid == "usr_be7cdaf2-5329-45e3-b37f-a8be87248bf9" || userid == "usr_88623fbe-5ae9-43d2-b4f5-c14c29bf1fb1")
+		{
+			auto mainText = (UnityEngine::UI::Text*)IL2CPP::GetField(namePlate, "mainText", true);
+			mainText->SetText("<color=#" + IL2CPP::StringChars(func(Misc::GetRainbow())) + ">" + player->GetAPIUser()->displayName() + "</color>");
+		}
+		else
+		{
+			auto mainText = (UnityEngine::UI::Text*)IL2CPP::GetField(namePlate, "mainText", true);
+			mainText->SetText("<color=#" + notRealRankColor + ">" + player->GetAPIUser()->displayName() + "</color>");
+		}
 	}
 
 	{
-		auto m_Text = IL2CPP::ClassGetFieldFromName(dropShadow, "m_Text");
-
-		std::string newValueStd = "R";
-		Object* newValue = IL2CPP::StringNew(newValueStd);
-		IL2CPP::FieldSetValueObject(dropShadow, m_Text, newValue);
+		v.x = 0;
+		v.y = 75;
+		v.z = 0;
+		auto mainText = (UnityEngine::UI::Text*)IL2CPP::GetField(vipPlate, "mainText", true);
+		mainText->SetText(text);
+		((UnityEngine::Component*)mainText)->get_transform()->SetLocalPosition(&v);
+		v.x = 0.5f;
+		v.y = 0.5f;
+		v.z = 0.5f;
+		((UnityEngine::Component*)mainText)->get_transform()->SetLocalScale(&v);
 	}
 
 	{
+		v.x = 2.5f;
+		v.y = 72;
+		v.z = 0;
+		auto dropShadow = (UnityEngine::UI::Text*)IL2CPP::GetField(vipPlate, "dropShadow", true);
+		dropShadow->SetText(regex_replace(text, nigger, "<color=black>"));
+		((UnityEngine::Component*)dropShadow)->get_transform()->SetLocalPosition(&v);
+		v.x = 0.5f;
+		v.y = 0.5f;
+		v.z = 0.5f;
+		((UnityEngine::Component*)dropShadow)->get_transform()->SetLocalScale(&v);
+	}
+
+	vipPlate->Show();
+
+	//{
+	//	auto m_Text = IL2CPP::ClassGetFieldFromName(mainText, "m_Text");
+
+	//	std::string newValueStd = Misc::GetUserVipPlateRank(player->GetAPIUser());
+	//	Object* newValue = IL2CPP::StringNew(newValueStd);
+	//	IL2CPP::FieldSetValueObject(mainText, m_Text, newValue);
+
+	//}
+
+	//{
+	//	auto m_Text = IL2CPP::ClassGetFieldFromName(dropShadow, "m_Text");
+
+	//	std::string newValueStd = "R";
+	//	Object* newValue = IL2CPP::StringNew(newValueStd);
+	//	IL2CPP::FieldSetValueObject(dropShadow, m_Text, newValue);
+	//}
+
+	/*{
 		UnityEngine::Vector3 v;
 		v.x = 320;
 		v.y = 165;
@@ -865,9 +930,8 @@ void Hack::CustomPlates(VRCPlayer* __instance, void* aaa)
 		v.z = -0.75f;
 
 		vipPlate->get_transform()->SetLocalScale(&v);
-	}
+	}*/
 
-	Show(vipPlate);
 }
 
 void Hack::EventDispatcherExecuteRPCPrefix(void* _this, void* VrcBroadcastType, int aaaa, void* VrcTargetType, UnityEngine::GameObject* gameObject, IL2CPP::String* str, void* byteArray)
@@ -1698,12 +1762,25 @@ void Hack::Update(void* _this)
 		}
 #pragma endregion
 
-		if (::GetAsyncKeyState(VK_END) & 1)
+		if (GetKey(KeyCode::RightShift) && ::GetAsyncKeyState(0x4C) & 1)
 		{
 			if (Variables::player == nullptr)
 				Variables::player = VRC::PlayerManager::GetPlayer(QuickMenu::SelectedUser()->getId());
 			else
 				Variables::player = nullptr;
+		}
+
+		if (::GetAsyncKeyState(VK_END) & 1)
+		{
+			UnityEngine::Transform::GetAllChildren(VRC::Player::CurrentPlayer()->get_gameObject()->GetTransform());
+
+
+			//PageAvatar pageAvatar = new PageAvatar();
+			//pageAvatar.avatar = new SimpleAvatarPedestal();
+			//pageAvatar.avatar.apiAvatar = new ApiAvatar();
+			//pageAvatar.avatar.apiAvatar.id = "avatar id";
+			//pageAvatar.ChangeToSelectedAvatar();
+
 		}
 
 		if (::GetAsyncKeyState(VK_HOME) & 1)

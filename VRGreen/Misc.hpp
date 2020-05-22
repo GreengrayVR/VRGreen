@@ -15,6 +15,8 @@ namespace VRC::Core { struct APIUser; }
 
 struct Misc
 {
+    static UnityEngine::Color GetRainbow();
+
     static void DropPortal(const std::string& world, const std::string& id, const std::string& text);
 
     static void DropPortal(const std::string& world, const std::string& id);

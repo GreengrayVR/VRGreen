@@ -33,13 +33,15 @@ namespace UnityEngine
 
 		void SetLocalScale(Vector3* value);
 
-		Transform* GetChild( int index);
+		Transform* GetChild(int index);
 
 		int ChildCount();
 
 		void GetAllChildren(int& deepCount);
 
 		static void GetAllChildren(Transform* transform);
+
+		Object* GetComponentInChildrenZ(std::string type);
 
 		UnityEngine::Vector3 GetForward();
 

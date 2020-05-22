@@ -71,6 +71,7 @@
     <ClCompile Include="VRCSocialMenu.cpp" />
     <ClCompile Include="VRCUiPage.cpp" />
     <ClCompile Include="VRCUiPopupManager.cpp" />
+    <ClCompile Include="VRCUiShadowPlate.cpp" />
     <ClCompile Include="VRC\Core\APIUser.cpp" />
     <ClCompile Include="VRC\PlayerManager.cpp" />
     <ClCompile Include="VRC\SDKBase\Networking.cpp" />

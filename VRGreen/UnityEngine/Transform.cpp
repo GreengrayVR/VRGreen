@@ -96,28 +96,45 @@ void UnityEngine::Transform::GetAllChildren(int& deepCount)
 
 	std::string text = "";
 
-	deepCount++;
-
 	for (size_t i = 0; i < childCount; i++)
 		text += "-";
 
-	ConsoleUtils::Log((deepCount - 1), " ", text, " ", UnityEngine::GetName(this));
+	ConsoleUtils::Log(text, " ", UnityEngine::GetName(this));
 
 	for (size_t i = 0; i < childCount; i++)
 	{
-
-		if (UnityEngine::GetName(this->GetChild(i)) == std::string("Text"))
-		{
-			//auto button = (UI::Text*)this->GetChild(i)->GetComponent("UnityEngine.UI.Text");
-
-			//auto m_Text = IL2CPP::ClassGetFieldFromName(button, "m_Text");
-			//auto str = IL2CPP::FieldGetValueObject(m_Text, button);
-			//ConsoleUtils::Log(text, " Text: ", IL2CPP::StringChars((IL2CPP::String*)str));
-		}
-
-		//GetAllChildren(GetChild(transform, i), deepCount);
+		this->GetAllChildren(this->GetChild(i));
 	}
 }
+
+void UnityEngine::Transform::GetAllChildren(Transform* transform)
+{
+	int i = 0;
+	transform->GetAllChildren(i);
+}
+
+Object* UnityEngine::Transform::GetComponentInChildrenZ(std::string type)
+{
+	int childCount = this->ChildCount();
+	
+	
+	if (GetComponent(type) != nullptr)
+	{
+		return GetComponent(type);
+	}
+	//std::string text = "";
+
+	//for (size_t i = 0; i < childCount; i++)
+		//text += "-";
+
+	//ConsoleUtils::Log(text, " ", UnityEngine::GetName(this));
+
+	for (size_t i = 0; i < childCount; i++)
+	{
+		this->GetChild(i)->GetComponentInChildrenZ(type);
+	}
+}
+
 
 UnityEngine::Vector3 UnityEngine::Transform::GetForward()
 {
@@ -173,12 +190,6 @@ System::Collections::IEnumerator* UnityEngine::Transform::GetEnumerator()
 	return func(this);
 }
 
-void UnityEngine::Transform::GetAllChildren(Transform* transform)
-{
-	int i = 0;
-	//GetAllChildren(transform, i);
-	ConsoleUtils::Log("Transforms found: ", i);
-}
 
 void UnityEngine::Transform::SetParent(Transform* to)
 {

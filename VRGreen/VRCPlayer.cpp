@@ -1,8 +1,9 @@
 #include "VRCPlayer.hpp"
 
 #include "IL2CPP/IL2CPP.hpp"
-
+#include "UnityEngine/Transform.hpp"
 #include "VRC/Player.h"
+
 
 VRCPlayer* VRCPlayer::GetCurrentVRCPlayer()
 {
@@ -25,6 +26,16 @@ long long VRCPlayer::get_steamId()
 	func_t func = GetMethod<func_t>(GETSTEAMID);
 
 	return func(this);
+}
+
+UnityEngine::GameObject* VRCPlayer::namePlate()
+{
+	return ((UnityEngine::Transform*)IL2CPP::GetField(this, "namePlate", true))->get_gameObject();
+}
+
+UnityEngine::GameObject* VRCPlayer::vipPlate()
+{
+	return ((UnityEngine::Transform*)IL2CPP::GetField(this, "vipPlate", true))->get_gameObject();
 }
 
 VRC::Core::ApiAvatar* VRCPlayer::GetApiAvatar()

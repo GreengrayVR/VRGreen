@@ -1,15 +1,14 @@
 #pragma once
 
-#include "Common.hpp"
+#include "UnityEngine/Component.hpp"
 
-struct VRCUiShadowPlate : UnityEngine::Component { NOIMPLEMENT(VRCUiShadowPlate); };
+namespace UnityEngine { struct Color; struct GameObject; }
 
-// 40 53 48 83 ec ? 33 d2 48 8b d9 e8 ? ? ? ? 48 85 c0 74 ? 45 33 c0 b2 ? 48 8b c8 e8 ? ? ? ? 48 8b 4b ? 48 85 c9 74 ? 33 d2 e8 ? ? ? ? 48 85 c0 74 ? 45 33 c0 b2 ? 48 8b c8 e8 ? ? ? ? 48 8b 4b ? 48 85 c9 74 ? 33 d2 e8 ? ? ? ? 48 85 c0 74 ? 45 33 c0 b2
-inline void Show(VRCUiShadowPlate* _this)
+struct VRCUiShadowPlate : UnityEngine::GameObject 
 {
-	using func_t = void(*)(VRCUiShadowPlate* _this);
+	NOIMPLEMENT(VRCUiShadowPlate); 
 
-	func_t func = GetMethod<func_t>(VIPPLATESHOW);
+	UnityEngine::Color* GetColor();
 
-	func(_this);
-}
+	void Show();
+};

@@ -8,6 +8,20 @@
 #include "VRC/Core/APIUser.hpp"
 #include "VRCPlayerApi.h"
 #include "ConsoleUtils.hpp"
+#include "Time.hpp"
+
+
+UnityEngine::Color Misc::GetRainbow()
+{
+	using HSVToRGB_t = UnityEngine::Color (*)(float H, float S, float V);
+	HSVToRGB_t HSVToRGB = GetMethod<HSVToRGB_t>(0x342B580); //	
+	
+	
+	using PingPong_t = float (*)(float t, float length);
+	PingPong_t PingPong = GetMethod<PingPong_t>(0x1974FE0); //
+	
+	return HSVToRGB(PingPong(Time::time() * 0.1f, 1.f), 1.f, 1.f);
+}
 
 void Misc::DropPortal(const std::string& world, const std::string& id, const std::string& text)
 {

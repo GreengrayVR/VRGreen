@@ -237,6 +237,9 @@
     <ClCompile Include="Sprite.cpp">
       <Filter>UnityEngine</Filter>
     </ClCompile>
+    <ClCompile Include="VRCUiShadowPlate.cpp">
+      <Filter>Assembly-CSharp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IL2CPP\IL2CPP.hpp">
