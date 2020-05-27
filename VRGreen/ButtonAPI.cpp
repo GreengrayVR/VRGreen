@@ -142,45 +142,17 @@ UnityEngine::Transform* ButtonBase::CreateButton(std::string name, std::string t
 	Transform* transform = InstantiateGameobject(type);
 	auto quickMenu = QuickMenu::QuickMenuInstance();
 
-	
-	auto v1 = quickMenu->get_transform()->Find("UserInteractMenu/ForceLogoutButton")->GetLocalPosition().x; // TODO: change local position
-	auto v2 = quickMenu->get_transform()->Find("UserInteractMenu/ForceLogoutButton")->GetLocalPosition().x;
-	float num = v1 - v2;
-	float num2 = v1 - v2;
-
 	SetName(transform, name);
 
 	Vector3 transformVector;
-	transformVector.x = transform->GetLocalPosition().x + num * x_pos;
-	transformVector.y = transform->GetLocalPosition().y + num2 * y_pos;
+	transformVector.x = transform->GetLocalPosition().x * x_pos;
+	transformVector.y = transform->GetLocalPosition().y * y_pos;
 	transformVector.z = transform->GetLocalPosition().z;
 
 	transform->SetLocalPosition(&transformVector);
 	transform->SetParent(parent, false);
 
-	{
-		auto component = transform->GetChild(0)->GetComponent("UnityEngine.UI.Text"); // TODO: Change to SetText()
-		auto m_Text = IL2CPP::ClassGetFieldFromName(component, "m_Text");
-		IL2CPP::FieldSetValueObject(component, m_Text, IL2CPP::StringNew(text));
-	}
-
-	{
-	/*	UI::Button* L_0 = (UI::Button*)transform->GetComponent("UnityEngine.UI.Button");
-		auto L_1 = (UI::ButtonClickedEvent*)IL2CPP::NewObjectFromObject(L_0->GetOnClick(), false);
-		L_1->ButtonClickedEvent_ctor();
-		L_0->SetOnClick(L_1);*/
-	}
-
-	{
-		/*	UI::Button* L_2 = (UI::Button*)transform->GetComponent("UnityEngine.UI.Button");
-			UI::ButtonClickedEvent* L_3 = L_2->GetOnClick();
-			auto L_4 = Events::UnityAction::ctor();
-			using func_t = void(*)();
-			*((func_t*)L_4 + 2) = action;
-
-			auto unityeven = (Events::UnityEvent*)L_3;
-			unityeven->AddListener(L_4);*/
-	}
+	((UnityEngine::UI::Text*)transform->GetChild(0)->GetComponent("UnityEngine.UI.Text"))->SetText(text);
 
 	return transform;
 }

@@ -51,8 +51,10 @@
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="MethodBase.cpp" />
     <ClCompile Include="Misc.cpp" />
+    <ClCompile Include="PageAvatar.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="QuickMenu.cpp" />
+    <ClCompile Include="Ray.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="RoomManagerBase.cpp" />
     <ClCompile Include="Selectable.cpp" />
@@ -116,8 +118,11 @@
     <ClInclude Include="Material.hpp" />
     <ClInclude Include="MethodBase.hpp" />
     <ClInclude Include="Misc.hpp" />
+    <ClInclude Include="PageAvatar.hpp" />
     <ClInclude Include="ProperBitConverter.hpp" />
     <ClInclude Include="QuickMenu.hpp" />
+    <ClInclude Include="Ray.hpp" />
+    <ClInclude Include="RaycastHit.hpp" />
     <ClInclude Include="RectTransform.hpp" />
     <ClInclude Include="Renderer.hpp" />
     <ClInclude Include="RoomManagerBase.hpp" />

@@ -310,7 +310,7 @@ void IL2CPP::GetFields(Object* obj)
 		ConsoleUtils::Log(fieldTypeName, ": ", fieldName, " | ", (size_t)IL2CPP::FieldGetValueObject(field, obj));
 
 		IL2CPP::Free(fieldTypeName);
-		//IL2CPP::Free(fieldName); ???????
+		//IL2CPP::Free(fieldName); // TODO: ???????
 
 	}
 
@@ -475,6 +475,15 @@ IL2CPP::Array* IL2CPP::ArrayNew(Class* elementTypeInfo, size_t length)
 	func_t func = (func_t)GetProcAddress(::GameAssemblyHandle, "il2cpp_array_new");
 
 	return func(elementTypeInfo, length);
+}
+
+void* IL2CPP::ObjectUnbox(Object* object)
+{
+	using func_t = void* (*)(Object* object);
+
+	func_t func = (func_t)GetProcAddress(::GameAssemblyHandle, "il2cpp_object_unbox");
+
+	return func(object);
 }
 
 Object* IL2CPP::ValueBox(std::string type, void* data)

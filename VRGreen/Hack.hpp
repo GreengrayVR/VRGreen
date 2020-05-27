@@ -38,6 +38,7 @@ public:
 	float emojiSpamDelay;
 	float updateDelay;
 	bool lobbyLag;
+	bool toggleRPC;
 
 	inline static Hack& getInstance();
 	void init();
@@ -60,7 +61,6 @@ private:
 	bool seeBlocked;
 	bool gravityHack;
 	bool emojiSpam;
-	bool toggleRPC;
 	bool disableTriggers;
 	bool noGlobal;
 	bool isTyping;
@@ -73,6 +73,7 @@ private:
 	void disableDetours();
 	void setupSettings();
 
+	static bool test1(void* _this, VRC::Player* player, int broadcastType, void* gameObject, bool xxx);
 	static void AntiWorldTriggers(void* _this, VRC::SDKBase::VRC_EventHandler* eventHandler, void* VRC_EventHandler_VrcEvent, int VRC_EventHandler_VrcBroadcastType, int instagatorId, float xxx);
 	static void SwitchAvatar(void* _this, VRC::Core::ApiAvatar* apiavatar, IL2CPP::String* fuzzy, float betterthen, void* tsumiki);
 	static void OfflineMode(IL2CPP::String* target, void* responseContainer, void* requestParams, void* credentials);
@@ -82,6 +83,7 @@ private:
 	static bool IsBlockedEitherWay(void* _this, IL2CPP::String* str);
 	static IL2CPP::String* GetFriendlyDetailedNameForSocialRank(VRC::Core::APIUser* apiuser);
 	static void CustomPlates(VRCPlayer* __instance, void* aaa);
+	static bool Serialize(void* _this);
 	static void EventDispatcherExecuteRPCPrefix(void* _this, void* VrcBroadcastType, int aaaa, void* VrcTargetType, UnityEngine::GameObject* gameObject, IL2CPP::String* str, void* byteArray);
 	static bool IsKicked2(void* _this, IL2CPP::String* str1, IL2CPP::String* str2, IL2CPP::String* str3);
 	static bool JoinWorld(void* _this, IL2CPP::String* str1, IL2CPP::String* str2, IL2CPP::String* str3);

@@ -67,6 +67,9 @@
     <Filter Include="Assembly-CSharp\System\Collections">
       <UniqueIdentifier>{d54fcda4-f06a-46dc-aa05-7e2fcf50c6f3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\VRC\UI">
+      <UniqueIdentifier>{3bcd198f-a609-4c23-a4bc-c84b29f91e9a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -240,6 +243,12 @@
     <ClCompile Include="VRCUiShadowPlate.cpp">
       <Filter>Assembly-CSharp</Filter>
     </ClCompile>
+    <ClCompile Include="Ray.cpp">
+      <Filter>UnityEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="PageAvatar.cpp">
+      <Filter>Header Files\VRC\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IL2CPP\IL2CPP.hpp">
@@ -398,9 +407,6 @@
     <ClInclude Include="CDetour.hpp">
       <Filter>detours</Filter>
     </ClInclude>
-    <ClInclude Include="Hack.hpp">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="VRCUiPage.hpp">
       <Filter>Assembly-CSharp</Filter>
     </ClInclude>
@@ -460,6 +466,18 @@
     </ClInclude>
     <ClInclude Include="Sprite.hpp">
       <Filter>UnityEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Ray.hpp">
+      <Filter>UnityEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Hack.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RaycastHit.hpp">
+      <Filter>UnityEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="PageAvatar.hpp">
+      <Filter>Header Files\VRC\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

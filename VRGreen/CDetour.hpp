@@ -6,7 +6,7 @@
 #include <Windows.h>
 #include <utility>
 
-class CDetour // TODO: rename
+class CDetour
 {
 
 private:

@@ -3,6 +3,9 @@
 
 #include <list>
 
+namespace UnityEngine { struct GameObject; }
+
+
 struct Variables // TODO: move to Hack.hpp
 {
 #pragma region QMButtons
@@ -15,8 +18,12 @@ struct Variables // TODO: move to Hack.hpp
 	inline static bool forceMute;
 	inline static bool autoDestroy;
 	inline static bool worldTriggers;
+	inline static bool blockRPCs;
+	inline static bool instanceLock;
+	inline static bool antiWorldTriggers;
 	inline static bool antiPortal;
 	inline static bool printApiRequests;
+	inline static bool serialize;
 	inline static bool stickOnHead;
 	inline static bool portalLag;
 	inline static bool spamEmoji;
@@ -25,5 +32,6 @@ struct Variables // TODO: move to Hack.hpp
 	inline static bool esp;
 	inline static float flySpeed;
 	inline static std::list<std::string> whiteList;
+	inline static UnityEngine::GameObject* modManager = nullptr;
 	inline static Discord* g_Discord;
 };

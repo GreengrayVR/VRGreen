@@ -20,7 +20,12 @@ struct UnknownType {};
 
 extern HMODULE GameAssemblyHandle;
 
-struct Object { NOIMPLEMENT(Object); };
+struct Object // TODO: proper inheritance of monobehaviour
+{
+    NOIMPLEMENT(Object); 
+
+    static Object* ctor();
+};
 struct ObjectArray { NOIMPLEMENT(ObjectArray); };
 
 namespace IL2CPP { extern void MonitorEnter(Object* object); }

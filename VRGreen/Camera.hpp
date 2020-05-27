@@ -1,9 +1,10 @@
 #pragma once
 
+#include "UnityEngine/Component.hpp"
 
 namespace UnityEngine
 {
-	struct Camera
+	struct Camera : Component
 	{
 		static Camera* MainCamera();
 	};

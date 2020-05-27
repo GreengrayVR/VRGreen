@@ -10,6 +10,7 @@
 #include "VRC/PlayerManager.hpp"
 #include "ConsoleUtils.hpp"
 #include "Image.hpp"
+#include "VRC/SDKBase/Networking.hpp"
 
 using namespace UnityEngine;
 
@@ -21,34 +22,46 @@ void VRCQuickMenu::ShowUIElements1()
 	{
 		auto btnName = GetName(btn->getGameObject());
 
-		if (btnName == "ToggleButton123(-3,0)" || btnName == "SingleButton1120(3,-1)" || btnName == "SingleButton116(1,-2)"|| btnName == "ToggleButton115(-1,-2)" || btnName == "ToggleButton114(-3,-2)" || btnName == "ToggleButton113(-1,0)" || btnName == "ToggleButton112(-1,-1)" || btnName == "ToggleButton111(-3,-1)" || btnName == "ToggleButton110(-2,-1)" || btnName == "ToggleButton121(-1,0)" || btnName == "ToggleButton122(-2,0)")
+		//ConsoleUtils::Log(btnName);
+
+		if (Variables::uiElementsPage1)
 		{
-			if (Variables::uiElementsPage1)
-			{
-				btn->setActive(false);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/SingleButton1110(3,0)")->get_gameObject()->SetActive(true);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton121(-1,0)")->get_gameObject()->SetActive(true);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton122(-2,0)")->get_gameObject()->SetActive(true);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton123(-3,0)")->get_gameObject()->SetActive(true);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleHUDButton")->get_gameObject()->SetActive(false);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleNameplatesButton")->get_gameObject()->SetActive(false);
-			}
-			else
-			{
-				btn->setActive(true);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/SingleButton1110(3,0)")->get_gameObject()->SetActive(false);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton121(-1,0)")->get_gameObject()->SetActive(false);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton122(-2,0)")->get_gameObject()->SetActive(false);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton123(-3,0)")->get_gameObject()->SetActive(false);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleHUDButton")->get_gameObject()->SetActive(true);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleNameplatesButton")->get_gameObject()->SetActive(true);
-			}
+			btn->setActive(false);
+			QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/SingleButton1110(3,0)")->get_gameObject()->SetActive(true);
+			QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton121(-1,0)")->get_gameObject()->SetActive(true);
+			QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton122(-2,0)")->get_gameObject()->SetActive(true);
+			QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton123(-3,0)")->get_gameObject()->SetActive(true);
+			QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/SingleButton124(0,-1)")->get_gameObject()->SetActive(true);
+			QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton125(-2,-1)")->get_gameObject()->SetActive(true);
+			QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton126(-1,-1)")->get_gameObject()->SetActive(true);
+			QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton127(-3,-2)")->get_gameObject()->SetActive(true);
+			QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton128(-2,-2)")->get_gameObject()->SetActive(true);
+			QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton129(-1,-2)")->get_gameObject()->SetActive(true);
+			QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleHUDButton")->get_gameObject()->SetActive(false);
+			QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleNameplatesButton")->get_gameObject()->SetActive(false);
+		}
+		else
+		{
+			btn->setActive(true);
+			QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/SingleButton1110(3,0)")->get_gameObject()->SetActive(false);
+			QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton121(-1,0)")->get_gameObject()->SetActive(false);
+			QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton122(-2,0)")->get_gameObject()->SetActive(false);
+			QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton123(-3,0)")->get_gameObject()->SetActive(false);
+			QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/SingleButton124(0,-1)")->get_gameObject()->SetActive(false);
+			QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton125(-2,-1)")->get_gameObject()->SetActive(false);
+			QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton126(-1,-1)")->get_gameObject()->SetActive(false);
+			QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton127(-3,-2)")->get_gameObject()->SetActive(false);
+			QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton128(-2,-2)")->get_gameObject()->SetActive(false);
+			QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton129(-1,-2)")->get_gameObject()->SetActive(false);
+			QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleHUDButton")->get_gameObject()->SetActive(true);
+			QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleNameplatesButton")->get_gameObject()->SetActive(true);
 		}
 	}
 }
 
 void VRCQuickMenu::SetupButtons()
 {
+#pragma region NestedButtons
 	Variables::uiElementsPage1 = false;
 
 	auto buttonUp1 = new SingleButton("UIElementsMenu", 1110, 3, 0, "", CreateDetour([=]() { ShowUIElements1(); }), "");
@@ -59,6 +72,7 @@ void VRCQuickMenu::SetupButtons()
 	auto buttonDown1 = new SingleButton("UIElementsMenu", 1120, 3, -1, "", CreateDetour([=]() { ShowUIElements1(); }), "");
 	((UI::Image*)buttonDown1->getGameObject()->GetComponent("UnityEngine.UI.Image"))->SetSprite(((UI::Image*)QuickMenu::QuickMenuInstance()->get_transform()->Find("EmojiMenu/PageDown")->GetComponent("UnityEngine.UI.Image"))->GetSprite());
 	QuickMenuButtons.push_back(buttonDown1);
+#pragma endregion
 
 #pragma region Page1
 	auto forceMuteButton = new ToggleButton("UIElementsMenu", 110, -2, -1, "Force Mute", CreateDetour([=]()
@@ -89,15 +103,15 @@ void VRCQuickMenu::SetupButtons()
 	autoDestroyButton->btnOff->SetActive(false);
 	
 	auto worldTriggersButton = new ToggleButton("UIElementsMenu", 112, -1, -1, "World Triggers", CreateDetour([=]()
-		{
-			Variables::worldTriggers = true;
+	{
+		Variables::worldTriggers = true;
 
-		}), "OFF", CreateDetour([=]()
-			{
+	}), "OFF", CreateDetour([=]()
+	{
 
-				Variables::worldTriggers = false;
+		Variables::worldTriggers = false;
 
-			}), "kiwi is stupid");
+	}), "kiwi is stupid");
 	QuickMenuButtons.push_back(worldTriggersButton);
 	worldTriggersButton->btnOn->SetActive(true);
 	worldTriggersButton->btnOff->SetActive(false);
@@ -120,10 +134,10 @@ void VRCQuickMenu::SetupButtons()
 
 	auto antiPortalButton = new ToggleButton("UIElementsMenu", 114, -3, -2, "Anti-Portal", CreateDetour([=]()
 	{
-		Variables::antiPortal = false;
+		Variables::antiPortal = true;
 	}), "OFF", CreateDetour([=]()
 	{
-		Variables::antiPortal = true;
+		Variables::antiPortal = false;
 	}), "nigger");
 	QuickMenuButtons.push_back(antiPortalButton);
 	antiPortalButton->btnOn->SetActive(true);
@@ -147,7 +161,7 @@ void VRCQuickMenu::SetupButtons()
 	auto speedHackButton = new ToggleButton("UIElementsMenu", 121, -1, 0, "Speed Hack", CreateDetour([=]()
 	{
 		Variables::speedHack = true;
-	}), "NO", CreateDetour([=]()
+	}), "OFF", CreateDetour([=]()
 	{
 		Variables::speedHack = false;
 	}), "find me a gf");
@@ -175,6 +189,67 @@ void VRCQuickMenu::SetupButtons()
 	}), "if ur a girl u get the cliennt fofree");
 	QuickMenuButtons.push_back(emojiSpamButton);
 	emojiSpamButton->setActive(false);
+
+	auto changePedistalsButton = new SingleButton("UIElementsMenu", 124, 0, -1, "Change\nPedistals", CreateDetour([=]()
+	{
+		Misc::ChangeAllPedistals();
+	}), "cant be sober");
+	QuickMenuButtons.push_back(changePedistalsButton);
+	changePedistalsButton->setActive(false);
+
+
+	auto instaneLockButton = new ToggleButton("UIElementsMenu", 125, -2, -1, "Instance Lock", CreateDetour([=]()
+	{
+		Variables::instanceLock = true;
+	}), "OFF", CreateDetour([=]()
+		{
+			Variables::instanceLock = false;
+		}), "i beat my dick to lolis");
+	QuickMenuButtons.push_back(instaneLockButton);
+	instaneLockButton->setActive(false);
+
+	auto worldDesyncButton = new ToggleButton("UIElementsMenu", 126, -1, -1, "World Desync", CreateDetour([=]()
+	{
+		if (VRC::SDKBase::Networking::GoToRoom(RoomManagerBase::GetRoomId()))
+			Variables::portalLag = true;
+	}), "OFF", CreateDetour([=]()
+	{
+		Variables::portalLag = false;
+	}), "glory to ukraine");
+	QuickMenuButtons.push_back(worldDesyncButton);
+	worldDesyncButton->setActive(false);
+
+	auto serializeButton = new ToggleButton("UIElementsMenu", 127, -3, -2, "Serialize", CreateDetour([=]()
+	{
+		Variables::serialize = true;
+	}), "OFF", CreateDetour([=]()
+	{
+		Variables::serialize = false;
+	}), "glory to ukraine");
+	QuickMenuButtons.push_back(serializeButton);
+	serializeButton->setActive(false);
+
+	auto antiWorldTriggersButton = new ToggleButton("UIElementsMenu", 128, -2, -2, "Anti\nWorld Triggers", CreateDetour([=]()
+	{
+		Variables::antiWorldTriggers = true;
+	}), "NO", CreateDetour([=]()
+	{
+		Variables::antiWorldTriggers = false;
+	}), "sup4ik autist");
+	QuickMenuButtons.push_back(antiWorldTriggersButton);
+	antiWorldTriggersButton->setActive(false);
+	antiWorldTriggersButton->btnOn->SetActive(true);
+	antiWorldTriggersButton->btnOff->SetActive(false);
+
+	auto worldCrashButton = new ToggleButton("UIElementsMenu", 129, -1, -2, "World\nCrash", CreateDetour([=]()
+	{
+		Misc::ChangeAvatar("avtr_0be90e0a-3f0a-462c-8b0d-97b8b178e53e");
+	}), "OFF", CreateDetour([=]()
+	{
+		Misc::ChangeAvatar("avtr_61bb01ab-8363-4f12-9cda-3b6931dd2c43");
+	}), "");
+	QuickMenuButtons.push_back(worldCrashButton);
+	worldCrashButton->setActive(false);
 #pragma endregion
 }
 

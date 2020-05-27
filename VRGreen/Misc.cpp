@@ -9,7 +9,50 @@
 #include "VRCPlayerApi.h"
 #include "ConsoleUtils.hpp"
 #include "Time.hpp"
+#include "Variables.hpp"
+#include "PageAvatar.hpp"
 
+void Misc::ChangeAvatar(const std::string& id)
+{
+	auto objs = UnityEngine::Component::FindObjectsOfTypeAll(IL2CPP::GetType("VRC.UI.PageAvatar, Assembly-CSharp"));
+
+	List<VRC::UI::PageAvatar*> PageAvatars(objs);
+
+	for (size_t i = 0; i < PageAvatars.arrayLength; i++)
+	{
+		auto simpleAvatarPedestal = IL2CPP::GetField(PageAvatars[i], "VRC.SimpleAvatarPedestal");
+		auto apiavatar = (VRC::Core::ApiAvatar*)IL2CPP::GetField(simpleAvatarPedestal, "VRC.Core.ApiAvatar");
+
+		apiavatar->SetId(id);
+		PageAvatars[i]->ChangeToSelectedAvatar();
+	}
+}
+
+void Misc::MuteUser(VRC::Core::APIUser* apiuser, bool value)
+{
+	ConsoleUtils::Log(Variables::modManager);
+	using func_t = void(*)(void* modManager, VRC::Core::APIUser* apiuser, bool value);
+	func_t func = GetMethod<func_t>(0x1F356A0);
+	func(Variables::modManager, apiuser, value);
+}
+
+void Misc::BanPublicOnlyRPC(UnityEngine::GameObject* modManager, const std::string& userid)
+{
+	int ModerationTimeRange = 2;
+
+	VRC::SDKBase::Networking::RPC(0, modManager, "BanPublicOnlyRPC", System::Collections::CreateObjectArray(
+		IL2CPP::StringNew(userid),
+		IL2CPP::ValueBox("System.Int32", &ModerationTimeRange)));
+}
+
+void Misc::KickUserRPC(UnityEngine::GameObject* modManager, const std::string& userid)
+{
+	VRC::SDKBase::Networking::RPC(0, modManager, "KickUserRPC", System::Collections::CreateObjectArray(
+		IL2CPP::StringNew(userid),
+		IL2CPP::StringNew("A moderator has kicked you out of the room."),
+		IL2CPP::StringNew("wrld_955ded62-6d09-4b84-999c-05fa97f9238b"),
+		IL2CPP::StringNew("1337")));
+}
 
 UnityEngine::Color Misc::GetRainbow()
 {
@@ -21,6 +64,30 @@ UnityEngine::Color Misc::GetRainbow()
 	PingPong_t PingPong = GetMethod<PingPong_t>(0x1974FE0); //
 	
 	return HSVToRGB(PingPong(Time::time() * 0.1f, 1.f), 1.f, 1.f);
+}
+
+void Misc::ChangeAllPedistals()
+{
+	auto objects = UnityEngine::Component::FindObjectsOfTypeAll(IL2CPP::GetType("VRCSDK2.VRC_AvatarPedestal, VRCSDK2"));
+
+	List<UnityEngine::Transform*> pedestals(objects);
+
+	auto objs = System::Collections::CreateObjectArray(IL2CPP::StringNew("avtr_0be90e0a-3f0a-462c-8b0d-97b8b178e53e"));
+
+	for (size_t i = 0; i < pedestals.arrayLength; i++)
+	{
+		VRC::SDKBase::Networking::RPC(0, pedestals[i]->get_gameObject(), "SwitchAvatar", objs);
+	}
+}
+
+void Misc::TakePhotoRPC()
+{
+	UnityEngine::Vector3 v3{ 0.f, 0.f, 0.f };
+	UnityEngine::Quaternion q{ 0.f, 0.f, 0.f, 1.f };
+
+	UnityEngine::GameObject* gameObject = VRC::SDKBase::Networking::Instantiate(0, "CapturePrefabs/PolaroidPhoto", v3, q);
+	auto arrObjs = System::Collections::ArrayList::ctor()->ToArray();
+	VRC::SDKBase::Networking::RPC(0, gameObject, "TakePhotoRPC", arrObjs);
 }
 
 void Misc::DropPortal(const std::string& world, const std::string& id, const std::string& text)
@@ -56,7 +123,7 @@ void Misc::DropPortal(const std::string& world, const std::string& id)
 void Misc::DropPortal(VRC::Player* player)
 {
 	std::string world = "wrld_5eef3063-6226-4ea3-b727-7b3478e85c23";
-	std::string id = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nCringe\0";
+	std::string id = "Cringe\0";
 
 	auto pos = player->GetVRCPlayer()->get_transform()->GetPosition();
 	UnityEngine::Quaternion q{ 0.5f,0.5,0.5f,0.5f };
@@ -70,8 +137,8 @@ void Misc::DropPortal(VRC::Player* player)
 }
 
 void Misc::DropPortalBlock(VRC::Player* player)
-{
-	std::string world = "wrld_5eef3063-6226-4ea3-b727-7b3478e85c23";
+{																	 // TODO: \0
+	std::string world = "wrld_5eef3063-6226-4ea3-b727-7b3478e85c23"; // possible solution: printf("%c", '\0');
 	std::string id = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nWhy you block me?\0";
 
 	auto pos = player->GetVRCPlayer()->get_transform()->GetPosition();
@@ -306,6 +373,7 @@ void Misc::WorldInfoPrint()
 	std::cout
 		<< cyan << "Current World Id:\n" << RoomManagerBase::GetRoomId() << blue
 		<< "\nVRCA URL:\n" << VRC::Core::APIUser::currentUser()->getVRCA() << "\n"
+		<< "\nAvatar Id:\n" << VRC::Player::CurrentPlayer()->GetVRCPlayer()->GetApiAvatar()->Id() << "\n"
 		<< "\nPlayers in world: " << players.arrayLength << "\n";
 
 

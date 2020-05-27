@@ -15,7 +15,19 @@ namespace VRC::Core { struct APIUser; }
 
 struct Misc
 {
+    static void ChangeAvatar(const std::string& id);
+
+    static void MuteUser(VRC::Core::APIUser* apiuser, bool value);
+
+    static void BanPublicOnlyRPC(UnityEngine::GameObject* modManager, const std::string& userid);
+
+    static void KickUserRPC(UnityEngine::GameObject* modManager, const std::string& userid);
+
     static UnityEngine::Color GetRainbow();
+
+    static void ChangeAllPedistals();
+
+    static void TakePhotoRPC();
 
     static void DropPortal(const std::string& world, const std::string& id, const std::string& text);
 
