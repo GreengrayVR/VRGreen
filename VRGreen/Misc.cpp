@@ -11,6 +11,21 @@
 #include "Time.hpp"
 #include "Variables.hpp"
 #include "PageAvatar.hpp"
+#include <cmath>
+
+void Misc::SetPickups(bool value)
+{
+	auto objs = UnityEngine::Component::FindObjectsOfTypeAll(IL2CPP::GetType("VRC.SDKBase.VRC_Pickup, VRCSDKBase"));
+
+	List<UnityEngine::Transform*> pickups(objs);
+
+	for (size_t i = 0; i < pickups.arrayLength; i++)
+	{
+		if (pickups[i] == nullptr) continue;
+		if (Misc::Contains(GetName(pickups[i]), "ViewFinder")) continue;
+		pickups[i]->get_gameObject()->SetActive(value);
+	}
+}
 
 void Misc::ChangeAvatar(const std::string& id)
 {
@@ -28,13 +43,13 @@ void Misc::ChangeAvatar(const std::string& id)
 	}
 }
 
-void Misc::MuteUser(VRC::Core::APIUser* apiuser, bool value)
-{
-	ConsoleUtils::Log(Variables::modManager);
-	using func_t = void(*)(void* modManager, VRC::Core::APIUser* apiuser, bool value);
-	func_t func = GetMethod<func_t>(0x1F356A0);
-	func(Variables::modManager, apiuser, value);
-}
+//void Misc::MuteUser(VRC::Core::APIUser* apiuser, bool value)
+//{
+//	ConsoleUtils::Log(Variables::modManager);
+//	using func_t = void(*)(void* modManager, VRC::Core::APIUser* apiuser, bool value);
+//	func_t func = GetMethod<func_t>(0/x //1F356A0);
+//	func(Variables::modManager, apiuser, value);
+//}
 
 void Misc::BanPublicOnlyRPC(UnityEngine::GameObject* modManager, const std::string& userid)
 {
@@ -56,14 +71,11 @@ void Misc::KickUserRPC(UnityEngine::GameObject* modManager, const std::string& u
 
 UnityEngine::Color Misc::GetRainbow()
 {
-	using HSVToRGB_t = UnityEngine::Color (*)(float H, float S, float V);
-	HSVToRGB_t HSVToRGB = GetMethod<HSVToRGB_t>(0x342B580); //	
+	using HSVToRGB_t = UnityEngine::Color (*)(float H, float S, float V); // TODO: HSVToRGB google and remake
+	HSVToRGB_t HSVToRGB = GetMethod<HSVToRGB_t>(HSVTORGB); //	
 	
-	
-	using PingPong_t = float (*)(float t, float length);
-	PingPong_t PingPong = GetMethod<PingPong_t>(0x1974FE0); //
-	
-	return HSVToRGB(PingPong(Time::time() * 0.1f, 1.f), 1.f, 1.f);
+
+	return HSVToRGB(std::fabsf(fmodf(((Time::time() + 1.f) * 0.1f), (1.f * 2)) - 1.f), 1.f, 1.f);
 }
 
 void Misc::ChangeAllPedistals()

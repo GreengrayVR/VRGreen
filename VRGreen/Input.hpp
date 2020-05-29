@@ -666,15 +666,15 @@ inline bool GetKeyDownString(std::string name)
 
 	return func(il2cppstr);
 }
-
-inline bool GetKeyDown(KeyCode name)
-{
-	using func_t = bool(*)(int32_t key);
-
-	func_t func = GetMethod<func_t>(0x1C9FE90);
-
-	return func(name);
-}
+//
+//inline bool GetKeyDown(KeyCode name)
+//{
+//	using func_t = bool(*)(int32_t key);
+//
+//	func_t func = GetMethod<func_t>(0/x1C9FE90);
+//
+//	return func(name);
+//}
 
 inline bool GetKey(KeyCode name)
 {

@@ -5,7 +5,7 @@ UnityEngine::Color* VRCUiShadowPlate::GetColor()
 {
 	using func_t = UnityEngine::Color * (*)(VRCUiShadowPlate* _this);
 
-	func_t func = GetMethod<func_t>(0x263A6B0);
+	func_t func = GetMethod<func_t>(UISHADOWPLATECOLOR);
 
 	return func(this);
 }

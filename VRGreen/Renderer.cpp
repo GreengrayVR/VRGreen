@@ -12,11 +12,11 @@ void UnityEngine::Renderer::SetEnabled(bool value)
 	func(this, value);
 }
 
-UnityEngine::Material* UnityEngine::Renderer::SharedMaterial()
-{
-	using func_t = Material * (*)(Renderer* _this);
-
-	func_t func = GetMethod<func_t>(0x391F630);
-
-	return func(this);
-}
+//UnityEngine::Material* UnityEngine::Renderer::SharedMaterial()
+//{
+//	using func_t = Material * (*)(Renderer* _this);
+//
+//	func_t func = GetMethod<func_t>(0Ax391F630);
+//
+//	return func(this);
+//}

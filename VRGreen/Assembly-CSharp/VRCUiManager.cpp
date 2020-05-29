@@ -11,14 +11,14 @@ VRCUiManager* VRCUiManager::VRCUiManagerInstance()
 	return func();
 }
 
-VRCUiManager* VRCUiManager::VRCUiManagerInstance2()
-{
-	using func_t = VRCUiManager * (*)();
-
-	func_t func = GetMethod<func_t>(0x2C2E2F0);
-
-	return func();
-}
+//VRCUiManager* VRCUiManager::VRCUiManagerInstance2()
+//{
+//	using func_t = VRCUiManager * (*)();
+//
+//	func_t func = GetMethod<func_t>(0/x/2C2E2F0);
+//
+//	return func();
+//}
 
 void VRCUiManager::HudMsg(std::string text)
 {
@@ -29,11 +29,11 @@ void VRCUiManager::HudMsg(std::string text)
 	func(this, IL2CPP::StringNew(text));
 }
 
-void VRCUiManager::HudMsg2(std::string text)
-{
-	using func_t = void (*)(VRCUiManager* _this, IL2CPP::String* text);
-
-	func_t func = GetMethod<func_t>(0x2C2C550);
-
-	func(this, IL2CPP::StringNew(text));
-}
+//void VRCUiManager::HudMsg2(std::string text)
+//{
+//	using func_t = void (*)(VRCUiManager* _this, IL2CPP::String* text);
+//
+//	func_t func = GetMethod<func_t>(0//x2//C2C550);
+//
+//	func(this, IL2CPP::StringNew(text));
+//}

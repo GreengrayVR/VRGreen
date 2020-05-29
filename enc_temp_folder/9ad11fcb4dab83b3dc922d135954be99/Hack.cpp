@@ -1103,6 +1103,8 @@ void Hack::CustomPlates(VRCPlayer* __instance, void* aaa)
 		{
 			auto mainText = (UnityEngine::UI::Text*)IL2CPP::GetField(namePlate, "mainText", true);
 			mainText->SetText("<color=#" + IL2CPP::StringChars(func(Misc::GetRainbow())) + ">" + player->GetAPIUser()->displayName() + "</color>");
+			ConsoleUtils::Log(clientUserId, " ", userid);
+			ConsoleUtils::Log(player->GetAPIUser()->displayName());
 		}
 	}
 

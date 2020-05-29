@@ -60,7 +60,7 @@ Object* UnityEngine::Component::GetComponentInChildren()
 
 	using func_t = Object * (*)(Component* _this);
 
-	func_t func = GetMethod<func_t>(COMPONENTINCHILDREN); // or 0x29D2850
+	func_t func = GetMethod<func_t>(COMPONENTINCHILDREN); // or 0/x29D2850
 
 	return func(this);
 }

@@ -23,6 +23,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="crc32.h" />
+    <ClInclude Include="Helpers.hpp" />
     <ClInclude Include="http.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

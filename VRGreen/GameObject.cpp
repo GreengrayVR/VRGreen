@@ -48,14 +48,14 @@ UnityEngine::GameObject* UnityEngine::GameObject::CreatePrimitive(int32_t type)
 	return func(type);
 }
 
-IL2CPP::Array* UnityEngine::GameObject::GetComponentsInChildren(IL2CPP::Type* type)
-{
-	using func_t = IL2CPP::Array* (*)(GameObject* _this, IL2CPP::Type* type);
-
-	func_t func = GetMethod<func_t>(0x1C9A920);
-
-	return func(this, type);
-}
+//IL2CPP::Array* UnityEngine::GameObject::GetComponentsInChildren(IL2CPP::Type* type)
+//{
+//	using func_t = IL2CPP::Array* (*)(GameObject* _this, IL2CPP::Type* type);
+//
+//	func_t func = GetMethod<func_t>(0ax1C9A920);
+//
+//	return func(this, type);
+//}
 
 bool UnityEngine::GameObject::GetActiveSelf()
 {

@@ -53,6 +53,7 @@ private:
 
 	// variables
 	std::vector<mode> settings;
+	std::vector<std::string> clientUsers;
 	std::mutex DetourMutex;
 	std::string GoToRoomID;
 	HANDLE threadId;
@@ -69,10 +70,12 @@ private:
 
 
 	void setupVariables();
+	void downloadSettings();
 	void generateHWID();
 	void disableDetours();
 	void setupSettings();
 
+	static void RPCS(void* _this, int VrcBroadcastType, int xxx, void* VrcTargetType, UnityEngine::GameObject* gameObject, IL2CPP::String* RPC, void* bytes);
 	static bool test1(void* _this, VRC::Player* player, int broadcastType, void* gameObject, bool xxx);
 	static void AntiWorldTriggers(void* _this, VRC::SDKBase::VRC_EventHandler* eventHandler, void* VRC_EventHandler_VrcEvent, int VRC_EventHandler_VrcBroadcastType, int instagatorId, float xxx);
 	static void SwitchAvatar(void* _this, VRC::Core::ApiAvatar* apiavatar, IL2CPP::String* fuzzy, float betterthen, void* tsumiki);
@@ -82,6 +85,7 @@ private:
 	static void CloneAvatar(UserInteractMenu* __instance);
 	static bool IsBlockedEitherWay(void* _this, IL2CPP::String* str);
 	static IL2CPP::String* GetFriendlyDetailedNameForSocialRank(VRC::Core::APIUser* apiuser);
+	static void SendRequest(IL2CPP::String* endpoint, int method, void* responseContainer, void* requestParams, bool authenticationRequired, bool disableCache, float cacheLifetime, int retryCount, void* credentials);
 	static void CustomPlates(VRCPlayer* __instance, void* aaa);
 	static bool Serialize(void* _this);
 	static void EventDispatcherExecuteRPCPrefix(void* _this, void* VrcBroadcastType, int aaaa, void* VrcTargetType, UnityEngine::GameObject* gameObject, IL2CPP::String* str, void* byteArray);

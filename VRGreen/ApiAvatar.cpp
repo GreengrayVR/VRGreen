@@ -9,7 +9,7 @@ VRC::Core::ApiAvatar* VRC::Core::ApiAvatar::ctor()
 {
 	auto ret = (VRC::Core::ApiAvatar*)IL2CPP::NewObject("VRC.Core.ApiAvatar, VRCCore-Standalone");
 	using func_t = void (*)(Object* _this);
-	func_t func = GetMethod<func_t>(0xC4D860);
+	func_t func = GetMethod<func_t>(APIAVATARCTOR);
 	func(ret);
 	return ret;
 }
@@ -78,7 +78,7 @@ std::string VRC::Core::ApiAvatar::Id() // TODO: proper inheritance with ApiModel
 	return ((VRC::Core::APIUser*)this)->getId();
 }
 
-void VRC::Core::ApiAvatar::SetId(const std::string& id)
+void VRC::Core::ApiAvatar::SetId(const std::string& id) // TODO: proper inheritance with ApiModel
 {
 	if (this == nullptr)
 	{
@@ -87,6 +87,6 @@ void VRC::Core::ApiAvatar::SetId(const std::string& id)
 	}
 
 	using func_t = void (*)(ApiAvatar* _this, IL2CPP::String* id);
-	func_t func = GetMethod<func_t>(0x432E90);
+	func_t func = GetMethod<func_t>(APIMODELSETID);
 	func(this, IL2CPP::StringNew(id));
 }

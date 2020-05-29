@@ -6,7 +6,7 @@ void VRC::Core::API::SendRequest(std::string endpoint, int HTTPMethods, void* re
 {
 	using func_t = decltype(&VRC::Core::API::SendRequest);
 
-	func_t func = GetMethod<func_t>(0x750BC0);
+	func_t func = GetMethod<func_t>(SENDREQUEST);
 
 	func(endpoint, HTTPMethods, responseContainer, requestParams, authenticationRequired, disableCache, cacheLifetime, retryCount, credentials);
 }

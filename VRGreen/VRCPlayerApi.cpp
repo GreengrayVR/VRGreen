@@ -13,14 +13,14 @@ VRC::SDKBase::VRCPlayerApi* VRC::SDKBase::VRCPlayerApi::GetCurrentVRCPlayerApi()
 	return func(currentPlayer);
 }
 
-VRC::SDKBase::VRCPlayerApi* VRC::SDKBase::VRCPlayerApi::GetPlayerById(int playerId)
-{
-	using func_t = VRC::SDKBase::VRCPlayerApi* (*)(int playerId);
-
-	func_t func = GetMethod<func_t>(0x145F520);
-
-	return func(playerId);
-}
+//VRC::SDKBase::VRCPlayerApi* VRC::SDKBase::VRCPlayerApi::GetPlayerById(int playerId)
+//{
+//	using func_t = VRC::SDKBase::VRCPlayerApi* (*)(int playerId);
+//
+//	func_t func = GetMethod<func_t>(0/x145F520);
+//
+//	return func(playerId);
+//}
 
 int VRC::SDKBase::VRCPlayerApi::PlayerId()
 {

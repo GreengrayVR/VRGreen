@@ -14,7 +14,6 @@ namespace UnityEngine
 {
 	struct Vector3;
 
-	//0x1837B20 Transform Find
 	struct Transform : Component 
 	{
 		NOIMPLEMENT(Transform); 

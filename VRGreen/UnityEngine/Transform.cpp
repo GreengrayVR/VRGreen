@@ -181,14 +181,14 @@ void UnityEngine::Transform::SetPosition(Vector3 value)
 	return func(this, value);
 }
 
-System::Collections::IEnumerator* UnityEngine::Transform::GetEnumerator()
-{
-	using func_t = System::Collections::IEnumerator * (*)(Transform* _this);
-
-	func_t func = GetMethod<func_t>(0x1883A80);
-
-	return func(this);
-}
+//System::Collections::IEnumerator* UnityEngine::Transform::GetEnumerator()
+//{
+//	using func_t = System::Collections::IEnumerator * (*)(Transform* _this);
+//
+//	func_t func = GetMethod<func_t>(0Ax1883A80);
+//
+//	return func(this);
+//}
 
 
 void UnityEngine::Transform::SetParent(Transform* to)

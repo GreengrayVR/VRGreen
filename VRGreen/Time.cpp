@@ -16,7 +16,7 @@ float Time::time()
 {
 	using func_t = float(*)();
 
-	func_t func = GetMethod<func_t>(0x1830F20);
+	func_t func = GetMethod<func_t>(GETTIME_FROMTIME);
 
 	return func();
 }

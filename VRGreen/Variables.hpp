@@ -2,6 +2,7 @@
 #include "Discord.hpp"
 
 #include <list>
+#include <vector>
 
 namespace UnityEngine { struct GameObject; }
 
@@ -10,6 +11,8 @@ struct Variables // TODO: move to Hack.hpp
 {
 #pragma region QMButtons
 	inline static bool uiElementsPage1;
+	inline static bool uiElementsPage2;
+	inline static bool userInteractMenu1;
 #pragma endregion
 
 	inline static void* player;
@@ -18,6 +21,7 @@ struct Variables // TODO: move to Hack.hpp
 	inline static bool forceMute;
 	inline static bool autoDestroy;
 	inline static bool worldTriggers;
+	inline static bool friendRequestSent;
 	inline static bool blockRPCs;
 	inline static bool instanceLock;
 	inline static bool antiWorldTriggers;
@@ -32,6 +36,7 @@ struct Variables // TODO: move to Hack.hpp
 	inline static bool esp;
 	inline static float flySpeed;
 	inline static std::list<std::string> whiteList;
+	inline static std::vector<std::string> clientUsers;
 	inline static UnityEngine::GameObject* modManager = nullptr;
 	inline static Discord* g_Discord;
 };

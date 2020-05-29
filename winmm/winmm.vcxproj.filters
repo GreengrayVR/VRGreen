@@ -23,5 +23,11 @@
     <ClInclude Include="http.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="crc32.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Helpers.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

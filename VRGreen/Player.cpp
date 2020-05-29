@@ -45,7 +45,7 @@ UnityEngine::Transform* VRC::Player::BoneTransform()
 	}
 
 	using func_t = UnityEngine::Transform * (*)(Object* animator, int humanBoneId);
-	func_t func = GetMethod<func_t>(0x1D47E20);
+	func_t func = GetMethod<func_t>(GETBONETRANSFORM);
 	return func(animator, 10)->get_transform();
 }
 

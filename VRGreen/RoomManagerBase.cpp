@@ -13,12 +13,12 @@ std::string RoomManagerBase::GetRoomId()
 	return IL2CPP::StringChars(func());
 }
 
-std::string RoomManagerBase::GetRoomCreatorUserId()
-{
-	using func_t = IL2CPP::String* (*)();
-
-	func_t func = GetMethod<func_t>(0x2DE7AB0);
-
-
-	return IL2CPP::StringChars(func());
-}
+//std::string RoomManagerBase::GetRoomCreatorUserId()
+//{
+//	using func_t = IL2CPP::String* (*)();
+//
+//	//func_t func = GetMethod<func_t>(0/x2DE//7AB0);
+//
+//
+//	//return IL2CPP::StringChars(func());
+//}

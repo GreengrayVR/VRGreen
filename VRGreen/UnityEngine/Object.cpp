@@ -59,7 +59,7 @@ Object* UnityEngine::Instantiate(Object* original, Transform* parent, bool insta
 //{
 //	using func_t = Object * (*)(Object* original, Object* paremt);
 //
-//	func_t func = GetMethod<func_t>(0x2073470);
+//	func_t func = GetMethod<func_t>(0/x2073470);
 //
 //	return func(original, paremt);
 //}

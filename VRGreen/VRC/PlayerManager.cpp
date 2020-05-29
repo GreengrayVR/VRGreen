@@ -17,19 +17,19 @@ IL2CPP::Array* VRC::PlayerManager::GetPlayers()
 {
 	using func_t = IL2CPP::Array* (*)();
 
-	func_t func = GetMethod<func_t>(GETALLPLAYERS); // or 0x29854B0
+	func_t func = GetMethod<func_t>(GETALLPLAYERS); // or 0/x29854B0
 
 	return func();
 }
 
-VRC::Player* VRC::PlayerManager::GetPlayer(int photonId)
-{
-	using func_t = Player * (*)(int photonId);
-
-	func_t func = GetMethod<func_t>(0x2989D50); // 0x2989D50
-
-	return func(photonId);
-}
+//VRC::Player* VRC::PlayerManager::GetPlayer(int photonId)
+//{
+//	using func_t = Player * (*)(int photonId);
+//
+//	func_t func = GetMethod<func_t>(0/x2989D50); // 0/x2989D50
+//
+//	return func(photonId);
+//}
 
 VRC::Player* VRC::PlayerManager::GetPlayer(std::string userId)
 {
