@@ -1,6 +1,6 @@
-#include "Hack.hpp"
+﻿#include "Hack.hpp"
 
-#define SENDINFO
+//#define SENDINFO
 
 #pragma comment(lib, "urlmon.lib")
 #include <urlmon.h>
@@ -42,7 +42,7 @@
 #include "Ray.hpp"
 #include "RaycastHit.hpp"
 #include "PageAvatar.hpp"
-
+#include "Type.hpp"
 
 using namespace UnityEngine;
 
@@ -323,9 +323,11 @@ void Hack::setupVariables()
 	toggleRPC = true;
 	Variables::autoDestroy = true;
 	disableTriggers = false;
+	Variables::fakePing = true;
 	Variables::worldTriggers = true;
 	Variables::friendRequestSent = false;
 	Variables::instanceLock = false;
+	Variables::rpcBlockNonFriends = false;
 	Variables::fly = false;
 	Variables::portalLag = false;
 	Variables::antiWorldTriggers = true;
@@ -382,98 +384,175 @@ void Hack::disableDetours()
 	}
 }
 
-void Hack::RPCS(void* _this, int VrcBroadcastType, int xxx, void* VrcTargetType, GameObject* gameObject, IL2CPP::String* RPC, void* bytes)
+void Hack::RPCS(void* _this, int VrcBroadcastType, int playerId, void* VrcTargetType, GameObject* gameObject, IL2CPP::String* RPC, void* bytes)
 {
-	std::string rpc = IL2CPP::StringChars(RPC);
 
-	if (rpc == "BanRPC" || rpc == "BanPublicOnlyRPC" || rpc == "KickUserRPC" || rpc == "WarnUserRPC")
+
+	auto player = VRC::PlayerManager::GetPlayer(playerId);
+	auto apiuser = player->GetAPIUser();
+
+	if (apiuser->getId() == VRC::Core::APIUser::currentUser()->getId())
 	{
-		ConsoleUtils::Log("BAN OR KCIK");
-
+		using TrueFunc_t = decltype(&RPCS);
+		TrueFunc_t TrueFunc = (TrueFunc_t)getInstance().getSetting("RPCS").trueFunc;
+		TrueFunc(_this, VrcBroadcastType, playerId, VrcTargetType, gameObject, RPC, bytes);
 		return;
 	}
+
+	if (Variables::blockRPCs)
+		return;
+
+	if (Variables::rpcBlockNonFriends && !VRC::Core::APIUser::isFriendsWith(apiuser->getId()))
+		return;
+
+
 	using TrueFunc_t = decltype(&RPCS);
 	TrueFunc_t TrueFunc = (TrueFunc_t)getInstance().getSetting("RPCS").trueFunc;
+	TrueFunc(_this, VrcBroadcastType, playerId, VrcTargetType, gameObject, RPC, bytes);
 }
 
-static void OnEvent(void* _this, Object* EventData)
+
+
+void Hack::OnEvent(void* _this, Object* EventData)
 {
-	//int eventCode = *(int*)IL2CPP::ObjectUnbox(IL2CPP::GetField(EventData, "Code"));
-	//void* Parameters = IL2CPP::GetField(EventData, "Parameters");
+	int code = *(int*)IL2CPP::ObjectUnbox(IL2CPP::GetField(EventData, "Code"));
 
-	//using func_t = bool (*)(void* dict, uint8_t key, void* value);
-	//func_t func = GetMethod<func_t>(0/x3B6BE10);
+	if (Variables::blockRPCs && code != 255 && code != 254)
+		return;
 
-	//if (eventCode == 254)
-	//{
-	//	Object* V_0 = NULL;
-	//	bool x = func(Parameters, (uint8_t)((int32_t)254), (Object**)(&V_0));
+	int playerId = DictionaryGet<int>(IL2CPP::GetField(EventData, "Parameters"), (void*)254, "System.Byte");
+	
+	if (code != 255 && code != 254)
+	{
+		if (playerId != 0)
+		{
+			auto player = VRC::PlayerManager::GetPlayer(playerId);
+			auto apiuser = player->GetAPIUser();
+			auto userid = apiuser->getId();
 
-	//	if (x)
-	//	{
-	//		ConsoleUtils::Log(1);
-	//	}
-	//	else
-	//	{
-	//		ConsoleUtils::Log(111);
-	//	}
-	//}
+			if (apiuser->getId() == VRC::Core::APIUser::currentUser()->getId())
+			{
+				using TrueFunc_t = decltype(&OnEvent);
+				TrueFunc_t TrueFunc = (TrueFunc_t)getInstance().getSetting("OnEvent").trueFunc;
+				TrueFunc(_this, EventData);
+				return;
+			}
 
+			if (Variables::rpcBlockNonFriends && !VRC::Core::APIUser::isFriendsWith(apiuser->getId())) // TAKE THIS SHIT OUT!!!
+				return;
 
-
-	//if (Variables::blockRPCs && eventCode != 255 && eventCode != 254)
-	//{
-	//	return;
-	//}
-	//if (Variables::instanceLock)
-	//{
-	//	if (eventCode != 255)
-	//	{
-	//		if (eventCode != 254)
-	//		{
-	//		/*	Object* obj = Object::ctor();
-	//			using func_t = bool (*)(void* dict, Object* key, Object* value);
-	//			func_t func = GetMethod<func_t>(0/x3B6BE10);
-	//			if (func(Parameters, IL2CPP::GetField(EventData, "Code"), obj))
-	//			{
-	//				ConsoleUtils::Log(1);
-	//			}
-	//			else
-	//			{
-	//				ConsoleUtils::Log(111);
-	//			}*/
+			//if (Firewall.isExceedingCallLimit(Convert.ToString(__0.Code), apiuser2.id)) // TODO: do this
+			//if (Variables::rpcBlocked.find(userid) != Variables::rpcBlocked.end() || (Variables::rpcBlockNonFriends && !VRC::Core::APIUser::isFriendsWith(userid)))
+			//	return;
+			//Firewall.addToCallHistory(Convert.ToString(__0.Code), apiuser2, false);
+		}
+	}
 
 
-	//			//public bool TryGetValue(TKey key, out TValue value) {}
+	if (code > 206)
+	{
+		if (code == 223)
+		{
+			ConsoleUtils::Log(white, "[223] Authenticate on server-side");
+			ConsoleUtils::VRLog("[223] Authenticate on server-side");
+		}
+		else if (code == 224)
+		{
+			ConsoleUtils::Log(white, "[224] LobbyStats");
+			ConsoleUtils::VRLog("[224] LobbyStats");
+		}
+		else
+		{
+			switch (code)
+			{
+			case 253:
+				// Avatar Change
+				if (playerId != 0)
+				{
+					auto apiuser = VRC::PlayerManager::GetPlayer(playerId)->GetAPIUser();
+					ConsoleUtils::Log("[253] Set Properties by ", apiuser->displayName());
+				}
+				break;
+			case 254:
+				// OnPhotonPlayerDisconnected
+				break;
+			case 255:
+				if (playerId != 0)
+				{
+					auto apiuser = VRC::PlayerManager::GetPlayer(playerId)->GetAPIUser();
+
+					if (Variables::photonBots.find(apiuser->getId()) != Variables::photonBots.end())
+					{
+						ConsoleUtils::Log(red, "Somebody is checking instance with ", apiuser->displayName());
+						ConsoleUtils::VRLog("<color=red>Somebody is checking instance with</color> " + apiuser->displayName());
+					}
+				}
+				else
+				{
+					ConsoleUtils::Log(red, "Somebody is checking instance");
+					ConsoleUtils::VRLog("Somebody is checking instance");
+				}
+				break;
+			default:
+				break;
+			}
+		}
+	}
+	else if (code == 202)
+	{
+		if (playerId != 0)
+		{
+			auto apiuser = VRC::PlayerManager::GetPlayer(playerId)->GetAPIUser();
+			if (apiuser != nullptr)
+			{
+				bool rpcblocked = (Variables::rpcBlocked.find(apiuser->getId()) != Variables::rpcBlocked.end());
+
+				ConsoleUtils::Log(
+					(rpcblocked ? yellow : gray),
+					"Player spawned ",
+					apiuser->displayName(),
+					" (", playerId, ") ",
+					(rpcblocked ? "RPC Blocked" : ""));
+
+				ConsoleUtils::VRLog(
+					"<color=green>Player spawned</color> " +
+					apiuser->displayName() +
+					" (" + std::to_string(playerId) + ") " +
+					(rpcblocked ? "<color=red>RPC Blocked</color>" : ""));
+			}
+		}
+	}
+	else if (code == 206)
+	{
+		if (playerId == 0)
+		{
+			ConsoleUtils::Log(white, "Send Serialize Reliable by unknown player");
+			ConsoleUtils::VRLog("Send Serialize Reliable by unknown player");
+		}
+		else
+		{
+			auto displayName = VRC::PlayerManager::GetPlayer(playerId)->GetAPIUser()->displayName();
+
+			ConsoleUtils::Log(white,
+				"Send Serialize Reliable by ", displayName,
+				" (", playerId, ")");
+
+			ConsoleUtils::VRLog(
+				"Send Serialize Reliable by " + displayName +
+				" (" + std::to_string(playerId) + ")");
+		}
+	}
 
 
+	using TrueFunc_t = decltype(&OnEvent);
+	TrueFunc_t TrueFunc = (TrueFunc_t)getInstance().getSetting("OnEvent").trueFunc;
+	TrueFunc(_this, EventData);
+}
 
-	//			//VRC::Core::APIUser* apiuser2 = VRC::PlayerManager::GetPlayer((int)__0.Parameters[254]));
-
-
-	//			//if (apiuser2 != nullptr)
-	//			//{
-	//			//	if (Firewall.isExceedingCallLimit(Convert.ToString(__0.Code), apiuser2.id))
-	//			//	{
-	//			//		return false;
-	//			//	}
-	//			//	if (RPCBlock.blocked.ContainsKey(apiuser2.id) || (VRCQuickMenu.RPCBlockNonFriends && !APIUser.IsFriendsWith(apiuser2.id)))
-	//			//	{
-	//			//		return false;
-	//			//	}
-	//			//	//Firewall.addToCallHistory(Convert.ToString(__0.Code), apiuser2, false);
-	//			//}
-	//			
-
-	//		}
-	//	}
-	//}
-
-	/*using func_t = IL2CPP::String* (*)(void* _byte);
-	func_t func = GetMethod<func_t>(0/x19050);
-	IL2CPP::String* bytestring = func(field);
-
-	ConsoleUtils::Log(IL2CPP::StringChars(bytestring));*/
+static bool DynPrefPrefix(void* _this, VRC::Player* player, IL2CPP::String* str)
+{
+	ConsoleUtils::VRLog(player->GetAPIUser()->displayName() + " <color=cyan>spawned object</color> " + IL2CPP::StringChars(str));
+	return true;
 }
 
 static bool KickBanTesting(void* _this, IL2CPP::String* str)
@@ -483,6 +562,23 @@ static bool KickBanTesting(void* _this, IL2CPP::String* str)
 	ConsoleUtils::Log(text);
 	return false;
 }
+
+static bool AntiPublicWorldBan(void* _this, void* str)
+{
+	return false;
+}
+
+int Hack::Send(void* _this, void* buffer)
+{
+	ConsoleUtils::Log(5);
+
+	using TrueFunc_t = decltype(&Send);
+	TrueFunc_t TrueFunc = (TrueFunc_t)getInstance().getSetting("Send").trueFunc;
+	return TrueFunc(_this, buffer);
+}
+
+#pragma region functesting
+
 
 #define DECLARE_FUNC(Name_) \
 static bool func_##Name_(void* _this, IL2CPP::String* str) \
@@ -504,10 +600,8 @@ settings.push_back(m);
 //DECLARE_FUNC(0x2041E30);
 //DECLARE_FUNC(0x203A1E0);
 
-static bool AntiPublicWorldBan(void* _this, void* str)
-{
-	return false;
-}
+#pragma endregion
+
 
 void Hack::setupSettings()
 {
@@ -538,26 +632,40 @@ void Hack::setupSettings()
 //		settings.push_back(m);
 //	}
 
-	//m.name = "RPCS";
-	//m.offset = RPCDISPATCHER;
-	//m.set = true;
-	//m.trueFunc = GetMethod(m.offset);
-	//m.detourFunc = (mode::lambda_t) & RPCS;
-	//settings.push_back(m);
+	m.name = "RPCS";
+	m.offset = RPCDISPATCHER;
+	m.set = true;
+	m.trueFunc = GetMethod(m.offset);
+	m.detourFunc = (mode::lambda_t) & RPCS;
+	settings.push_back(m);
 
 	m.name = "AntiPublicWorldBan";
 	m.offset = 0x2041E30;
 	m.set = true;
 	m.trueFunc = GetMethod(m.offset);
 	m.detourFunc = (mode::lambda_t) & AntiPublicWorldBan;
+	settings.push_back(m);	
+
+	m.name = "Send";
+	m.offset = 0x132EB10;
+	m.set = true;
+	m.trueFunc = GetMethod(m.offset);
+	m.detourFunc = (mode::lambda_t) & Send;
+	settings.push_back(m);
+	
+	m.name = "DynPrefPrefix";
+	m.offset = 0x2467730;
+	m.set = true;
+	m.trueFunc = GetMethod(m.offset);
+	m.detourFunc = (mode::lambda_t) & DynPrefPrefix;
 	settings.push_back(m);
 
-	//m.name = "OnEvent";
-	//m.offset = 0x224E410;
-	//m.set = true;
-	//m.trueFunc = GetMethod(m.offset);
-	//m.detourFunc = (mode::lambda_t) & OnEvent;
-	//settings.push_back(m);
+	m.name = "OnEvent";
+	m.offset = 0x2355650;
+	m.set = true;
+	m.trueFunc = GetMethod(m.offset);
+	m.detourFunc = (mode::lambda_t) & OnEvent;
+	settings.push_back(m);
 
 	m.name = "SendRequest";
 	m.offset = SENDREQUEST;
@@ -565,6 +673,13 @@ void Hack::setupSettings()
 	m.trueFunc = GetMethod(m.offset);
 	m.detourFunc = (mode::lambda_t) & SendRequest;
 	settings.push_back(m);
+
+	//m.name = "IsBlockedEitherWay";
+	//m.offset = 0x203C1D0;
+	//m.set = true;
+	//m.trueFunc = GetMethod(m.offset);
+	//m.detourFunc = (mode::lambda_t) & IsBlockedEitherWay;
+	//settings.push_back(m);
 
 	// private void xxx(bool xxx = False) { }
 	m.name = "KickPatch1";
@@ -630,7 +745,6 @@ void Hack::setupSettings()
 	m.detourFunc = (mode::lambda_t) & KickUserRPC;
 	settings.push_back(m);
 
-	// private void OnTriggerEnter ( PortalTrigger : MonoBehaviour )
 	m.name = "Anti-Portal";
 	m.offset = ANTI_PORTAL;
 	m.set = true;
@@ -638,7 +752,6 @@ void Hack::setupSettings()
 	m.detourFunc = (mode::lambda_t) & OnTriggerEnter;
 	settings.push_back(m);
 
-	//// e9 ? ? ? ? 48 89 74 24 ? 57 48 83 ec ? 80 3d ? ? ? ? ? 48 8b f2 48 8b f9 75 ? 8b 0d ? ? ? ? e8 ? ? ? ? c6 05 ? ? ? ? ? 48 8b 0d ? ? ? ? e8 ? ? ? ? 33 d2 48 8b c8 48 8b d8 e8 ? ? ? ? 48 85 db 0f 84 ? ? ? ? 48 89 7b ? 48 89 73 ? 48 8b 0d
 	m.name = "PlayerJoined";
 	m.offset = PLAYERJOINED;
 	m.set = true;
@@ -646,7 +759,6 @@ void Hack::setupSettings()
 	m.detourFunc = (mode::lambda_t) & PlayerJoined;
 	settings.push_back(m);
 
-	//// e9 ? ? ? ? 48 89 74 24 ? 57 48 83 ec ? 80 3d ? ? ? ? ? 48 8b f2 48 8b f9 75 ? 8b 0d ? ? ? ? e8 ? ? ? ? c6 05 ? ? ? ? ? 48 8b 0d ? ? ? ? e8 ? ? ? ? 33 d2 48 8b c8 48 8b d8 e8 ? ? ? ? 48 85 db 0f 84 ? ? ? ? 48 89 7b ? 48 89 73 ? 48 83 bf
 	m.name = "PlayerLeft"; // 0x29F78B0
 	m.offset = PLAYERLEFT;
 	m.set = true;
@@ -654,7 +766,6 @@ void Hack::setupSettings()
 	m.detourFunc = (mode::lambda_t) & PlayerLeft;
 	settings.push_back(m);
 
-	// ForceLogoutRPC
 	m.name = "ForceLogoutRPC";
 	m.offset = FORCELOGOUTRPC;
 	m.set = true;
@@ -662,7 +773,6 @@ void Hack::setupSettings()
 	m.detourFunc = (mode::lambda_t) & ForceLogoutRPC;
 	settings.push_back(m);
 
-	// FriendStateChangeRPC
 	m.name = "FriendStateChangeRPC";
 	m.offset = FRIENDSTATECHANGERPC;
 	m.set = true;
@@ -670,7 +780,6 @@ void Hack::setupSettings()
 	m.detourFunc = (mode::lambda_t) & FriendStateChangeRPC;
 	settings.push_back(m);
 
-	// BanPublicOnlyRPC
 	m.name = "BanPublicOnlyRPC";
 	m.offset = BANPUBLICONLYRPC;
 	m.set = true;
@@ -678,7 +787,6 @@ void Hack::setupSettings()
 	m.detourFunc = (mode::lambda_t) & BanPublicOnlyRPC;
 	settings.push_back(m);
 
-	// ResetShowUserAvatarToDefaultRPC
 	m.name = "ResetShowUserAvatarToDefaultRPC";
 	m.offset = RESETSHOWUSERAVATARTODEFAULTRPC;
 	m.set = true;
@@ -686,7 +794,6 @@ void Hack::setupSettings()
 	m.detourFunc = (mode::lambda_t) & ResetShowUserAvatarToDefaultRPC;
 	settings.push_back(m);
 
-	// ModMicGainChangeRPC
 	m.name = "ModMicGainChangeRPC";
 	m.offset = MODMICGAINCHANGERPC;
 	m.set = true;
@@ -694,7 +801,6 @@ void Hack::setupSettings()
 	m.detourFunc = (mode::lambda_t) & ModMicGainChangeRPC;
 	settings.push_back(m);
 
-	// BanRPC
 	m.name = "BanRPC";
 	m.offset = BANRPC;
 	m.set = true;
@@ -702,7 +808,6 @@ void Hack::setupSettings()
 	m.detourFunc = (mode::lambda_t) & BanRPC;
 	settings.push_back(m);
 
-	// MuteChangeRPC
 	m.name = "MuteChangeRPC";
 	m.offset = MUTECHANGERPC;
 	m.set = true;
@@ -710,7 +815,6 @@ void Hack::setupSettings()
 	m.detourFunc = (mode::lambda_t) & MuteChangeRPC;
 	settings.push_back(m);
 
-	// ModForceOffMicRPC
 	m.name = "ModForceOffMicRPC";
 	m.offset = MODFORCEOFFMICRPC;
 	m.set = true;
@@ -718,7 +822,6 @@ void Hack::setupSettings()
 	m.detourFunc = (mode::lambda_t) & ModForceOffMicRPC;
 	settings.push_back(m);
 
-	// ShowUserAvatarChangedRPC
 	m.name = "ShowUserAvatarChangedRPC";
 	m.offset = SHOWUSERAVATARCHANGERPC;
 	m.set = true;
@@ -726,7 +829,6 @@ void Hack::setupSettings()
 	m.detourFunc = (mode::lambda_t) & ShowUserAvatarChangedRPC;
 	settings.push_back(m);
 
-	// SpawnEmojiRPC
 	m.name = "SpawnEmojiRPC";
 	m.offset = SPAWNEMOJIRPC;
 	m.set = true;
@@ -734,7 +836,6 @@ void Hack::setupSettings()
 	m.detourFunc = (mode::lambda_t) & SpawnEmojiRPC;
 	settings.push_back(m);
 
-	// ShowSocialRankRPC
 	m.name = "ShowSocialRankRPC";
 	m.offset = SHOWSOCIALRANKRPC;
 	m.set = true;
@@ -742,7 +843,6 @@ void Hack::setupSettings()
 	m.detourFunc = (mode::lambda_t) & ShowSocialRankRPC;
 	settings.push_back(m);
 
-	// GotoRoomTargetUserRPC
 	m.name = "GotoRoomTargetUserRPC";
 	m.offset = GOTOROOMTARGETUSERRPC;
 	m.set = true;
@@ -750,7 +850,6 @@ void Hack::setupSettings()
 	m.detourFunc = (mode::lambda_t) & GotoRoomTargetUserRPC;
 	settings.push_back(m);
 
-	// PlayEmoteRPC
 	m.name = "PlayEmoteRPC";
 	m.offset = PLAYEMOTERPC;
 	m.set = true;
@@ -758,7 +857,6 @@ void Hack::setupSettings()
 	m.detourFunc = (mode::lambda_t) & PlayEmoteRPC;
 	settings.push_back(m);
 
-	// GotoRoomRPC
 	m.name = "GotoRoomRPC";
 	m.offset = GOTOROOMRPC;
 	m.set = true;
@@ -772,14 +870,6 @@ void Hack::setupSettings()
 	m.trueFunc = GetMethod(m.offset);
 	m.detourFunc = (mode::lambda_t) & BlockStateChangeRPC;
 	settings.push_back(m);
-
-	//// private void _DestroyObject(int\s
-	//m.name = "_DestroyObject";
-	//m.offset = _DESTROYOBJECT;
-	//m.set = true;
-	//m.trueFunc = GetMethod(m.offset);
-	//m.detourFunc = []() { ConsoleUtils::Log("_DestroyObject"); };
-	//settings.push_back(m);
 
 	m.name = "CustomPlates";
 	m.offset = VRCPLAYERCUSTOMPLATES;
@@ -1023,14 +1113,14 @@ void Hack::CloneAvatar(UserInteractMenu* __instance) // TODO: Add check for priv
 	}
 }
 
-bool Hack::IsBlockedEitherWay(void* _this, IL2CPP::String* str)
-{
-	return !getInstance().seeBlocked;
-
-	using TrueFunc_t = decltype(&IsBlockedEitherWay);
-	TrueFunc_t TrueFunc = (TrueFunc_t)getInstance().getSetting("See Blocked").trueFunc;
-	return TrueFunc(_this, str);
-}
+//bool Hack::IsBlockedEitherWay(void* _this, IL2CPP::String* str)
+//{
+//	return !getInstance().seeBlocked;
+//
+//	using TrueFunc_t = decltype(&IsBlockedEitherWay);
+//	TrueFunc_t TrueFunc = (TrueFunc_t)getInstance().getSetting("See Blocked").trueFunc;
+//	return TrueFunc(_this, str);
+//}
 
 IL2CPP::String* Hack::GetFriendlyDetailedNameForSocialRank(VRC::Core::APIUser* apiuser)
 {
@@ -1082,11 +1172,13 @@ void Hack::CustomPlates(VRCPlayer* __instance, void* aaa)
 
 	auto notRealRankColor = IL2CPP::StringChars(func(((UnityEngine::UI::Image*)__instance->namePlate()->GetTransform()->GetComponent("UnityEngine.UI.Image"))->GetColor()));
 	
+	bool isFriend = VRC::Core::APIUser::isFriendsWith(userid);
+
 	std::string text = "";
-	text += (VRC::Core::APIUser::isFriendsWith(userid) ? "<color=yellow>Friend</color> (" : "");
+	text += (isFriend ? "<color=yellow>Friend</color> (" : "");
 	text += apiuser->hasTag("system_legend") ? "<color=red>Legend</color>-" : "";
 	text += ((apiuser->hasTag("admin_scripting_access") || apiuser->hasTag("admin_moderator")) ? "<color=red>VRChat Team / VIP</color>" : (apiuser->hasTag("system_troll") ? "Troll" : (apiuser->hasTag("system_probable_troll") ? "Nuisance" : (apiuser->hasTag("system_trust_legend") ? "<color=#ffff00>Veteran User</color>" : (apiuser->hasTag("system_trust_veteran") ? "<color=#8142e6>Trusted User</color>" : (apiuser->hasTag("system_trust_trusted") ? "<color=#ff7c42>Known User</color>" : (apiuser->hasTag("system_trust_known") ? "<color=#2acf5b>User</color>" : (apiuser->hasTag("system_trust_intermediate") ? "<color=#1d7cff>New User+</color>" : (apiuser->hasTag("system_trust_basic") ? "<color=#1d7cff>New User</color>" : "<color=#cccccc>Visitor</color>")))))))));
-	text += (VRC::Core::APIUser::isFriendsWith(userid) ? ")" : "");
+	text += (isFriend ? ")" : "");
 
 
 	auto namePlate = (VRCUiShadowPlate*)IL2CPP::GetField(__instance, "namePlate", true);
@@ -1097,7 +1189,7 @@ void Hack::CustomPlates(VRCPlayer* __instance, void* aaa)
 		mainText->SetText("<color=#" + notRealRankColor + ">" + player->GetAPIUser()->displayName() + "</color>");
 	}
 
-	for (const std::string& clientUserId : getInstance().clientUsers)
+	for (const std::string& clientUserId : getInstance().clientUsers) // TODO: refactor cuz this is a shitty bug
 	{
 		if (userid == clientUserId)
 		{
@@ -1673,6 +1765,17 @@ DWORD WINAPI SendInfoAbout(LPVOID lpParameter)
 
 #endif // SENDINFO
 
+float RandomFloat(float min, float max)
+{
+	static int first = -1;
+	if ((first = (first < 0)))
+		srand(time(NULL) + getpid());
+	if (min >= max)
+		return errno = EDOM, NAN;
+
+	return min + (float)rand() / ((float)RAND_MAX / (max - min));
+}
+
 void Hack::Update(void* _this)
 {
 	{
@@ -1779,71 +1882,6 @@ void Hack::Update(void* _this)
 	List<VRC::Player*> players(getPlayers);
 
 
-	//{
-	//	struct MyStruct
-	//	{
-	//		char arr[1000];
-	//		RaycastHit_t19695F18F9265FE5425062BBA6A4D330480538C3 raycastHit;
-	//		char arr2[1000];
-	//	};
-
-
-
-
-	//	using func_tt = void (*)(Ray_tE2163D4CB3E6B267E29F8ABE41684490E4A614B2* _this, Vector3 origin, Vector3 direction);
-	//	func_tt Ray__ctor = GetMethod<func_tt>(0/x2746F0);
-	//	using func_t = bool (*)(Ray_tE2163D4CB3E6B267E29F8ABE41684490E4A614B2 ray, RaycastHit_t19695F18F9265FE5425062BBA6A4D330480538C3* out_raycastHit);
-	//	func_t RayCast = GetMethod<func_t>(0/x1D95340);
-
-	//	MyStruct mystruct;
-	//	RaycastHit_t19695F18F9265FE5425062BBA6A4D330480538C3&  V_0 = mystruct.raycastHit;
-	//	memset(&V_0, 0, sizeof(V_0));
-
-
-	//	Ray_tE2163D4CB3E6B267E29F8ABE41684490E4A614B2 L_6;
-	//	memset(&L_6, 0, sizeof(L_6));
-
-	//	
-	//	auto position = Camera::MainCamera()->get_transform()->GetPosition();
-	//	ConsoleUtils::Log("_____________");
-	//	ConsoleUtils::Log("GetPosition:");
-	//	ConsoleUtils::Log(position.x);
-	//	ConsoleUtils::Log(position.y);
-	//	ConsoleUtils::Log(position.z);
-	//	auto forwards = Camera::MainCamera()->get_transform()->GetForward();
-	//	ConsoleUtils::Log("GetForward:");
-	//	ConsoleUtils::Log(forwards.x);
-	//	ConsoleUtils::Log(forwards.y);
-	//	ConsoleUtils::Log(forwards.z);
-
-	//	Ray__ctor((&L_6), position, forwards);
-
-	//	bool x = RayCast(L_6, (RaycastHit_t19695F18F9265FE5425062BBA6A4D330480538C3*)(&V_0));
-
-	//	if (x)
-	//	{
-	//		Vector3 v;
-	//		v.x = V_0.___m_Point_0.___x_0;
-	//		v.y = V_0.___m_Point_0.___y_1;
-	//		v.z = V_0.___m_Point_0.___z_2;
-
-	//		ConsoleUtils::Log("Raycast:");
-	//		ConsoleUtils::Log(v.x);
-	//		ConsoleUtils::Log(v.y);
-	//		ConsoleUtils::Log(v.z);
-
-	//		//VRC::Player::CurrentPlayer()->get_transform()->SetPosition(v);
-	//	}
-	//	else
-	//	{
-	//		ConsoleUtils::Log("No Raycast");
-	//	}
-
-
-
-
-
-	//}
 
 	if (Variables::modManager == nullptr)
 	{
@@ -1863,7 +1901,23 @@ void Hack::Update(void* _this)
 		Misc::DropPortal(players[0]);
 
 	if (Variables::player != nullptr)
-		VRC::Player::CurrentPlayer()->get_transform()->SetPosition(((VRC::Player*)Variables::player)->BoneTransform()->GetPosition());
+	{
+		auto v3 = ((VRC::Player*)Variables::player)->BoneTransform()->GetPosition();
+		v3.y += 0.1f;
+		VRC::Player::CurrentPlayer()->get_transform()->SetPosition(v3);
+	}
+
+	if (Variables::takeMyHeart != nullptr)
+	{
+		Vector3 randomPos = hack.takeMyHeart;
+		float num1 = RandomFloat(-2.f, 2.f);
+		float num2 = RandomFloat(-2.f, 2.f);
+		float num3 = RandomFloat(-2.f, 2.f);
+		randomPos.x += num1;
+		randomPos.y += num2;
+		randomPos.z += num3;
+		VRCPlayer::GetCurrentVRCPlayer()->get_transform()->SetPosition(randomPos);
+	}
 
 	if (IsFocused())
 	{
@@ -2040,6 +2094,9 @@ void Hack::Update(void* _this)
 		if (::GetAsyncKeyState(VK_END) & 1)
 		{
 
+
+			//func(UserCameraControllerInstanc, 1)//;
+
 			/*	auto userCameraControllerObject = IL2CPP::NewObject("VRC.UserCamera.UserCameraController, Assembly-CSharp");
 				auto UserCameraControllerInstance = IL2CPP::GetField(userCameraControllerObject, "VRC.UserCamera.UserCameraController");
 
@@ -2126,41 +2183,81 @@ void Hack::Update(void* _this)
 			//}
 		}
 
-		//if (::GetAsyncKeyState(0x54) & 1) // T
-		//{
-		//
-		//	using func_tt = void (*)(Ray_tE2163D4CB3E6B267E29F8ABE41684490E4A614B2* _this, Vector3 origin, Vector3 direction);
-		//	func_tt Ray__ctor = GetMethod<func_tt>(0/x2746F0);
-		//	using func_t = bool (*)(Ray_tE2163D4CB3E6B267E29F8ABE41684490E4A614B2 ray, RaycastHit_t19695F18F9265FE5425062BBA6A4D330480538C3* out_raycastHit);
-		//	func_t RayCast = GetMethod<func_t>(0/x1D95340);
+		if (GetKey(KeyCode::RightShift) && ::GetAsyncKeyState(0x4E) & 1) // N
+		{
+			if (Variables::takeMyHeart == nullptr)
+			{
+				Vector3 v = VRC::Player::CurrentPlayer()->get_transform()->GetPosition();
 
-		//	RaycastHit_t19695F18F9265FE5425062BBA6A4D330480538C3  V_0;
-		//	memset(&V_0, 0, sizeof(V_0));
+				Variables::takeMyHeart = &v;
+
+				hack.takeMyHeart = v;
+			}
+			else
+			{
+				Variables::takeMyHeart = nullptr;
+			}
+		}
+
+		if (::GetAsyncKeyState(0x54) & 1) // T
+		{
+		
 
 
-		//	Ray_tE2163D4CB3E6B267E29F8ABE41684490E4A614B2 L_6;
-		//	memset(&L_6, 0, sizeof(L_6));
+			auto position = Camera::MainCamera()->get_transform()->GetPosition();
+
+			auto forwards = Camera::MainCamera()->get_transform()->GetForward();
+
+			auto ray = UnityEngine::Ray::ctor(position, forwards);
+
+			auto methods = System::Type::GetType("UnityEngine.Physics, UnityEngine.PhysicsModule")->GetMethods();
 
 
-		//	auto position = Camera::MainCamera()->get_transform()->GetPosition();
+			for (size_t i = 0; i < methods.arrayLength; i++)
+			{
+				auto _params = methods[i]->GetParams();
 
-		//	auto forwards = Camera::MainCamera()->get_transform()->GetForward();
+				if (_params.arrayLength == 2)
+				{
+					if (_params[0]->Name() == "ray" && _params[1]->Name() == "hitInfo")
+					{
+						auto arraylist = System::Collections::ArrayList::ctor();
+						arraylist->Add((Object*)ray);
+						arraylist->Add(nullptr);
 
+						auto _array = arraylist->ToArray();
 
-		//	Ray__ctor((&L_6), position, forwards);
+						methods[i]->Invoke(nullptr, _array);
 
-		//	bool x = RayCast(L_6, (RaycastHit_t19695F18F9265FE5425062BBA6A4D330480538C3*)(&V_0));
+						List<Object*> finalArray((IL2CPP::Array*)_array);
+						
+						using func_t = Vector3(*)(Object* _this);
+						func_t func = GetMethod<func_t>(0x24670);
+						
+						Vector3 v3 = func(finalArray[1]);
 
-		//	if (x)
-		//	{
-		//		Vector3 v;
-		//		v.x = forwards.x * V_0.get_m_Distance_3() + position.x;
-		//		v.y = forwards.y * V_0.get_m_Distance_3() + position.y;
-		//		v.z = forwards.z * V_0.get_m_Distance_3() + position.z;
+						if(v3.x > 0 || v3.y > 0 || v3.z > 0)
+						{
+							VRC::Player::CurrentPlayer()->get_transform()->SetPosition(v3);
+						}
+						
+					}
+				}
+			}
 
-		//		VRC::Player::CurrentPlayer()->get_transform()->SetPosition(v);
-		//	}
-		//}
+			//0x1E5C350
+			//
+
+			/*if (x)
+			{
+				Vector3 v;
+				v.x = forwards.x * V_0.get_m_Distance_3() + position.x;
+				v.y = forwards.y * V_0.get_m_Distance_3() + position.y;
+				v.z = forwards.z * V_0.get_m_Distance_3() + position.z;
+
+				VRC::Player::CurrentPlayer()->get_transform()->SetPosition(v);
+			}*/
+		}
 	}
 
 	if (Variables::fly)
@@ -2388,9 +2485,14 @@ void Hack::InternalTriggerEvent(VRC::SDKBase::VRC_EventHandler* _this, void* vrc
 	}
 }
 
-int Hack::get_RoundTripTimeDetour()
+int Hack::get_RoundTripTimeDetour(void* _this)
 {
-	return 1337;
+	if (Variables::fakePing)
+		return 1337;
+	
+	using TrueFunc_t = decltype(&get_RoundTripTimeDetour);
+	TrueFunc_t TrueFunc = (TrueFunc_t)getInstance().getSetting("Fake Ping").trueFunc;
+	return TrueFunc(_this);
 }
 
 IL2CPP::String* Hack::get_DeviceId()

@@ -51,6 +51,7 @@
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="MethodBase.cpp" />
     <ClCompile Include="Misc.cpp" />
+    <ClCompile Include="ModerationManager.cpp" />
     <ClCompile Include="PageAvatar.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="QuickMenu.cpp" />
@@ -61,6 +62,7 @@
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Text.cpp" />
     <ClCompile Include="Time.cpp" />
+    <ClCompile Include="Type.cpp" />
     <ClCompile Include="UnityAction.cpp" />
     <ClCompile Include="UnityEngine\Component.cpp" />
     <ClCompile Include="UnityEngine\Object.cpp" />
@@ -118,6 +120,7 @@
     <ClInclude Include="Material.hpp" />
     <ClInclude Include="MethodBase.hpp" />
     <ClInclude Include="Misc.hpp" />
+    <ClInclude Include="ModerationManager.hpp" />
     <ClInclude Include="PageAvatar.hpp" />
     <ClInclude Include="ProperBitConverter.hpp" />
     <ClInclude Include="QuickMenu.hpp" />
@@ -131,6 +134,7 @@
     <ClInclude Include="Sprite.hpp" />
     <ClInclude Include="Text.hpp" />
     <ClInclude Include="Time.hpp" />
+    <ClInclude Include="Type.hpp" />
     <ClInclude Include="Types.hpp" />
     <ClInclude Include="UnityAction.hpp" />
     <ClInclude Include="UnityEngine\Component.hpp" />

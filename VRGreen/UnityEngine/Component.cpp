@@ -34,11 +34,22 @@ UnityEngine::GameObject* UnityEngine::Component::get_gameObject()
 
 Object* UnityEngine::Component::GetComponent(std::string type)
 {
-	using func_t = Object * (*)(Component* component, IL2CPP::String* type);
+	using func_tt = Object * (*)(Component* component, IL2CPP::String* type, void* nullptr1, void* nullptr2);
+	using func_t = func_tt(*)(const char* memory);
 
-	func_t func = GetMethod<func_t>(GETCOMPONENT_COMPONENT);
+	func_t func = (func_t)GetProcAddress(::GameAssemblyHandle, "il2cpp_resolve_icall");
 
-	return func(this, IL2CPP::StringNew(type));
+	auto hentai = func("UnityEngine.Component::GetComponent(System.String)");
+
+	auto xxx = hentai(this, IL2CPP::StringNew(type), nullptr, nullptr);
+
+	return xxx;
+
+	//using func_t = Object * (*)(Component* component, IL2CPP::String* type);
+
+	//func_t func = GetMethod<func_t>(GETCOMPONENT_COMPONENT);
+
+	//return func(this, IL2CPP::StringNew(type));
 }
 
 Object* UnityEngine::Component::GetComponent(IL2CPP::Type* type)
@@ -50,7 +61,7 @@ Object* UnityEngine::Component::GetComponent(IL2CPP::Type* type)
 	return func(this, type);
 }
 
-Object* UnityEngine::Component::GetComponentInChildren()
+Object* UnityEngine::Component::GetComponentInChildren(IL2CPP::Type* type)
 {
 	if (this == nullptr)
 	{
@@ -58,25 +69,12 @@ Object* UnityEngine::Component::GetComponentInChildren()
 		return nullptr;
 	}
 
-	using func_t = Object * (*)(Component* _this);
+	using func_t = Object * (*)(Component* _this, IL2CPP::Type* type);
 
-	func_t func = GetMethod<func_t>(COMPONENTINCHILDREN); // or 0/x29D2850
+	func_t func = GetMethod<func_t>(0x180C2A0);
 
-	return func(this);
+	return func(this, type);
 }
-//
-//UnityEngine::Vector3 UnityEngine::Component::GetLocalPosition()
-//{
-//	Vector3_Nig retstr;
-//
-//	using func_t = Vector3 * (*)(Vector3_Nig* retstr, Transform* _this);
-//
-//	func_t func = GetMethod<func_t>(GETLOCALPOS);
-//
-//	auto temp = func((Vector3_Nig*)(&retstr), this);
-//
-//	return retstr;
-//}
 
 IL2CPP::Array* UnityEngine::Component::FindObjectsOfTypeAll(IL2CPP::Type* type)
 {

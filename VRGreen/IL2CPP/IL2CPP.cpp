@@ -518,7 +518,7 @@ Object* IL2CPP::GetField(Object* obj, const char* name, bool AAAAAAAAAAAAAAAAAAA
 {
 	if (obj == nullptr)
 	{
-		ConsoleUtils::Log("GetField is nullptr");
+		//ConsoleUtils::Log("GetField is nullptr");
 		return nullptr;
 	}
 

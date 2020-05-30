@@ -15,6 +15,8 @@ namespace VRC::Core { struct APIUser; }
 
 struct Misc
 {
+    static void ClearRoom();
+
     static void SetPickups(bool value);
 
     static void ChangeAvatar(const std::string& id);

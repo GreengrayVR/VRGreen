@@ -68,10 +68,11 @@ void VRCQuickMenu::ShowUIElements2()
 	{
 		auto btnName = GetName(btn->getGameObject());
 
-		if (btnName == "SingleButton1130(3,-1)" || btnName == "ToggleButton123(-3,0)" || btnName == "SingleButton1120(3,-1)" || btnName == "SingleButton116(1,-2)" || btnName == "ToggleButton115(-1,-2)" || btnName == "ToggleButton114(-3,-2)" || btnName == "ToggleButton113(-1,0)" || btnName == "ToggleButton112(-1,-1)" || btnName == "ToggleButton111(-3,-1)" || btnName == "ToggleButton110(-2,-1)" || btnName == "ToggleButton121(-1,0)" || btnName == "ToggleButton122(-2,0)")
+		if (btnName == "ToggleButton133(-2,0)" ||btnName == "ToggleButton132(-1,-1)" ||btnName == "ToggleButton131(-2,-1)" ||btnName == "SingleButton1130(3,-1)" || btnName == "ToggleButton123(-3,0)" || btnName == "SingleButton1120(3,-1)" || btnName == "SingleButton116(1,-2)" || btnName == "ToggleButton115(-1,-2)" || btnName == "ToggleButton114(-3,-2)" || btnName == "ToggleButton113(-1,0)" || btnName == "ToggleButton112(-1,-1)" || btnName == "ToggleButton111(-3,-1)" || btnName == "ToggleButton110(-2,-1)" || btnName == "ToggleButton121(-1,0)" || btnName == "ToggleButton122(-2,0)")
 		{
 			if (Variables::uiElementsPage2)
 			{
+				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/SingleButton1130(3,-1)")->get_gameObject()->SetActive(false);
 				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/SingleButton1110(3,0)")->get_gameObject()->SetActive(false);
 				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton121(-1,0)")->get_gameObject()->SetActive(false);
 				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton122(-2,0)")->get_gameObject()->SetActive(false);
@@ -82,10 +83,16 @@ void VRCQuickMenu::ShowUIElements2()
 				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton127(-3,-2)")->get_gameObject()->SetActive(false);
 				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton128(-2,-2)")->get_gameObject()->SetActive(false);
 				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton129(-1,-2)")->get_gameObject()->SetActive(false);
+				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton130(-3,0)")->get_gameObject()->SetActive(true);
+				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton131(-2,-1)")->get_gameObject()->SetActive(true);
+				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton132(-1,-1)")->get_gameObject()->SetActive(true);
+				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton133(-2,0)")->get_gameObject()->SetActive(true);
 				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/SingleButton1140(3,0)")->get_gameObject()->SetActive(true);
 			}
 			else
 			{
+
+				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/SingleButton1130(3,-1)")->get_gameObject()->SetActive(true);
 				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/SingleButton1110(3,0)")->get_gameObject()->SetActive(true);
 				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton121(-1,0)")->get_gameObject()->SetActive(true);
 				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton122(-2,0)")->get_gameObject()->SetActive(true);
@@ -96,6 +103,10 @@ void VRCQuickMenu::ShowUIElements2()
 				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton127(-3,-2)")->get_gameObject()->SetActive(true);
 				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton128(-2,-2)")->get_gameObject()->SetActive(true);
 				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton129(-1,-2)")->get_gameObject()->SetActive(true);
+				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton130(-3,0)")->get_gameObject()->SetActive(false);
+				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton131(-2,-1)")->get_gameObject()->SetActive(false);
+				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton132(-1,-1)")->get_gameObject()->SetActive(false);
+				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton133(-2,0)")->get_gameObject()->SetActive(false);
 				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/SingleButton1140(3,0)")->get_gameObject()->SetActive(false);
 			}
 		}
@@ -353,6 +364,53 @@ void VRCQuickMenu::SetupButtons()
 	}), "");
 	QuickMenuButtons.push_back(worldCrashButton);
 	worldCrashButton->setActive(false);
+#pragma endregion
+
+#pragma region Page3
+	auto pickupButton = new ToggleButton("UIElementsMenu", 130, -3, 0, "Hide\nPickups", CreateDetour([=]()
+	{
+		Misc::SetPickups(false);
+
+	}), "OFF", CreateDetour([=]()
+	{
+		Misc::SetPickups(true);
+	}), "yaekith pls stop flexing with ur shit nobody cares");
+	QuickMenuButtons.push_back(pickupButton);
+	pickupButton->setActive(false);
+
+	auto rpcBlockNonFriendsButton = new ToggleButton("UIElementsMenu", 131, -2, -1, "RPC-Block\nNon-Friends", CreateDetour([=]()
+	{
+		Misc::SerializeAll();
+		Variables::rpcBlockNonFriends = true;
+
+	}), "OFF", CreateDetour([=]()
+	{
+		Variables::rpcBlockNonFriends = false;
+	}), "my ass");
+	QuickMenuButtons.push_back(rpcBlockNonFriendsButton);
+	rpcBlockNonFriendsButton->setActive(false);
+
+	auto rpcBlockButton = new ToggleButton("UIElementsMenu", 132, -1, -1, "RPC-Block", CreateDetour([=]()
+	{
+		Variables::blockRPCs = true;
+	}), "OFF", CreateDetour([=]()
+	{
+		Variables::blockRPCs = false;
+	}), "i wanna die");
+	QuickMenuButtons.push_back(rpcBlockButton);
+	rpcBlockButton->setActive(false);
+
+	auto fakePingButton = new ToggleButton("UIElementsMenu", 133, -2, 0, "Fake Ping", CreateDetour([=]()
+	{
+		Variables::fakePing = true;
+	}), "OFF", CreateDetour([=]()
+	{
+		Variables::fakePing = false;
+	}), "take my heart");
+	QuickMenuButtons.push_back(fakePingButton);
+	fakePingButton->setActive(false);
+	fakePingButton->btnOn->SetActive(true);
+	fakePingButton->btnOff->SetActive(false);
 #pragma endregion
 
 
@@ -738,6 +796,10 @@ void VRCQuickMenu::ClearInterface()
 			break;
 		}
 	}
+
+	// Restore default buttons
+	QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleHUDButton")->get_gameObject()->SetActive(true);
+	QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleNameplatesButton")->get_gameObject()->SetActive(true);
 
 	// Delete Quick Menu buttons
 	for (auto& button : QuickMenuButtons)

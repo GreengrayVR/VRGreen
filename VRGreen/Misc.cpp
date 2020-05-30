@@ -1,4 +1,5 @@
-#include "Misc.hpp"
+﻿#include "Misc.hpp"
+#include <cmath>
 
 #include "UnityEngine/Quaternion.hpp"
 #include "ApiAvatar.hpp"
@@ -11,7 +12,45 @@
 #include "Time.hpp"
 #include "Variables.hpp"
 #include "PageAvatar.hpp"
-#include <cmath>
+#include "ModerationManager.hpp"
+
+void Misc::ClearRoom()
+{
+
+
+	{
+		
+		
+	}
+
+	/*{
+		std::string txt((1024 * 1024) / 5, 'w');
+		VRC::SDKBase::Networking::RPC(0, VRC::Player::CurrentPlayer()->get_gameObject(), txt, System::Collections::ArrayList::ctor()->ToArray());
+	}*/
+
+	{
+		std::string txt("😢");
+		VRC::SDKBase::Networking::RPC(0, VRC::Player::CurrentPlayer()->get_gameObject(), txt, System::Collections::ArrayList::ctor()->ToArray());
+	}
+
+
+	/*auto objs = UnityEngine::Component::FindObjectsOfTypeAll(IL2CPP::GetType("UnityEngine.GameObject, UnityEngine.CoreModule"));
+
+	List<UnityEngine::GameObject*> pickups(objs);
+
+	for (size_t i = 0; i < pickups.arrayLength; i++)
+	{
+		if (GetName(pickups[i]) == "DrawingManager")
+		{
+			VRC::SDKBase::Networking::RPC(0, pickups[i], "ClearRoomRPC", System::Collections::ArrayList::ctor()->ToArray());
+
+			UnityEngine::Vector3 v3{ 0.f, 0.f, 0.f };
+			UnityEngine::Quaternion q{ 0.f, 0.f, 0.f, 1.f };
+
+			UnityEngine::GameObject* gameObject = VRC::SDKBase::Networking::Instantiate(0, "CapturePrefabs/DynamicSpot", v3, q);
+		}
+	}*/
+}
 
 void Misc::SetPickups(bool value)
 {
@@ -425,11 +464,13 @@ std::string Misc::GetSocialRankForPlayerList(VRC::Player* player)
 {
 	auto vrcplayer = (VRCPlayer*)IL2CPP::GetField(player, "VRCPlayer", false);
 	auto apiuser = player->GetAPIUser();
+	auto userid = apiuser->getId();
 
 	std::string text = "<color=red><b>";
 
+	text += (ModerationManager::Instance()->IsBlockedEitherWay(userid) ? "[B]" : "");
 	text += (vrcplayer->get_steamId() == 0 ? "[H]" : "");
-	text += (VRC::Core::APIUser::isFriendsWith(apiuser->getId()) ? "[F]" : "");
+	text += (VRC::Core::APIUser::isFriendsWith(userid) ? "[F]" : "");
 	text += "</b></color> ";
 
 	text += GetUserRank(apiuser);
@@ -441,11 +482,13 @@ std::string Misc::GetSocialRankForPlayerListShadow(VRC::Player* player)
 {
 	auto vrcplayer = (VRCPlayer*)IL2CPP::GetField(player, "VRCPlayer", false);
 	auto apiuser = player->GetAPIUser();
+	auto userid = apiuser->getId();
 
 	std::string text = "<color=black><b>";
 
+	text += (ModerationManager::Instance()->IsBlockedEitherWay(userid) ? "[B]" : "");
 	text += (vrcplayer->get_steamId() == 0 ? "[H]" : "");
-	text += (VRC::Core::APIUser::isFriendsWith(apiuser->getId()) ? "[F]" : "");
+	text += (VRC::Core::APIUser::isFriendsWith(userid) ? "[F]" : "");
 	text += "</b> ";
 
 	text += apiuser->displayName();

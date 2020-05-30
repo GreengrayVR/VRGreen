@@ -1,8 +1,10 @@
 #pragma once
 #include "Discord.hpp"
 
+
 #include <list>
 #include <vector>
+#include <set>
 
 namespace UnityEngine { struct GameObject; }
 
@@ -16,13 +18,16 @@ struct Variables // TODO: move to Hack.hpp
 #pragma endregion
 
 	inline static void* player;
+	inline static void* takeMyHeart;
 	inline static bool speedHack;
 	inline static bool offlineMode;
 	inline static bool forceMute;
 	inline static bool autoDestroy;
 	inline static bool worldTriggers;
 	inline static bool friendRequestSent;
+	inline static bool fakePing;
 	inline static bool blockRPCs;
+	inline static bool rpcBlockNonFriends;
 	inline static bool instanceLock;
 	inline static bool antiWorldTriggers;
 	inline static bool antiPortal;
@@ -37,6 +42,8 @@ struct Variables // TODO: move to Hack.hpp
 	inline static float flySpeed;
 	inline static std::list<std::string> whiteList;
 	inline static std::vector<std::string> clientUsers;
+	inline static std::set<std::string> photonBots;
+	inline static std::set<std::string> rpcBlocked;
 	inline static UnityEngine::GameObject* modManager = nullptr;
 	inline static Discord* g_Discord;
 };

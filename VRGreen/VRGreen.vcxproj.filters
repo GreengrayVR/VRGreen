@@ -249,6 +249,12 @@
     <ClCompile Include="PageAvatar.cpp">
       <Filter>Header Files\VRC\UI</Filter>
     </ClCompile>
+    <ClCompile Include="ModerationManager.cpp">
+      <Filter>Assembly-CSharp</Filter>
+    </ClCompile>
+    <ClCompile Include="Type.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IL2CPP\IL2CPP.hpp">
@@ -478,6 +484,12 @@
     </ClInclude>
     <ClInclude Include="PageAvatar.hpp">
       <Filter>Header Files\VRC\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="ModerationManager.hpp">
+      <Filter>Assembly-CSharp</Filter>
+    </ClInclude>
+    <ClInclude Include="Type.hpp">
+      <Filter>Assembly-CSharp\System\Reflection</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

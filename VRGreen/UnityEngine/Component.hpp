@@ -25,7 +25,7 @@ namespace UnityEngine
 
 		Object* GetComponent(IL2CPP::Type* type);
 
-		Object* GetComponentInChildren();
+		Object* GetComponentInChildren(IL2CPP::Type* type);
 
 		static IL2CPP::Array* FindObjectsOfTypeAll(IL2CPP::Type* type);
 	};

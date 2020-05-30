@@ -5,6 +5,7 @@
 #include "ButtonClickedEvent.h"
 #include "Text.hpp"
 #include "ConsoleUtils.hpp"
+#include "Type.hpp"
 
 using namespace UnityEngine;
 
@@ -152,7 +153,7 @@ UnityEngine::Transform* ButtonBase::CreateButton(std::string name, std::string t
 	transform->SetLocalPosition(&transformVector);
 	transform->SetParent(parent, false);
 
-	((UnityEngine::UI::Text*)transform->GetChild(0)->GetComponent("UnityEngine.UI.Text"))->SetText(text);
+	((UnityEngine::UI::Text*)transform->GetComponentInChildren((IL2CPP::Type*)System::Type::GetType("UnityEngine.UI.Text")))->SetText(text);
 
 	return transform;
 }
@@ -166,7 +167,7 @@ SingleButton::SingleButton(std::string btnMenu, int buttonPage, int btnXLocation
 
 void SingleButton::setButtonText(std::string buttonText)
 {
-	((UI::Text*)getGameObject()->GetTransform()->GetChild(0)->GetComponent("UnityEngine.UI.Text"))->SetText(buttonText);
+	((UI::Text*)getGameObject()->GetComponentInChildren((IL2CPP::Type*)System::Type::GetType("UnityEngine.UI.Text, UnityEngine.UI")))->SetText(buttonText);
 }
 
 void SingleButton::setAction(CDetour* buttonAction)

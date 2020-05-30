@@ -18,7 +18,10 @@
 #include <mutex>
 #include <memory>
 #include <thread>
-
+#include "ArrayList.hpp"
+#include "List.hpp"
+#include "Type.hpp"
+#include "UnityEngine/Vector3.hpp"
 
 #include "detours/detours.h"
 
@@ -39,6 +42,7 @@ public:
 	float updateDelay;
 	bool lobbyLag;
 	bool toggleRPC;
+	UnityEngine::Vector3 takeMyHeart;
 
 	inline static Hack& getInstance();
 	void init();
@@ -76,14 +80,15 @@ private:
 	void setupSettings();
 
 	static void RPCS(void* _this, int VrcBroadcastType, int xxx, void* VrcTargetType, UnityEngine::GameObject* gameObject, IL2CPP::String* RPC, void* bytes);
+	static void OnEvent(void* _this, Object* EventData);
 	static bool test1(void* _this, VRC::Player* player, int broadcastType, void* gameObject, bool xxx);
 	static void AntiWorldTriggers(void* _this, VRC::SDKBase::VRC_EventHandler* eventHandler, void* VRC_EventHandler_VrcEvent, int VRC_EventHandler_VrcBroadcastType, int instagatorId, float xxx);
 	static void SwitchAvatar(void* _this, VRC::Core::ApiAvatar* apiavatar, IL2CPP::String* fuzzy, float betterthen, void* tsumiki);
 	static void OfflineMode(IL2CPP::String* target, void* responseContainer, void* requestParams, void* credentials);
 	static void ReceiveVoteToKickInitiation(void* _this, IL2CPP::String* player2, VRC::Player* player);
+	static int Send(void* _this, void* buffer);
 	static void Wtf(void* _this, VRC::Player* player);
 	static void CloneAvatar(UserInteractMenu* __instance);
-	static bool IsBlockedEitherWay(void* _this, IL2CPP::String* str);
 	static IL2CPP::String* GetFriendlyDetailedNameForSocialRank(VRC::Core::APIUser* apiuser);
 	static void SendRequest(IL2CPP::String* endpoint, int method, void* responseContainer, void* requestParams, bool authenticationRequired, bool disableCache, float cacheLifetime, int retryCount, void* credentials);
 	static void CustomPlates(VRCPlayer* __instance, void* aaa);
@@ -118,7 +123,7 @@ private:
 	static void Update(void* _this);
 	static void ConfigurePortal(void* _this, IL2CPP::String* world_id, IL2CPP::String* instance_id, int32_t playersInWorld, VRC::Player* player);
 	static void InternalTriggerEvent(VRC::SDKBase::VRC_EventHandler* _this, void* vrc_event, int broadcastType, int instagatorId, float fastForward);
-	static int get_RoundTripTimeDetour();
+	static int get_RoundTripTimeDetour(void* _this);
 	static IL2CPP::String* get_DeviceId();
 	void initDetours();
 	mode& getSetting(std::string settingName);
@@ -126,6 +131,30 @@ private:
 	static void promptRoomID();
 	static void testReturnStrings(std::vector<ptrdiff_t>& vector);
 	static std::string getEmoji(int i);
+
+	template <typename T>
+	static T DictionaryGet(void* dict, void* value, const std::string& typeName);
 };
+
+template <typename T>
+T Hack::DictionaryGet(void* dict, void* value, const std::string& typeName)
+{
+	auto method = System::Type::GetType(dict)->GetMethod("TryGetValue");
+
+	auto arraylist = System::Collections::ArrayList::ctor();
+	arraylist->Add(IL2CPP::ValueBox(typeName, &value));
+	arraylist->Add(nullptr);
+
+	auto array_ = arraylist->ToArray();
+
+	method->Invoke(dict, array_);
+
+	List<IL2CPP::String*> objarray((IL2CPP::Array*)array_);
+
+	if (objarray[1] != nullptr)
+		return (T)(*(T*)IL2CPP::ObjectUnbox(objarray[1]));
+	else
+		return NULL;
+}
 
 #endif

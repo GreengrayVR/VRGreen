@@ -29,6 +29,8 @@ namespace UnityEngine
 
 		static GameObject* CreatePrimitive(int32_t type);
 
+		Object* GetComponentInChildren(IL2CPP::Type* type);
+
 		IL2CPP::Array* GetComponentsInChildren(IL2CPP::Type* type);
 
 		bool GetActiveSelf();
