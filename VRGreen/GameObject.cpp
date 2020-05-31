@@ -1,6 +1,7 @@
 #include "UnityEngine/GameObject.hpp"
 
 #include "IL2CPP/IL2CPP.hpp"
+#include "Type.hpp"
 
 void UnityEngine::GameObject::SetActive(bool value)
 {
@@ -48,7 +49,7 @@ UnityEngine::GameObject* UnityEngine::GameObject::CreatePrimitive(int32_t type)
 	return func(type);
 }
 
-Object* UnityEngine::GameObject::GetComponentInChildren(IL2CPP::Type* type)
+Object* UnityEngine::GameObject::GetComponentInChildren(const std::string& type)
 {
 	if (this == nullptr)
 	{
@@ -56,11 +57,11 @@ Object* UnityEngine::GameObject::GetComponentInChildren(IL2CPP::Type* type)
 		return nullptr;
 	}
 
-	using func_t = Object * (*)(GameObject* _this, IL2CPP::Type* type);
+	using func_t = Object * (*)(GameObject* _this, System::Type* type);
 
 	func_t func = GetMethod<func_t>(0x19FA080);
 
-	return func(this, type);
+	return func(this, System::Type::GetType(type));
 }
 
 //IL2CPP::Array* UnityEngine::GameObject::GetComponentsInChildren(IL2CPP::Type* type)

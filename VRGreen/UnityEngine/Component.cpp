@@ -1,5 +1,5 @@
 #include "Component.hpp"
-
+#include "Type.hpp"
 #include "ConsoleUtils.hpp"
 
 UnityEngine::Transform* UnityEngine::Component::get_transform()
@@ -32,7 +32,7 @@ UnityEngine::GameObject* UnityEngine::Component::get_gameObject()
 	return func(this);
 }
 
-Object* UnityEngine::Component::GetComponent(std::string type)
+Object* UnityEngine::Component::GetComponent(const std::string& type)
 {
 	using func_tt = Object * (*)(Component* component, IL2CPP::String* type, void* nullptr1, void* nullptr2);
 	using func_t = func_tt(*)(const char* memory);
@@ -61,7 +61,7 @@ Object* UnityEngine::Component::GetComponent(IL2CPP::Type* type)
 	return func(this, type);
 }
 
-Object* UnityEngine::Component::GetComponentInChildren(IL2CPP::Type* type)
+Object* UnityEngine::Component::GetComponentInChildren(const std::string& type)
 {
 	if (this == nullptr)
 	{
@@ -69,11 +69,11 @@ Object* UnityEngine::Component::GetComponentInChildren(IL2CPP::Type* type)
 		return nullptr;
 	}
 
-	using func_t = Object * (*)(Component* _this, IL2CPP::Type* type);
+	using func_t = Object * (*)(Component* _this, System::Type* type);
 
 	func_t func = GetMethod<func_t>(0x180C2A0);
 
-	return func(this, type);
+	return func(this, System::Type::GetType(type));
 }
 
 IL2CPP::Array* UnityEngine::Component::FindObjectsOfTypeAll(IL2CPP::Type* type)

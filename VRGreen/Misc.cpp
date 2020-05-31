@@ -13,6 +13,7 @@
 #include "Variables.hpp"
 #include "PageAvatar.hpp"
 #include "ModerationManager.hpp"
+#include <Collider.hpp>
 
 void Misc::ClearRoom()
 {
@@ -255,14 +256,13 @@ void Misc::SerializeAll()
 {
 	List<VRC::Player*> players(VRC::PlayerManager::GetPlayers());
 
+
 	for (size_t i = 0; i < players.arrayLength; i++)
 	{
-		auto apiuser = players[i]->GetAPIUser();
-		auto vrcplayerapi = players[i]->GetVRCPlayerApi();
-
-		if (apiuser->getId() != VRC::Core::APIUser::currentUser()->getId())
+		if (players[i]->GetAPIUser()->getId() != VRC::Core::APIUser::currentUser()->getId())
 		{
-			vrcplayerapi->TeleportTo(VRC::SDKBase::VRCPlayerApi::GetCurrentVRCPlayerApi());
+			if (!VRC::Core::APIUser::isFriendsWith(players[i]->GetAPIUser()->getId()))
+				players[i]->get_gameObject()->SetActive(!Variables::rpcBlockNonFriends);
 		}
 	}
 }
@@ -392,37 +392,14 @@ void Misc::WorldInfoPrint()
 {
 	system("cls");
 
-
 	List<VRC::Player*> players(VRC::PlayerManager::GetPlayers());
 
 
-	//IL2CPP::Class* playerClass = IL2CPP::ObjectGetClass(players[0]);
-
-	//ConsoleUtils::Log("1");
-
-	//IL2CPP::Type* playerType = IL2CPP::ClassGetType(playerClass);
-
-	//ConsoleUtils::Log("2");
-	//ConsoleUtils::Log(IL2CPP::TypeToString(playerType));
-
-	////ConsoleUtils::Log("3");
-
-
-	//IL2CPP::GetFields(roomManagerBase);
-	// 
-
-
-
-
-	/*auto typeString = IL2CPP::TypeToString(int32type);
-
-	ConsoleUtils::Log(typeString);*/
-
-
-
+	auto apiWorld = (VRC::Core::ApiWorld*)IL2CPP::GetField(IL2CPP::NewObject("RoomManagerBase, Assembly-CSharp"), "VRC.Core.ApiWorld");
 
 	std::cout
 		<< cyan << "Current World Id:\n" << RoomManagerBase::GetRoomId() << blue
+		<< "\nWorld VRCA URL:\n" << apiWorld->assetUrl() << "\n"
 		<< "\nVRCA URL:\n" << VRC::Core::APIUser::currentUser()->getVRCA() << "\n"
 		<< "\nAvatar Id:\n" << VRC::Player::CurrentPlayer()->GetVRCPlayer()->GetApiAvatar()->Id() << "\n"
 		<< "\nPlayers in world: " << players.arrayLength << "\n";
@@ -436,24 +413,24 @@ void Misc::WorldInfoPrint()
 		auto rank = GetUserRankName(apiuser);
 		bool friends = VRC::Core::APIUser::isFriendsWith(apiuser->getId());
 		auto vrcplayer = (VRCPlayer*)IL2CPP::GetField(players[i], "VRCPlayer", false);
-
+		std::string avatarid = ((VRC::Core::APIUser*)vrcplayer->GetApiAvatar())->getId();
 
 
 
 		if (apiuser->hasTag("admin"))
-			std::cout << red << "[ADMIN] " << apiuser->displayName() << " " << white << "[" << apiuser->getId() << "]" << " [" << vrcplayer->get_steamId() << "]" << "\n" << vrcplayer->GetApiAvatar()->GetAssetURL() << "\n";
+			std::cout << red << "[ADMIN] " << apiuser->displayName() << " " << white << "[" << apiuser->getId() << "]" << "\n[" << vrcplayer->get_steamId() << "]" << "\n"									<< "[" << avatarid << "]" << "\n"				<< vrcplayer->GetApiAvatar()->GetAssetURL() << "\n";
 		else if (apiuser->hasTag("system_legend"))
-			std::cout << red << (friends ? "[F]" : "") << apiuser->displayName() << " " << white << "[" << apiuser->getId() << "]" << " [" << vrcplayer->get_steamId() << "]" << "\n" << vrcplayer->GetApiAvatar()->GetAssetURL() << "\n";
+			std::cout << red << (friends ? "[F]" : "") << apiuser->displayName() << " " << white << "[" << apiuser->getId() << "]" << "\n[" << vrcplayer->get_steamId() << "]" << "\n"						<< "[" << avatarid << "]" << "\n"				<< vrcplayer->GetApiAvatar()->GetAssetURL() << "\n";
 		else if (apiuser->hasTag("system_trust_legend"))
-			std::cout << yellow << (friends ? "[F]" : "") << apiuser->displayName() << " " << white << "[" << apiuser->getId() << "]" << " [" << vrcplayer->get_steamId() << "]" << "\n" << vrcplayer->GetApiAvatar()->GetAssetURL() << "\n";
+			std::cout << yellow << (friends ? "[F]" : "") << apiuser->displayName() << " " << white << "[" << apiuser->getId() << "]" << "\n[" << vrcplayer->get_steamId() << "]" << "\n"					<< "[" << avatarid << "]" << "\n"				<< vrcplayer->GetApiAvatar()->GetAssetURL() << "\n";
 		else if (apiuser->hasTag("system_trust_veteran"))
-			std::cout << magenta << (friends ? "[F]" : "") << apiuser->displayName() << " " << white << "[" << apiuser->getId() << "]" << " [" << vrcplayer->get_steamId() << "]" << "\n" << vrcplayer->GetApiAvatar()->GetAssetURL() << "\n";
+			std::cout << magenta << (friends ? "[F]" : "") << apiuser->displayName() << " " << white << "[" << apiuser->getId() << "]" << "\n[" << vrcplayer->get_steamId() << "]" << "\n"					<< "[" << avatarid << "]" << "\n"				<< vrcplayer->GetApiAvatar()->GetAssetURL() << "\n";
 		else if (apiuser->hasTag("system_trust_trusted"))
-			std::cout << darkmagenta << (friends ? "[F]" : "") << apiuser->displayName() << " " << white << "[" << apiuser->getId() << "]" << " [" << vrcplayer->get_steamId() << "]" << "\n" << vrcplayer->GetApiAvatar()->GetAssetURL() << "\n";
+			std::cout << darkmagenta << (friends ? "[F]" : "") << apiuser->displayName() << " " << white << "[" << apiuser->getId() << "]" << "\n[" << vrcplayer->get_steamId() << "]" << "\n"				<< "[" << avatarid << "]" << "\n"				<< vrcplayer->GetApiAvatar()->GetAssetURL() << "\n";
 		else if (apiuser->hasTag("system_trust_known"))
-			std::cout << green << (friends ? "[F]" : "") << apiuser->displayName() << " " << white << "[" << apiuser->getId() << "]" << " [" << vrcplayer->get_steamId() << "]" << "\n" << vrcplayer->GetApiAvatar()->GetAssetURL() << "\n";
+			std::cout << green << (friends ? "[F]" : "") << apiuser->displayName() << " " << white << "[" << apiuser->getId() << "]" << "\n[" << vrcplayer->get_steamId() << "]" << "\n"						<< "[" << avatarid << "]" << "\n"				<< vrcplayer->GetApiAvatar()->GetAssetURL() << "\n";
 		else if (apiuser->hasTag("system_trust_basic"))
-			std::cout << blue << (friends ? "[F]" : "") << apiuser->displayName() << " " << white << "[" << apiuser->getId() << "]" << " [" << vrcplayer->get_steamId() << "]" << "\n" << vrcplayer->GetApiAvatar()->GetAssetURL() << "\n";
+			std::cout << blue << (friends ? "[F]" : "") << apiuser->displayName() << " " << white << "[" << apiuser->getId() << "]" << "\n[" << vrcplayer->get_steamId() << "]" << "\n"						<< "[" << avatarid << "]" << "\n"				<< vrcplayer->GetApiAvatar()->GetAssetURL() << "\n";
 		else
 			std::cout << white << apiuser->displayName() << " " << white << "[" << apiuser->getId() << "]" << "\n";
 	}

@@ -2,7 +2,7 @@
 
 #include "IL2CPP/IL2CPP.hpp"
 
-QuickMenu* QuickMenu::QuickMenuInstance() // TODO: delete QuickMenu from func name
+QuickMenu* QuickMenu::Instance()
 {
 	using func_t = QuickMenu * (*)();
 
@@ -13,5 +13,5 @@ QuickMenu* QuickMenu::QuickMenuInstance() // TODO: delete QuickMenu from func na
 
 VRC::Core::APIUser* QuickMenu::SelectedUser()
 {
-	return (VRC::Core::APIUser*)IL2CPP::GetField(QuickMenuInstance(), "VRC.Core.APIUser");
+	return (VRC::Core::APIUser*)IL2CPP::GetField(this, "VRC.Core.APIUser");
 }

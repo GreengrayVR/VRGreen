@@ -11,8 +11,11 @@
 #include "ConsoleUtils.hpp"
 #include "Image.hpp"
 #include "VRC/SDKBase/Networking.hpp"
+#include "VRC/Core/APIUser.hpp"
+#include "VRC/Player.h"
 
 using namespace UnityEngine;
+
 
 void VRCQuickMenu::ShowUserInteractMenu1()
 {
@@ -21,42 +24,42 @@ void VRCQuickMenu::ShowUserInteractMenu1()
 	if (Variables::userInteractMenu1)
 	{
 		Vector3 v{ 1,1,1 };
-		QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/ShowAvatarStatsButton")->SetLocalScale(&v); // 
-		QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/ShowAuthorButton")->SetLocalScale(&v); // 
-		QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/ViewPlaylistsButton")->SetLocalScale(&v); // 
-		QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/CloneAvatarButton")->SetLocalScale(&v); //
-		QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/ReportAbuseButton")->SetLocalScale(&v);
+		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/ShowAvatarStatsButton")->SetLocalScale(&v); // 
+		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/ShowAuthorButton")->SetLocalScale(&v); // 
+		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/ViewPlaylistsButton")->SetLocalScale(&v); // 
+		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/CloneAvatarButton")->SetLocalScale(&v); //
+		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/ReportAbuseButton")->SetLocalScale(&v);
 
 		Vector3 v2{ 0,0,0 };
-		QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/FriendButton")->SetLocalScale(&v2);
-		QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/DetailsButton")->SetLocalScale(&v2);
-		QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/BlockButton")->SetLocalScale(&v2);
-		QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/ViewAvatarThreeToggle")->SetLocalScale(&v2);
-		QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/MuteButton")->SetLocalScale(&v2);
-		QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/MicOffButton")->SetLocalScale(&v2);
-		QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/KickButton")->SetLocalScale(&v2);
-		QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/WarnButton")->SetLocalScale(&v2);
-		QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/SingleButton2120(3,-1)")->SetLocalScale(&v2);
+		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/FriendButton")->SetLocalScale(&v2);
+		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/DetailsButton")->SetLocalScale(&v2);
+		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/BlockButton")->SetLocalScale(&v2);
+		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/ViewAvatarThreeToggle")->SetLocalScale(&v2);
+		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/MuteButton")->SetLocalScale(&v2);
+		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/MicOffButton")->SetLocalScale(&v2);
+		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/KickButton")->SetLocalScale(&v2);
+		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/WarnButton")->SetLocalScale(&v2);
+		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/SingleButton2120(3,-1)")->SetLocalScale(&v2);
 	}
 	else
 	{
 		Vector3 v{ 0,0,0 };
-		QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/ShowAvatarStatsButton")->SetLocalScale(&v); // 
-		QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/ShowAuthorButton")->SetLocalScale(&v); // 
-		QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/ViewPlaylistsButton")->SetLocalScale(&v); // 
-		QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/CloneAvatarButton")->SetLocalScale(&v); //
-		QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/ReportAbuseButton")->SetLocalScale(&v);
+		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/ShowAvatarStatsButton")->SetLocalScale(&v); // 
+		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/ShowAuthorButton")->SetLocalScale(&v); // 
+		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/ViewPlaylistsButton")->SetLocalScale(&v); // 
+		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/CloneAvatarButton")->SetLocalScale(&v); //
+		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/ReportAbuseButton")->SetLocalScale(&v);
 
 		Vector3 v2{ 1,1,1 };
-		QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/FriendButton")->SetLocalScale(&v2);
-		QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/DetailsButton")->SetLocalScale(&v2);
-		QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/BlockButton")->SetLocalScale(&v2);
-		QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/ViewAvatarThreeToggle")->SetLocalScale(&v2);
-		QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/MuteButton")->SetLocalScale(&v2);
-		QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/MicOffButton")->SetLocalScale(&v2);
-		QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/KickButton")->SetLocalScale(&v2);
-		QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/WarnButton")->SetLocalScale(&v2);
-		QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/SingleButton2120(3,-1)")->SetLocalScale(&v2);
+		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/FriendButton")->SetLocalScale(&v2);
+		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/DetailsButton")->SetLocalScale(&v2);
+		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/BlockButton")->SetLocalScale(&v2);
+		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/ViewAvatarThreeToggle")->SetLocalScale(&v2);
+		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/MuteButton")->SetLocalScale(&v2);
+		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/MicOffButton")->SetLocalScale(&v2);
+		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/KickButton")->SetLocalScale(&v2);
+		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/WarnButton")->SetLocalScale(&v2);
+		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/SingleButton2120(3,-1)")->SetLocalScale(&v2);
 	}
 }
 
@@ -72,42 +75,42 @@ void VRCQuickMenu::ShowUIElements2()
 		{
 			if (Variables::uiElementsPage2)
 			{
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/SingleButton1130(3,-1)")->get_gameObject()->SetActive(false);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/SingleButton1110(3,0)")->get_gameObject()->SetActive(false);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton121(-1,0)")->get_gameObject()->SetActive(false);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton122(-2,0)")->get_gameObject()->SetActive(false);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton123(-3,0)")->get_gameObject()->SetActive(false);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/SingleButton124(0,-1)")->get_gameObject()->SetActive(false);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton125(-2,-1)")->get_gameObject()->SetActive(false);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton126(-1,-1)")->get_gameObject()->SetActive(false);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton127(-3,-2)")->get_gameObject()->SetActive(false);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton128(-2,-2)")->get_gameObject()->SetActive(false);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton129(-1,-2)")->get_gameObject()->SetActive(false);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton130(-3,0)")->get_gameObject()->SetActive(true);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton131(-2,-1)")->get_gameObject()->SetActive(true);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton132(-1,-1)")->get_gameObject()->SetActive(true);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton133(-2,0)")->get_gameObject()->SetActive(true);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/SingleButton1140(3,0)")->get_gameObject()->SetActive(true);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/SingleButton1130(3,-1)")->get_gameObject()->SetActive(false);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/SingleButton1110(3,0)")->get_gameObject()->SetActive(false);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleButton121(-1,0)")->get_gameObject()->SetActive(false);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleButton122(-2,0)")->get_gameObject()->SetActive(false);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleButton123(-3,0)")->get_gameObject()->SetActive(false);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/SingleButton124(0,-1)")->get_gameObject()->SetActive(false);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleButton125(-2,-1)")->get_gameObject()->SetActive(false);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleButton126(-1,-1)")->get_gameObject()->SetActive(false);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleButton127(-3,-2)")->get_gameObject()->SetActive(false);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleButton128(-2,-2)")->get_gameObject()->SetActive(false);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleButton129(-1,-2)")->get_gameObject()->SetActive(false);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleButton130(-3,0)")->get_gameObject()->SetActive(true);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleButton131(-2,-1)")->get_gameObject()->SetActive(true);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleButton132(-1,-1)")->get_gameObject()->SetActive(true);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleButton133(-2,0)")->get_gameObject()->SetActive(true);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/SingleButton1140(3,0)")->get_gameObject()->SetActive(true);
 			}
 			else
 			{
 
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/SingleButton1130(3,-1)")->get_gameObject()->SetActive(true);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/SingleButton1110(3,0)")->get_gameObject()->SetActive(true);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton121(-1,0)")->get_gameObject()->SetActive(true);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton122(-2,0)")->get_gameObject()->SetActive(true);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton123(-3,0)")->get_gameObject()->SetActive(true);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/SingleButton124(0,-1)")->get_gameObject()->SetActive(true);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton125(-2,-1)")->get_gameObject()->SetActive(true);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton126(-1,-1)")->get_gameObject()->SetActive(true);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton127(-3,-2)")->get_gameObject()->SetActive(true);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton128(-2,-2)")->get_gameObject()->SetActive(true);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton129(-1,-2)")->get_gameObject()->SetActive(true);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton130(-3,0)")->get_gameObject()->SetActive(false);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton131(-2,-1)")->get_gameObject()->SetActive(false);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton132(-1,-1)")->get_gameObject()->SetActive(false);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton133(-2,0)")->get_gameObject()->SetActive(false);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/SingleButton1140(3,0)")->get_gameObject()->SetActive(false);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/SingleButton1130(3,-1)")->get_gameObject()->SetActive(true);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/SingleButton1110(3,0)")->get_gameObject()->SetActive(true);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleButton121(-1,0)")->get_gameObject()->SetActive(true);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleButton122(-2,0)")->get_gameObject()->SetActive(true);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleButton123(-3,0)")->get_gameObject()->SetActive(true);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/SingleButton124(0,-1)")->get_gameObject()->SetActive(true);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleButton125(-2,-1)")->get_gameObject()->SetActive(true);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleButton126(-1,-1)")->get_gameObject()->SetActive(true);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleButton127(-3,-2)")->get_gameObject()->SetActive(true);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleButton128(-2,-2)")->get_gameObject()->SetActive(true);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleButton129(-1,-2)")->get_gameObject()->SetActive(true);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleButton130(-3,0)")->get_gameObject()->SetActive(false);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleButton131(-2,-1)")->get_gameObject()->SetActive(false);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleButton132(-1,-1)")->get_gameObject()->SetActive(false);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleButton133(-2,0)")->get_gameObject()->SetActive(false);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/SingleButton1140(3,0)")->get_gameObject()->SetActive(false);
 			}
 		}
 	}
@@ -127,36 +130,36 @@ void VRCQuickMenu::ShowUIElements1()
 			if (Variables::uiElementsPage1)
 			{
 				btn->setActive(false);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/SingleButton1110(3,0)")->get_gameObject()->SetActive(true);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/SingleButton1130(3,-1)")->get_gameObject()->SetActive(true);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton121(-1,0)")->get_gameObject()->SetActive(true);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton122(-2,0)")->get_gameObject()->SetActive(true);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton123(-3,0)")->get_gameObject()->SetActive(true);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/SingleButton124(0,-1)")->get_gameObject()->SetActive(true);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton125(-2,-1)")->get_gameObject()->SetActive(true);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton126(-1,-1)")->get_gameObject()->SetActive(true);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton127(-3,-2)")->get_gameObject()->SetActive(true);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton128(-2,-2)")->get_gameObject()->SetActive(true);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton129(-1,-2)")->get_gameObject()->SetActive(true);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleHUDButton")->get_gameObject()->SetActive(false);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleNameplatesButton")->get_gameObject()->SetActive(false);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/SingleButton1110(3,0)")->get_gameObject()->SetActive(true);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/SingleButton1130(3,-1)")->get_gameObject()->SetActive(true);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleButton121(-1,0)")->get_gameObject()->SetActive(true);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleButton122(-2,0)")->get_gameObject()->SetActive(true);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleButton123(-3,0)")->get_gameObject()->SetActive(true);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/SingleButton124(0,-1)")->get_gameObject()->SetActive(true);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleButton125(-2,-1)")->get_gameObject()->SetActive(true);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleButton126(-1,-1)")->get_gameObject()->SetActive(true);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleButton127(-3,-2)")->get_gameObject()->SetActive(true);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleButton128(-2,-2)")->get_gameObject()->SetActive(true);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleButton129(-1,-2)")->get_gameObject()->SetActive(true);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleHUDButton")->get_gameObject()->SetActive(false);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleNameplatesButton")->get_gameObject()->SetActive(false);
 			}
 			else
 			{
 				btn->setActive(true);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/SingleButton1110(3,0)")->get_gameObject()->SetActive(false);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/SingleButton1130(3,-1)")->get_gameObject()->SetActive(false);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton121(-1,0)")->get_gameObject()->SetActive(false);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton122(-2,0)")->get_gameObject()->SetActive(false);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton123(-3,0)")->get_gameObject()->SetActive(false);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/SingleButton124(0,-1)")->get_gameObject()->SetActive(false);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton125(-2,-1)")->get_gameObject()->SetActive(false);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton126(-1,-1)")->get_gameObject()->SetActive(false);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton127(-3,-2)")->get_gameObject()->SetActive(false);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton128(-2,-2)")->get_gameObject()->SetActive(false);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleButton129(-1,-2)")->get_gameObject()->SetActive(false);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleHUDButton")->get_gameObject()->SetActive(true);
-				QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleNameplatesButton")->get_gameObject()->SetActive(true);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/SingleButton1110(3,0)")->get_gameObject()->SetActive(false);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/SingleButton1130(3,-1)")->get_gameObject()->SetActive(false);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleButton121(-1,0)")->get_gameObject()->SetActive(false);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleButton122(-2,0)")->get_gameObject()->SetActive(false);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleButton123(-3,0)")->get_gameObject()->SetActive(false);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/SingleButton124(0,-1)")->get_gameObject()->SetActive(false);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleButton125(-2,-1)")->get_gameObject()->SetActive(false);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleButton126(-1,-1)")->get_gameObject()->SetActive(false);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleButton127(-3,-2)")->get_gameObject()->SetActive(false);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleButton128(-2,-2)")->get_gameObject()->SetActive(false);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleButton129(-1,-2)")->get_gameObject()->SetActive(false);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleHUDButton")->get_gameObject()->SetActive(true);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleNameplatesButton")->get_gameObject()->SetActive(true);
 			}
 		}
 	}
@@ -169,21 +172,21 @@ void VRCQuickMenu::SetupButtons()
 	Variables::uiElementsPage2 = false;
 
 	auto buttonUp1 = new SingleButton("UIElementsMenu", 1110, 3, 0, "", CreateDetour([=]() { ShowUIElements1(); }), "");
-	((UI::Image*)buttonUp1->getGameObject()->GetComponent("UnityEngine.UI.Image"))->SetSprite(((UI::Image*)QuickMenu::QuickMenuInstance()->get_transform()->Find("EmojiMenu/PageUp")->GetComponent("UnityEngine.UI.Image"))->GetSprite());
+	((UI::Image*)buttonUp1->getGameObject()->GetComponent("UnityEngine.UI.Image"))->SetSprite(((UI::Image*)QuickMenu::Instance()->get_transform()->Find("EmojiMenu/PageUp")->GetComponent("UnityEngine.UI.Image"))->GetSprite());
 	QuickMenuButtons.push_back(buttonUp1);
 	buttonUp1->setActive(false);
 
 	auto buttonDown1 = new SingleButton("UIElementsMenu", 1120, 3, -1, "", CreateDetour([=]() { ShowUIElements1(); }), "");
-	((UI::Image*)buttonDown1->getGameObject()->GetComponent("UnityEngine.UI.Image"))->SetSprite(((UI::Image*)QuickMenu::QuickMenuInstance()->get_transform()->Find("EmojiMenu/PageDown")->GetComponent("UnityEngine.UI.Image"))->GetSprite());
+	((UI::Image*)buttonDown1->getGameObject()->GetComponent("UnityEngine.UI.Image"))->SetSprite(((UI::Image*)QuickMenu::Instance()->get_transform()->Find("EmojiMenu/PageDown")->GetComponent("UnityEngine.UI.Image"))->GetSprite());
 	QuickMenuButtons.push_back(buttonDown1);
 
 	auto buttonDown2 = new SingleButton("UIElementsMenu", 1130, 3, -1, "", CreateDetour([=]() { ShowUIElements2(); }), "");
-	((UI::Image*)buttonDown2->getGameObject()->GetComponent("UnityEngine.UI.Image"))->SetSprite(((UI::Image*)QuickMenu::QuickMenuInstance()->get_transform()->Find("EmojiMenu/PageDown")->GetComponent("UnityEngine.UI.Image"))->GetSprite());
+	((UI::Image*)buttonDown2->getGameObject()->GetComponent("UnityEngine.UI.Image"))->SetSprite(((UI::Image*)QuickMenu::Instance()->get_transform()->Find("EmojiMenu/PageDown")->GetComponent("UnityEngine.UI.Image"))->GetSprite());
 	QuickMenuButtons.push_back(buttonDown2);
 	buttonDown2->setActive(false);
 
 	auto buttonUp2 = new SingleButton("UIElementsMenu", 1140, 3, 0, "", CreateDetour([=]() { ShowUIElements2(); }), "");
-	((UI::Image*)buttonUp2->getGameObject()->GetComponent("UnityEngine.UI.Image"))->SetSprite(((UI::Image*)QuickMenu::QuickMenuInstance()->get_transform()->Find("EmojiMenu/PageUp")->GetComponent("UnityEngine.UI.Image"))->GetSprite());
+	((UI::Image*)buttonUp2->getGameObject()->GetComponent("UnityEngine.UI.Image"))->SetSprite(((UI::Image*)QuickMenu::Instance()->get_transform()->Find("EmojiMenu/PageUp")->GetComponent("UnityEngine.UI.Image"))->GetSprite());
 	QuickMenuButtons.push_back(buttonUp2);
 	buttonUp2->setActive(false);
 #pragma endregion
@@ -380,12 +383,13 @@ void VRCQuickMenu::SetupButtons()
 
 	auto rpcBlockNonFriendsButton = new ToggleButton("UIElementsMenu", 131, -2, -1, "RPC-Block\nNon-Friends", CreateDetour([=]()
 	{
-		Misc::SerializeAll();
 		Variables::rpcBlockNonFriends = true;
+		Misc::SerializeAll();
 
 	}), "OFF", CreateDetour([=]()
 	{
 		Variables::rpcBlockNonFriends = false;
+		Misc::SerializeAll();
 	}), "my ass");
 	QuickMenuButtons.push_back(rpcBlockNonFriendsButton);
 	rpcBlockNonFriendsButton->setActive(false);
@@ -416,36 +420,74 @@ void VRCQuickMenu::SetupButtons()
 
 #pragma region UserInteractMenuSetup
 	Vector3 v{ 0, 0, 0 };
-	QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/MicOffButton")->SetLocalScale(&v);
-	QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/ShowAvatarStatsButton")->SetLocalScale(&v);
-	QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/ShowAuthorButton")->SetLocalScale(&v);
-	QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/ReportAbuseButton")->SetLocalScale(&v);
-	QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/ViewPlaylistsButton")->SetLocalScale(&v);
-	QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/CloneAvatarButton")->SetLocalScale(&v);
+	QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/MicOffButton")->SetLocalScale(&v);
+	QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/ShowAvatarStatsButton")->SetLocalScale(&v);
+	QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/ShowAuthorButton")->SetLocalScale(&v);
+	QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/ReportAbuseButton")->SetLocalScale(&v);
+	QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/ViewPlaylistsButton")->SetLocalScale(&v);
+	QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/CloneAvatarButton")->SetLocalScale(&v);
 	Vector3 blockbtn{ 210,  1470, 0 };
-	QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/BlockButton")->SetLocalPosition(&blockbtn);
+	QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/BlockButton")->SetLocalPosition(&blockbtn);
 	Vector3 detailsbtn{ -630, 630, 0 };
-	QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/DetailsButton")->SetLocalPosition(&detailsbtn);
+	QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/DetailsButton")->SetLocalPosition(&detailsbtn);
 	Vector3 clonebtn{ 210, 1470, 0 };
-	QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/CloneAvatarButton")->SetLocalPosition(&clonebtn);
+	QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/CloneAvatarButton")->SetLocalPosition(&clonebtn);
 	Vector3 avatarauthorbtn{ -210, 1050, 0 };
-	QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/ShowAvatarStatsButton")->SetLocalPosition(&avatarauthorbtn);
+	QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/ShowAvatarStatsButton")->SetLocalPosition(&avatarauthorbtn);
 	Vector3 showauthorbtn{ -630, 1050, 0 };
-	QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/ShowAuthorButton")->SetLocalPosition(&showauthorbtn);
+	QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/ShowAuthorButton")->SetLocalPosition(&showauthorbtn);
 	Vector3 playlistbtn{ -210, 1470, 0 };
-	QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/ViewPlaylistsButton")->SetLocalPosition(&playlistbtn);
+	QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/ViewPlaylistsButton")->SetLocalPosition(&playlistbtn);
 	Vector3 reportbtn{ -630, 1470, 0 };
-	QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/ReportAbuseButton")->SetLocalPosition(&reportbtn);
+	QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/ReportAbuseButton")->SetLocalPosition(&reportbtn);
 	Vector3 backbtn{ 630, 630, 0 };
-	QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/BackButton")->SetLocalPosition(&backbtn);
+	QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/BackButton")->SetLocalPosition(&backbtn);
 
 	auto buttonUserUp1 = new SingleButton("UserInteractMenu", 2110, 3, 0, "", CreateDetour([=]() { ShowUserInteractMenu1(); }), "");
-	((UI::Image*)buttonUserUp1->getGameObject()->GetComponent("UnityEngine.UI.Image"))->SetSprite(((UI::Image*)QuickMenu::QuickMenuInstance()->get_transform()->Find("EmojiMenu/PageUp")->GetComponent("UnityEngine.UI.Image"))->GetSprite());
+	((UI::Image*)buttonUserUp1->getGameObject()->GetComponent("UnityEngine.UI.Image"))->SetSprite(((UI::Image*)QuickMenu::Instance()->get_transform()->Find("EmojiMenu/PageUp")->GetComponent("UnityEngine.UI.Image"))->GetSprite());
 	QuickMenuButtons.push_back(buttonUserUp1);
 
 	auto buttonUserDown1 = new SingleButton("UserInteractMenu", 2120, 3, -1, "", CreateDetour([=]() { ShowUserInteractMenu1(); }), "");
-	((UI::Image*)buttonUserDown1->getGameObject()->GetComponent("UnityEngine.UI.Image"))->SetSprite(((UI::Image*)QuickMenu::QuickMenuInstance()->get_transform()->Find("EmojiMenu/PageDown")->GetComponent("UnityEngine.UI.Image"))->GetSprite());
+	((UI::Image*)buttonUserDown1->getGameObject()->GetComponent("UnityEngine.UI.Image"))->SetSprite(((UI::Image*)QuickMenu::Instance()->get_transform()->Find("EmojiMenu/PageDown")->GetComponent("UnityEngine.UI.Image"))->GetSprite());
 	QuickMenuButtons.push_back(buttonUserDown1);
+
+	auto soundVolumeUp = new SingleButton("UserInteractMenu", 12345, -1, 0, "Volume\nUP", CreateDetour([=]()
+	{
+		auto apiuser = QuickMenu::Instance()->SelectedUser();
+
+		if (apiuser == nullptr)
+			return;
+
+		auto uspeaker = VRC::PlayerManager::GetPlayer(apiuser->getId())->GetComponentInChildren("USpeaker, Assembly-CSharp");
+		float speakerVolume = *(float*)IL2CPP::ObjectUnbox(IL2CPP::GetField(uspeaker, "SpeakerVolume"));
+
+		speakerVolume += 0.1f;
+		if (speakerVolume <= 0.f || speakerVolume >= 1.f)
+			return;
+		IL2CPP::SetField(uspeaker, "System.Single", "SpeakerVolume", &speakerVolume);
+		ConsoleUtils::Log(apiuser->displayName(), " valume is now ", std::to_string(speakerVolume));
+		ConsoleUtils::VRLog(apiuser->displayName() + " valume is now " + std::to_string(speakerVolume));
+	}), "why does it hurt");
+	QuickMenuButtons.push_back(soundVolumeUp);
+
+	auto soundVolumeDown = new SingleButton("UserInteractMenu", 123456, -1, -1, "Volume\nDOWN", CreateDetour([=]()
+	{
+		auto apiuser = QuickMenu::Instance()->SelectedUser();
+
+		if (apiuser == nullptr)
+			return;
+
+		auto uspeaker = VRC::PlayerManager::GetPlayer(apiuser->getId())->GetComponentInChildren("USpeaker, Assembly-CSharp");
+		float speakerVolume = *(float*)IL2CPP::ObjectUnbox(IL2CPP::GetField(uspeaker, "SpeakerVolume"));
+
+		speakerVolume -= 0.1f;
+		if (speakerVolume <= 0.f || speakerVolume >= 1.f)
+			return;
+		IL2CPP::SetField(uspeaker, "System.Single", "SpeakerVolume", &speakerVolume);
+		ConsoleUtils::Log(apiuser->displayName(), " valume is now ", std::to_string(speakerVolume));
+		ConsoleUtils::VRLog(apiuser->displayName() + " valume is now " + std::to_string(speakerVolume));
+	}), "so much");
+	QuickMenuButtons.push_back(soundVolumeDown);
 #pragma endregion
 }
 
@@ -458,10 +500,10 @@ void VRCQuickMenu::SetupVRGreenText()
 
 	
 	//UnityEngine::Transform* posInHier = UnityEngine::Find(UnityEngine::get_transform(QuickMenuInstance()), IL2CPP::StringNew("ShortcutMenu"));
-	UnityEngine::Transform* posInHier = QuickMenu::QuickMenuInstance()->get_transform()->Find("ShortcutMenu");
+	UnityEngine::Transform* posInHier = QuickMenu::Instance()->get_transform()->Find("ShortcutMenu");
 
 	//UnityEngine::Transform* EAText = UnityEngine::Find(UnityEngine::get_transform(QuickMenuInstance()), IL2CPP::StringNew("ShortcutMenu/EarlyAccessText"));
-	UnityEngine::Transform* EAText = QuickMenu::QuickMenuInstance()->get_transform()->Find("ShortcutMenu/EarlyAccessText");
+	UnityEngine::Transform* EAText = QuickMenu::Instance()->get_transform()->Find("ShortcutMenu/EarlyAccessText");
 
 	auto gameObject = (GameObject*)Instantiate(EAText->get_gameObject(), posInHier, true);
 	auto textTemplate = gameObject->GetTransform();
@@ -492,7 +534,7 @@ void VRCQuickMenu::VRPlayerListUpdate()
 		{
 			std::string playerString = "ShortcutMenu/playerListStringShadow" + std::to_string(i);
 
-			auto PlayerText = QuickMenu::QuickMenuInstance()->get_transform()->Find(IL2CPP::StringNew(playerString));
+			auto PlayerText = QuickMenu::Instance()->get_transform()->Find(IL2CPP::StringNew(playerString));
 
 			if (PlayerText != nullptr)
 			{
@@ -510,9 +552,9 @@ void VRCQuickMenu::VRPlayerListUpdate()
 
 		for (size_t i = 0; i < players.arrayLength; i++)
 		{
-			UnityEngine::Transform* posInHier = QuickMenu::QuickMenuInstance()->get_transform()->Find("ShortcutMenu");
+			UnityEngine::Transform* posInHier = QuickMenu::Instance()->get_transform()->Find("ShortcutMenu");
 
-			UnityEngine::Transform* EAText = QuickMenu::QuickMenuInstance()->get_transform()->Find("ShortcutMenu/EarlyAccessText");
+			UnityEngine::Transform* EAText = QuickMenu::Instance()->get_transform()->Find("ShortcutMenu/EarlyAccessText");
 
 			auto instantiate = Instantiate(EAText->get_gameObject(), posInHier, true);
 
@@ -545,7 +587,7 @@ void VRCQuickMenu::VRPlayerListUpdate()
 	{
 		std::string playerString = "ShortcutMenu/playerListString" + std::to_string(i);
 
-		auto PlayerText = QuickMenu::QuickMenuInstance()->get_transform()->Find(IL2CPP::StringNew(playerString));
+		auto PlayerText = QuickMenu::Instance()->get_transform()->Find(IL2CPP::StringNew(playerString));
 
 		if (PlayerText != nullptr)
 		{
@@ -563,9 +605,9 @@ void VRCQuickMenu::VRPlayerListUpdate()
 
 	for (size_t i = 0; i < players.arrayLength; i++)
 	{
-		UnityEngine::Transform* posInHier = QuickMenu::QuickMenuInstance()->get_transform()->Find("ShortcutMenu");
+		UnityEngine::Transform* posInHier = QuickMenu::Instance()->get_transform()->Find("ShortcutMenu");
 
-		UnityEngine::Transform* EAText = QuickMenu::QuickMenuInstance()->get_transform()->Find("ShortcutMenu/EarlyAccessText");
+		UnityEngine::Transform* EAText = QuickMenu::Instance()->get_transform()->Find("ShortcutMenu/EarlyAccessText");
 
 		auto instantiate = Instantiate(EAText->get_gameObject(), posInHier, true);
 
@@ -597,14 +639,14 @@ void VRCQuickMenu::VRPlayerListUpdate()
 
 void VRCQuickMenu::PlayerListCounterUpdate()
 {
-	auto PlayerText = QuickMenu::QuickMenuInstance()->get_transform()->Find(IL2CPP::StringNew("ShortcutMenu/PlayersInRoom"));
+	auto PlayerText = QuickMenu::Instance()->get_transform()->Find(IL2CPP::StringNew("ShortcutMenu/PlayersInRoom"));
 
 	if (PlayerText != nullptr)
 		Destroy(PlayerText->get_gameObject(), 0.f);
 
-	UnityEngine::Transform* posInHier = QuickMenu::QuickMenuInstance()->get_transform()->Find("ShortcutMenu");
+	UnityEngine::Transform* posInHier = QuickMenu::Instance()->get_transform()->Find("ShortcutMenu");
 
-	UnityEngine::Transform* EAText = QuickMenu::QuickMenuInstance()->get_transform()->Find("ShortcutMenu/EarlyAccessText");
+	UnityEngine::Transform* EAText = QuickMenu::Instance()->get_transform()->Find("ShortcutMenu/EarlyAccessText");
 
 	auto instantiate = Instantiate(EAText->get_gameObject(), posInHier, true);
 
@@ -640,9 +682,9 @@ void VRCQuickMenu::InitVRDebug()
 	// Create Shadow Text
 	for (size_t i = 0; i < ConsoleUtils::MaxDebugLines; i++)
 	{
-		UnityEngine::Transform* posInHier = QuickMenu::QuickMenuInstance()->get_transform()->Find("ShortcutMenu");
+		UnityEngine::Transform* posInHier = QuickMenu::Instance()->get_transform()->Find("ShortcutMenu");
 
-		UnityEngine::Transform* EAText = QuickMenu::QuickMenuInstance()->get_transform()->Find("ShortcutMenu/EarlyAccessText");
+		UnityEngine::Transform* EAText = QuickMenu::Instance()->get_transform()->Find("ShortcutMenu/EarlyAccessText");
 
 		auto instantiate = Instantiate(EAText->get_gameObject(), posInHier, true);
 
@@ -674,9 +716,9 @@ void VRCQuickMenu::InitVRDebug()
 	// Create Text
 	for (size_t i = 0; i < ConsoleUtils::MaxDebugLines; i++)
 	{
-		UnityEngine::Transform* posInHier = QuickMenu::QuickMenuInstance()->get_transform()->Find("ShortcutMenu");
+		UnityEngine::Transform* posInHier = QuickMenu::Instance()->get_transform()->Find("ShortcutMenu");
 
-		UnityEngine::Transform* EAText = QuickMenu::QuickMenuInstance()->get_transform()->Find("ShortcutMenu/EarlyAccessText");
+		UnityEngine::Transform* EAText = QuickMenu::Instance()->get_transform()->Find("ShortcutMenu/EarlyAccessText");
 
 		auto instantiate = Instantiate(EAText->get_gameObject(), posInHier, true);
 
@@ -728,7 +770,7 @@ void VRCQuickMenu::ClearInterface()
 	{
 		std::string playerString = "ShortcutMenu/playerListString" + std::to_string(i);
 
-		auto PlayerText = QuickMenu::QuickMenuInstance()->get_transform()->Find(IL2CPP::StringNew(playerString));
+		auto PlayerText = QuickMenu::Instance()->get_transform()->Find(IL2CPP::StringNew(playerString));
 
 		if (PlayerText != nullptr)
 		{
@@ -745,7 +787,7 @@ void VRCQuickMenu::ClearInterface()
 	{
 		std::string playerString = "ShortcutMenu/playerListStringShadow" + std::to_string(i);
 
-		auto PlayerText = QuickMenu::QuickMenuInstance()->get_transform()->Find(IL2CPP::StringNew(playerString));
+		auto PlayerText = QuickMenu::Instance()->get_transform()->Find(IL2CPP::StringNew(playerString));
 
 		if (PlayerText != nullptr)
 		{
@@ -758,17 +800,17 @@ void VRCQuickMenu::ClearInterface()
 	}
 
 	// Delete VRGreen text
-	Destroy(QuickMenu::QuickMenuInstance()->get_transform()->Find(IL2CPP::StringNew("ShortcutMenu/VRGreenTitle"))->get_gameObject(), 0.f);
+	Destroy(QuickMenu::Instance()->get_transform()->Find(IL2CPP::StringNew("ShortcutMenu/VRGreenTitle"))->get_gameObject(), 0.f);
 
 	// Delete Players in room text
-	Destroy(QuickMenu::QuickMenuInstance()->get_transform()->Find(IL2CPP::StringNew("ShortcutMenu/PlayersInRoom"))->get_gameObject(), 0.f);
+	Destroy(QuickMenu::Instance()->get_transform()->Find(IL2CPP::StringNew("ShortcutMenu/PlayersInRoom"))->get_gameObject(), 0.f);
 
 	// Delete VR Debug Text
 	for (size_t i = 0; i < 150; i++)
 	{
 		std::string debugString = "ShortcutMenu/debugString" + std::to_string(i);
 
-		auto debugText = QuickMenu::QuickMenuInstance()->get_transform()->Find(IL2CPP::StringNew(debugString));
+		auto debugText = QuickMenu::Instance()->get_transform()->Find(IL2CPP::StringNew(debugString));
 
 		if (debugText != nullptr)
 		{
@@ -785,7 +827,7 @@ void VRCQuickMenu::ClearInterface()
 	{
 		std::string debugString = "ShortcutMenu/debugStringShadow" + std::to_string(i);
 
-		auto debugText = QuickMenu::QuickMenuInstance()->get_transform()->Find(IL2CPP::StringNew(debugString));
+		auto debugText = QuickMenu::Instance()->get_transform()->Find(IL2CPP::StringNew(debugString));
 
 		if (debugText != nullptr)
 		{
@@ -798,8 +840,8 @@ void VRCQuickMenu::ClearInterface()
 	}
 
 	// Restore default buttons
-	QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleHUDButton")->get_gameObject()->SetActive(true);
-	QuickMenu::QuickMenuInstance()->get_transform()->Find("UIElementsMenu/ToggleNameplatesButton")->get_gameObject()->SetActive(true);
+	QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleHUDButton")->get_gameObject()->SetActive(true);
+	QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleNameplatesButton")->get_gameObject()->SetActive(true);
 
 	// Delete Quick Menu buttons
 	for (auto& button : QuickMenuButtons)
@@ -810,14 +852,31 @@ void VRCQuickMenu::ClearInterface()
 
 	// Reset UserInteractMenu Buttons
 	Vector3 v{ 1, 1, 1 };
-	QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/ShowAvatarStatsButton")->SetLocalScale(&v);
-	QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/ShowAuthorButton")->SetLocalScale(&v);
-	QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/ViewAvatarThreeToggle")->SetLocalScale(&v);
-	QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/ReportAbuseButton")->SetLocalScale(&v);
-	QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/ViewPlaylistsButton")->SetLocalScale(&v);
-	QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/CloneAvatarButton")->SetLocalScale(&v);
+	QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/ShowAvatarStatsButton")->SetLocalScale(&v);
+	QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/ShowAuthorButton")->SetLocalScale(&v);
+	QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/ViewAvatarThreeToggle")->SetLocalScale(&v);
+	QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/ReportAbuseButton")->SetLocalScale(&v);
+	QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/ViewPlaylistsButton")->SetLocalScale(&v);
+	QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/CloneAvatarButton")->SetLocalScale(&v);
 	Vector3 blockbtn{ 630,  1470, 0 };
-	QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/BlockButton")->SetLocalPosition(&blockbtn);
+	QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/BlockButton")->SetLocalPosition(&blockbtn);
 	Vector3 detailsbtn{ 210,  1470, 0 }; 
-	QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/DetailsButton")->SetLocalPosition(&detailsbtn);
+	QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/DetailsButton")->SetLocalPosition(&detailsbtn);
+}
+
+void VRCQuickMenu::UpdateUSpeaker()
+{
+	auto apiuser = QuickMenu::Instance()->SelectedUser();
+
+	if (apiuser == nullptr)
+		return;
+
+	
+
+	auto uspeaker = VRC::PlayerManager::GetPlayer(apiuser->getId())->GetComponentInChildren("USpeaker, Assembly-CSharp");
+	float speakerVolume = *(float*)IL2CPP::ObjectUnbox(IL2CPP::GetField(uspeaker, "SpeakerVolume"));
+
+	ConsoleUtils::Log(speakerVolume);
+	//IL2CPP::GetField(uspeaker, "SpeakerVolume");
+
 }

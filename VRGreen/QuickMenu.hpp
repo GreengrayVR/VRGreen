@@ -8,7 +8,7 @@ struct QuickMenu : UnityEngine::Component
 {
 	NOIMPLEMENT(QuickMenu);
 
-	static QuickMenu* QuickMenuInstance();
+	static QuickMenu* Instance();
 
-	static VRC::Core::APIUser* SelectedUser();
+	VRC::Core::APIUser* SelectedUser();
 };

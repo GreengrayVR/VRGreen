@@ -112,6 +112,8 @@ namespace IL2CPP
 
 	void SetField(Object* obj, const char* name, int pos, void* value);
 
+	void SetField(Object* obj, const std::string& fieldType, const std::string& variabledName, void* value);
+
 	void SetFieldsTesting(Object* obj);
 
 	void GetFields(Object* obj);

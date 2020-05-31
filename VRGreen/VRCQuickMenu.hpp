@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "ButtonAPI.hpp"
+#include "Text.hpp"
 
 namespace VRCQuickMenu
 {
@@ -27,4 +28,6 @@ namespace VRCQuickMenu
 	void VRDebugUpdate();
 
 	void ClearInterface();
+
+	void UpdateUSpeaker();
 }

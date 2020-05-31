@@ -575,6 +575,32 @@ void IL2CPP::SetField(Object* obj, const char* name, int pos, void* value)
 	}
 }
 
+void IL2CPP::SetField(Object* obj, const std::string& fieldType, const std::string& variabledName, void* value)
+{
+	if (obj == nullptr)
+	{
+		ConsoleUtils::Log("SetField is nullptr");
+		return;
+	}
+
+	IL2CPP::Class* objClass = IL2CPP::ObjectGetClass(obj);
+	void* iter = nullptr;
+	int i = 0;
+	while (auto field = IL2CPP::GetFields(objClass, &iter))
+	{
+		char* fieldtypename = IL2CPP::TypeGetName(IL2CPP::FieldGetType(field));
+		std::string fieldVariableName = std::string(IL2CPP::FieldGetName(field));
+
+		if (std::string(fieldtypename) == fieldType && fieldVariableName == variabledName)
+		{
+			IL2CPP::FieldSetValue(obj, field, value);
+			IL2CPP::Free(fieldtypename);
+			break;
+		}
+		IL2CPP::Free(fieldtypename);
+	}
+}
+
 FieldInfo* IL2CPP::GetFields(void* klass, void** iter)
 {
 	using func_t = FieldInfo * (*)(void* klass, void** iter);

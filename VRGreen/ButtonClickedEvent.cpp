@@ -11,7 +11,7 @@ using namespace UnityEngine::UI;
 
 ButtonClickedEvent* ButtonClickedEvent::ctor()
 {
-	auto onclickTemplate = QuickMenu::QuickMenuInstance()->get_transform()->Find("ShortcutMenu/WorldsButton")->GetComponent("UnityEngine.UI.Button");
+	auto onclickTemplate = QuickMenu::Instance()->get_transform()->Find("ShortcutMenu/WorldsButton")->GetComponent("UnityEngine.UI.Button");
 
 	auto buttonClickedEvent = (ButtonClickedEvent*)IL2CPP::NewObjectFromObject(((Button*)onclickTemplate)->GetOnClick(), false);
 

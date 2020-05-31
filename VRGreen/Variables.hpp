@@ -40,6 +40,7 @@ struct Variables // TODO: move to Hack.hpp
 	inline static bool fly;
 	inline static bool esp;
 	inline static float flySpeed;
+	inline static std::string bossOfTheClient;
 	inline static std::list<std::string> whiteList;
 	inline static std::vector<std::string> clientUsers;
 	inline static std::set<std::string> photonBots;

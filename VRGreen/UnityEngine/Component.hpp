@@ -21,11 +21,11 @@ namespace UnityEngine
 
 		GameObject* get_gameObject();
 
-		Object* GetComponent(std::string type);
+		Object* GetComponent(const std::string& type);
 
 		Object* GetComponent(IL2CPP::Type* type);
 
-		Object* GetComponentInChildren(IL2CPP::Type* type);
+		Object* GetComponentInChildren(const std::string& type);
 
 		static IL2CPP::Array* FindObjectsOfTypeAll(IL2CPP::Type* type);
 	};

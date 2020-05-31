@@ -2,6 +2,7 @@
 
 #include "Common.hpp"
 #include <string>
+#include "UnityEngine/Component.hpp"
 
 namespace IL2CPP
 {
@@ -10,7 +11,7 @@ namespace IL2CPP
 
 namespace VRC::Core
 {
-	struct APIUser : Object 
+	struct APIUser : UnityEngine::Component 
 	{
 		NOIMPLEMENT(APIUser); 
 	

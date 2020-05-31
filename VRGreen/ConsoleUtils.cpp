@@ -222,7 +222,7 @@ void ConsoleUtils::Line::Update(int lineNumber)
 	}
 
 
-	UnityEngine::Transform* text = QuickMenu::QuickMenuInstance()->get_transform()->Find(IL2CPP::StringNew("ShortcutMenu/debugString" + std::to_string(lineNumber)));
+	UnityEngine::Transform* text = QuickMenu::Instance()->get_transform()->Find(IL2CPP::StringNew("ShortcutMenu/debugString" + std::to_string(lineNumber)));
 	auto component = (UnityEngine::UI::Text*)text->GetComponent("UnityEngine.UI.Text");
 	component->SetText(newText);
 }
@@ -247,7 +247,7 @@ void ConsoleUtils::Line::UpdateShadow(int lineNumber)
 	}
 
 
-	UnityEngine::Transform* text = QuickMenu::QuickMenuInstance()->get_transform()->Find(IL2CPP::StringNew("ShortcutMenu/debugStringShadow" + std::to_string(lineNumber)));
+	UnityEngine::Transform* text = QuickMenu::Instance()->get_transform()->Find(IL2CPP::StringNew("ShortcutMenu/debugStringShadow" + std::to_string(lineNumber)));
 	auto component = (UnityEngine::UI::Text*)text->GetComponent("UnityEngine.UI.Text");
 	component->SetText(newText);
 }

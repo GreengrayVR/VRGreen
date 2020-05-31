@@ -9,5 +9,7 @@ namespace VRC::Core
 		NOIMPLEMENT(ApiWorld); 
 
 		std::string GetName();
+
+		std::string assetUrl();
 	};
 }

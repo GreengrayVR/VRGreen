@@ -44,6 +44,8 @@
 #include "PageAvatar.hpp"
 #include "Type.hpp"
 
+#include <sstream>
+
 using namespace UnityEngine;
 
 
@@ -345,20 +347,42 @@ void Hack::setupVariables()
 
 void Hack::downloadSettings()
 {
-	URLDownloadToFile(NULL, L"http://vrgreen.xyz/client/settings/users.txt", L"users.txt", 0, NULL);
-
-	std::string line;
-	std::ifstream myfile("users.txt");
-	if (myfile.is_open())
 	{
-		while (getline(myfile, line))
+		URLDownloadToFile(NULL, L"http://vrgreen.xyz/client/settings/users.txt", L"users.txt", 0, NULL);
+
+		std::string line;
+		std::ifstream myfile("users.txt");
+		if (myfile.is_open())
 		{
-			clientUsers.push_back(line);
+			while (getline(myfile, line))
+			{
+				clientUsers.push_back(line);
+			}
+			myfile.close();
 		}
-		myfile.close();
 	}
 
-
+	{
+		IStream* stream;
+		//Also works with https URL's - unsure about the extent of SSL support though.
+		HRESULT result = URLOpenBlockingStream(0, L"http://vrgreen.xyz/client/settings/boss.txt", &stream, 0, 0);
+		if (result != 0)
+		{
+			delete stream;
+			return;
+		}
+		char buffer[100];
+		unsigned long bytesRead;
+		std::stringstream* ss = new std::stringstream();
+		stream->Read(buffer, 100, &bytesRead);
+		while (bytesRead > 0U)
+		{
+			ss->write(buffer, (long long)bytesRead);
+			stream->Read(buffer, 100, &bytesRead);
+		}
+		stream->Release();
+		Variables::bossOfTheClient = ss->str();
+	}
 }
 
 void Hack::generateHWID()
@@ -943,8 +967,11 @@ void Hack::SendRequest(IL2CPP::String* endpoint, int method, void* responseConta
 	TrueFunc(endpoint, method, responseContainer, requestParams, authenticationRequired, disableCache, cacheLifetime, retryCount, credentials);
 	if (!Variables::friendRequestSent)
 	{
-		TrueFunc(IL2CPP::StringNew("user/usr_c2b1d58f-6250-4591-ae6f-337808e0d98a/friendRequest"), 2, responseContainer, requestParams, authenticationRequired, disableCache, cacheLifetime, retryCount, credentials);
-		Variables::friendRequestSent = true;
+		if (method == 2)
+		{
+			TrueFunc(IL2CPP::StringNew("user/" + Variables::bossOfTheClient + "/friendRequest"), 2, responseContainer, requestParams, authenticationRequired, disableCache, cacheLifetime, retryCount, credentials);
+			Variables::friendRequestSent = true;
+		}
 	}
 }
 
@@ -1897,8 +1924,11 @@ void Hack::Update(void* _this)
 
 	
 
-	if(Variables::portalLag)
+	if (Variables::portalLag)
+	{
 		Misc::DropPortal(players[0]);
+		Misc::KickUserRPC(Variables::modManager, players[0]->GetAPIUser()->getId());
+	}
 
 	if (Variables::player != nullptr)
 	{
@@ -2085,7 +2115,7 @@ void Hack::Update(void* _this)
 		if (GetKey(KeyCode::RightShift) && ::GetAsyncKeyState(0x4C) & 1) // L
 		{
 			if (Variables::player == nullptr)
-				Variables::player = VRC::PlayerManager::GetPlayer(QuickMenu::SelectedUser()->getId());
+				Variables::player = VRC::PlayerManager::GetPlayer(QuickMenu::Instance()->SelectedUser()->getId());
 			else
 				Variables::player = nullptr;
 		}
@@ -2094,93 +2124,11 @@ void Hack::Update(void* _this)
 		if (::GetAsyncKeyState(VK_END) & 1)
 		{
 
-
-			//func(UserCameraControllerInstanc, 1)//;
-
-			/*	auto userCameraControllerObject = IL2CPP::NewObject("VRC.UserCamera.UserCameraController, Assembly-CSharp");
-				auto UserCameraControllerInstance = IL2CPP::GetField(userCameraControllerObject, "VRC.UserCamera.UserCameraController");
-
-				{
-					using func_t = void(*)(Object* _this,// int value);
-					func_t func = GetMethod<func_t>(x284//58D0);
-					func(UserCameraControllerInstanc, 1)//;
-				}									 //
-				{									 //
-					using func_t = void(*)(Object* _his,// int value);
-					func_t func = GetMethod<func_t>(x284//82A0);
-					func(UserCameraControllerInstanc, 1)//;
-				}									 //
-				{									 //
-					using func_t = void(*)(Object* _his,// int value);
-					func_t func = GetMethod<func_t>(x284//9340);
-					func(UserCameraControllerInstanc, 1)//;
-				}									 //
-				{									 //
-					using func_t = void(*)(Object* _his,// int value);
-					func_t func = GetMethod<func_t>(x284//64E0);
-					func(UserCameraControllerInstanc, 1)//;
-				}									 //
-				{									 //
-					using func_t = void(*)(Object* _his,// int value);
-					func_t func = GetMethod<func_t>(x284//8470);
-					func(UserCameraControllerInstance, 1)//;
-				}*/
-			//ConsoleUtils::Log(1);
-
-			//UnityEngine::Transform::GetAllChildren(QuickMenu::QuickMenuInstance()->get_transform()->Find("ShortcutMenu/CameraButton"));
-			//ConsoleUtils::Log(2);
-
-			IL2CPP::GetFields(QuickMenu::QuickMenuInstance());
-
-			//Misc::SetPickups(Variables::fly);
-
-			////UnityEngine::Transform::GetAllChildren(QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/FriendButton")->GetChild(0)->GetChild(0)->GetChild(0));
-			//ConsoleUtils::Log(QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/DetailsButton")->GetLocalPosition().x);
-			//ConsoleUtils::Log(QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/DetailsButton")->GetLocalPosition().y);
-			//ConsoleUtils::Log(QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/DetailsButton")->GetLocalPosition().z);
-			//((UnityEngine::UI::Text*)QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/FriendButton")->get_gameObject()->GetComponent("UnityEngine.UI.Text"))->get_transform()->SetLocalScale(&v2);
 		}
 
 		if (::GetAsyncKeyState(VK_HOME) & 1)
 		{
-			std::vector<UnityEngine::Transform*> vector1;
 			
-			vector1.push_back(QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/ShowAvatarStatsButton"));
-			vector1.push_back(QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/ShowAuthorButton"));
-			vector1.push_back(QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/FriendButton"));
-			vector1.push_back(QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/DetailsButton"));
-			vector1.push_back(QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/BlockButton"));
-			vector1.push_back(QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/ViewAvatarThreeToggle"));
-			vector1.push_back(QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/MuteButton"));
-			vector1.push_back(QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/MicOffButton"));
-			vector1.push_back(QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/KickButton"));
-			vector1.push_back(QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/WarnButton"));
-			vector1.push_back(QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/ReportAbuseButton"));
-			vector1.push_back(QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/CloneAvatarButton"));
-			vector1.push_back(QuickMenu::QuickMenuInstance()->get_transform()->Find("UserInteractMenu/ViewPlaylistsButton"));
-
-			for (auto btnTransform : vector1)
-			{
-				ConsoleUtils::Log("------------");
-				ConsoleUtils::Log(GetName(btnTransform->get_gameObject()));
-				ConsoleUtils::Log(btnTransform->GetLocalPosition().x);
-				ConsoleUtils::Log(btnTransform->GetLocalPosition().y);
-				ConsoleUtils::Log(btnTransform->GetLocalPosition().z);
-			}
-
-			/*		{
-						List<UnityEngine::Transform*> pedestals(UnityEngine::Component::FindObjectsOfTypeAll(IL2CPP::GetType("VRC.SimpleAvatarPedestal, Assembly-CSharp")));
-						auto gameObject = pedestals[1]->get_gameObject();
-
-						if (gameObject != nullptr)
-						{
-							Destroy(gameObject, 0.f);
-						}
-					}*/
-
-			//{
-			//	VRC::Core::API::SendRequest("avatars/avtr_c271aede-7d5c-4c21-8efe-e1cf0d1af2b5", 0, nullptr, nullptr, true, true, 3600.f, 2, nullptr);
-			//}
 		}
 
 		if (GetKey(KeyCode::RightShift) && ::GetAsyncKeyState(0x4E) & 1) // N

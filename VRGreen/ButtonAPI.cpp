@@ -22,7 +22,7 @@ void ButtonBase::setActive(bool isActive)
 
 void ButtonBase::setLocation(int buttonPage, int buttonXLoc, int buttonYLoc)
 {
-	auto quickMenu = QuickMenu::QuickMenuInstance();
+	auto quickMenu = QuickMenu::Instance();
 	auto transform = getGameObject()->GetTransform();
 
 	Vector3 transformVector = transform->GetLocalPosition();
@@ -50,7 +50,7 @@ void ButtonBase::setToolTip(std::string buttonToolTip)
 
 UnityEngine::Transform* ButtonBase::FindInQuickMenu(std::string str)
 {
-	return QuickMenu::QuickMenuInstance()->get_transform()->Find(str);
+	return QuickMenu::Instance()->get_transform()->Find(str);
 }
 
 UnityEngine::Transform* ButtonBase::InstantiateGameobject(std::string type)
@@ -67,7 +67,7 @@ UnityEngine::Transform* ButtonBase::InstantiateGameobject(std::string type)
 	   {"menu",					9}
 	};
 
-	auto quickMenu = QuickMenu::QuickMenuInstance();
+	auto quickMenu = QuickMenu::Instance();
 
 	switch (string_to_case.at(type))
 	{
@@ -141,7 +141,7 @@ UnityEngine::Transform* ButtonBase::InstantiateGameobject(std::string type)
 UnityEngine::Transform* ButtonBase::CreateButton(std::string name, std::string type, std::string text, std::string tooltip, float x_pos, float y_pos, Transform* parent, lambda_t action)
 {
 	Transform* transform = InstantiateGameobject(type);
-	auto quickMenu = QuickMenu::QuickMenuInstance();
+	auto quickMenu = QuickMenu::Instance();
 
 	SetName(transform, name);
 
@@ -153,7 +153,7 @@ UnityEngine::Transform* ButtonBase::CreateButton(std::string name, std::string t
 	transform->SetLocalPosition(&transformVector);
 	transform->SetParent(parent, false);
 
-	((UnityEngine::UI::Text*)transform->GetComponentInChildren((IL2CPP::Type*)System::Type::GetType("UnityEngine.UI.Text")))->SetText(text);
+	((UnityEngine::UI::Text*)transform->GetComponentInChildren("UnityEngine.UI.Text"))->SetText(text);
 
 	return transform;
 }
@@ -167,7 +167,7 @@ SingleButton::SingleButton(std::string btnMenu, int buttonPage, int btnXLocation
 
 void SingleButton::setButtonText(std::string buttonText)
 {
-	((UI::Text*)getGameObject()->GetComponentInChildren((IL2CPP::Type*)System::Type::GetType("UnityEngine.UI.Text, UnityEngine.UI")))->SetText(buttonText);
+	((UI::Text*)getGameObject()->GetComponentInChildren("UnityEngine.UI.Text, UnityEngine.UI"))->SetText(buttonText);
 }
 
 void SingleButton::setAction(CDetour* buttonAction)
@@ -310,7 +310,7 @@ SingleButton* NestedButton::getBackButton()
 void NestedButton::initButton(int btnXLocation, int btnYLocation, std::string btnText, std::string btnToolTip, Color* btnBackgroundColor /*= nullptr*/, Color* btnTextColor /*= nullptr*/, Color* backbtnBackgroundColor /*= nullptr*/, Color* backbtnTextColor /*= nullptr*/)
 {
 	
-	Transform* menu = (Transform*)Instantiate(QuickMenu::QuickMenuInstance()->get_transform()->Find("CameraMenu"), QuickMenu::QuickMenuInstance()->get_transform(), true); // MB FALSE/////////////////////////////////////////////////////////////////////////////////////////////////
+	Transform* menu = (Transform*)Instantiate(QuickMenu::Instance()->get_transform()->Find("CameraMenu"), QuickMenu::Instance()->get_transform(), true); // MB FALSE/////////////////////////////////////////////////////////////////////////////////////////////////
 	menuName = "CustomMenu" + btnQMLoc + "_" + std::to_string(btnXLocation) + "_" + std::to_string(btnYLocation);
 	SetName(menu, menuName);
 
