@@ -14,6 +14,15 @@ List<System::MethodInfo*> System::Type::GetMethods()
 	return _list;
 }
 
+System::Type* System::Type::GetType()
+{
+	using func_t = Type * (*)(void* _this);
+
+	func_t func = ::GetMethod<func_t>(0x14E6E00);
+
+	return func(this);
+}
+
 System::Type* System::Type::GetType(void* object)
 {
 	using func_t = Type* (*)(void* _this);
@@ -44,6 +53,20 @@ std::string System::Type::ToString(void* object)
 	func_t func = ::GetMethod<func_t>(0x30DC100);
 
 	return IL2CPP::StringChars(func(object));
+}
+
+void* System::Type::EmptyTypes()
+{
+	return IL2CPP::GetField(IL2CPP::NewObject("System.Type"), "EmptyTypes");
+}
+
+System::ConstructorInfo* System::Type::GetConstructor(void* types)
+{
+	using func_t = System::ConstructorInfo* (*)(Type* _this, void* types);
+
+	func_t func = ::GetMethod<func_t>(0x186A440);
+
+	return func(this, types);
 }
 
 System::Type* System::Type::GetType(const std::string& typeName)
@@ -85,4 +108,13 @@ std::string System::ParameterInfo::Name()
 	func_t func = ::GetMethod<func_t>(0x42E600);
 
 	return IL2CPP::StringChars(func(this));
+}
+
+void* System::ConstructorInfo::Invoke(void* objectArray)
+{
+	using func_t = void* (*)(ConstructorInfo* _this, void* objectArray);
+
+	func_t func = ::GetMethod<func_t>(0x352A8D0);
+
+	return func(this, objectArray);
 }

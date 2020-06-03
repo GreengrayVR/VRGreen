@@ -30,6 +30,7 @@ struct Variables // TODO: move to Hack.hpp
 	inline static bool rpcBlockNonFriends;
 	inline static bool instanceLock;
 	inline static bool antiWorldTriggers;
+	inline static bool portalKOS;
 	inline static bool antiPortal;
 	inline static bool printApiRequests;
 	inline static bool serialize;
@@ -40,9 +41,8 @@ struct Variables // TODO: move to Hack.hpp
 	inline static bool fly;
 	inline static bool esp;
 	inline static float flySpeed;
-	inline static std::string bossOfTheClient;
 	inline static std::list<std::string> whiteList;
-	inline static std::vector<std::string> clientUsers;
+	inline static std::set<std::string> portalKOSList;
 	inline static std::set<std::string> photonBots;
 	inline static std::set<std::string> rpcBlocked;
 	inline static UnityEngine::GameObject* modManager = nullptr;

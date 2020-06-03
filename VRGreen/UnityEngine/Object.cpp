@@ -55,6 +55,11 @@ Object* UnityEngine::Instantiate(Object* original, Transform* parent, bool insta
 	return func(original, parent, instantiateInWorldSpace);
 }
 
+Object* UnityEngine::Instantiate(Object* original, Transform* parent)
+{
+	return UnityEngine::Instantiate(original, parent, false);
+}
+
 //Object* UnityEngine::Instantiate(Object* original, Object* paremt)
 //{
 //	using func_t = Object * (*)(Object* original, Object* paremt);

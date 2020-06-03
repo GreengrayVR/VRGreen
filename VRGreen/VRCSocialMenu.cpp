@@ -246,6 +246,20 @@ void VRCSocialMenu::SetupButtons()
 			}
 		}
 	})));
+
+	SocialButtons.push_back(CreateButton("Drop Portal\nTo Instance", -700, -550, new CDetour([=]()
+	{
+		auto apiuser = CurrentUser();
+		std::string location = apiuser->getLocation();
+
+		if (location.empty())
+			VRCUiManager::VRCUiManagerInstance()->HudMsg(apiuser->displayName() + " has no valid location");
+		if(location == "private")
+			VRCUiManager::VRCUiManagerInstance()->HudMsg(apiuser->displayName() + " location is private");
+
+		Misc::DropPortal(location);
+
+	})));
 }
 
 void VRCSocialMenu::ClearInterface()

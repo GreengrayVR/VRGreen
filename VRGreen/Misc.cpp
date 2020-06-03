@@ -15,6 +15,14 @@
 #include "ModerationManager.hpp"
 #include <Collider.hpp>
 
+void Misc::SelectYourself()
+{
+	QuickMenu::Instance()->OnPlayerSelectedByLaser(VRCPlayer::GetCurrentVRCPlayer());
+	using func_t = void (*)(VRCPlayer* vrcplayer);
+	func_t func = GetMethod<func_t>(0x25C01A0);
+	func(VRCPlayer::GetCurrentVRCPlayer());
+}
+
 void Misc::ClearRoom()
 {
 
@@ -169,6 +177,25 @@ void Misc::DropPortal(const std::string& world, const std::string& id)
 
 	int nothing = 0;
 	auto objs = System::Collections::CreateObjectArray(IL2CPP::StringNew(world), IL2CPP::StringNew(id), IL2CPP::ValueBox("System.Int32", &nothing));
+	VRC::SDKBase::Networking::RPC(7, gameObject, "ConfigurePortal", objs);
+}
+
+void Misc::DropPortal(const std::string& worldid)
+{
+	auto vectorstrings = Misc::split(worldid, ":");
+	auto a = VRCPlayer::GetCurrentVRCPlayer()->get_transform()->GetPosition();
+	auto forward = VRCPlayer::GetCurrentVRCPlayer()->get_transform()->GetForward();
+
+	a.x += forward.x * 2.f;
+	a.y += forward.y * 2.f;
+	a.z += forward.z * 2.f;
+
+	UnityEngine::Quaternion q{ 0.5f,0.5,0.5f,0.5f };
+
+	auto gameObject = VRC::SDKBase::Networking::Instantiate(0, "Portals/PortalInternalDynamic", a, q);
+
+	int nothing = 0;
+	auto objs = System::Collections::CreateObjectArray(IL2CPP::StringNew(vectorstrings[0]), IL2CPP::StringNew(vectorstrings[1]), IL2CPP::ValueBox("System.Int32", &nothing));
 	VRC::SDKBase::Networking::RPC(7, gameObject, "ConfigurePortal", objs);
 }
 

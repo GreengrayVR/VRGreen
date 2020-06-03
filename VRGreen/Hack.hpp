@@ -22,6 +22,7 @@
 #include "List.hpp"
 #include "Type.hpp"
 #include "UnityEngine/Vector3.hpp"
+#include "ExtendedAvatars.hpp"
 
 #include "detours/detours.h"
 
@@ -39,9 +40,11 @@ class Hack
 {
 public:
 	float emojiSpamDelay;
+	float portalKOSDelay;
 	float updateDelay;
 	bool lobbyLag;
 	bool toggleRPC;
+	ExtendedAvatars* avatarFavorites;
 	UnityEngine::Vector3 takeMyHeart;
 
 	inline static Hack& getInstance();
@@ -49,6 +52,7 @@ public:
 	void mainLoop();
 	void destroy();
 
+	static void* AvatarFav(void* _this, void* list, int sex, char nigger, void* maybe);
 
 private:
 

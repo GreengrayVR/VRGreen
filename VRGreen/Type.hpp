@@ -11,9 +11,8 @@ namespace System
 		std::string Name();
 	};
 
-	struct MemberInfo
+	struct MemberInfo : Object
 	{
-
 	};
 
 	struct MethodInfo
@@ -27,9 +26,16 @@ namespace System
 	{
 	};
 
+	struct ConstructorInfo : MethodBase
+	{
+		void* Invoke(void* objectArray);
+	};
+
 	struct Type : MemberInfo
 	{
 		List<MethodInfo*> GetMethods();
+
+		Type* GetType();
 
 		static Type* GetType(void* object);
 
@@ -39,7 +45,9 @@ namespace System
 
 		static std::string ToString(void* object);
 
-		
+		static void* EmptyTypes();
+
+		ConstructorInfo* GetConstructor(void* types);
 	};
 
 	struct ReflectionUtils

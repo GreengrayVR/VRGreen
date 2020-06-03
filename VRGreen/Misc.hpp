@@ -15,6 +15,8 @@ namespace VRC::Core { struct APIUser; }
 
 struct Misc
 {
+    static void SelectYourself();
+
     static void ClearRoom();
 
     static void SetPickups(bool value);
@@ -36,6 +38,8 @@ struct Misc
     static void DropPortal(const std::string& world, const std::string& id, const std::string& text);
 
     static void DropPortal(const std::string& world, const std::string& id);
+
+    static void DropPortal(const std::string& worldid);
 
     static void DropPortal(VRC::Player* player);
 

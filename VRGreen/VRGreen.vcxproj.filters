@@ -70,6 +70,9 @@
     <Filter Include="Header Files\VRC\UI">
       <UniqueIdentifier>{3bcd198f-a609-4c23-a4bc-c84b29f91e9a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Modules">
+      <UniqueIdentifier>{3df4c863-d4d3-483e-82e6-463d3fcb4b49}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -255,6 +258,9 @@
     <ClCompile Include="Type.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ExtendedAvatars.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IL2CPP\IL2CPP.hpp">
@@ -425,9 +431,6 @@
     <ClInclude Include="Camera.hpp">
       <Filter>UnityEngine</Filter>
     </ClInclude>
-    <ClInclude Include="VRCSocialMenu.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ArrayList.hpp">
       <Filter>Assembly-CSharp\System\Collections</Filter>
     </ClInclude>
@@ -490,6 +493,15 @@
     </ClInclude>
     <ClInclude Include="Type.hpp">
       <Filter>Assembly-CSharp\System\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="ExtendedAvatars.hpp">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="SystemList.hpp">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="VRCSocialMenu.hpp">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -41,6 +41,7 @@
     <ClCompile Include="DiscordRPC\discord-rpc-master\src\rpc_connection.cpp" />
     <ClCompile Include="DiscordRPC\discord-rpc-master\src\serialization.cpp" />
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="ExtendedAvatars.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Graphic.cpp" />
     <ClCompile Include="Hack.cpp" />
@@ -100,6 +101,7 @@
     <ClInclude Include="DiscordRPC\discord-rpc-master\src\backoff.h" />
     <ClInclude Include="DiscordRPC\discord-rpc-master\src\rpc_connection.h" />
     <ClInclude Include="DiscordRPC\discord-rpc-master\src\serialization.h" />
+    <ClInclude Include="ExtendedAvatars.hpp" />
     <ClInclude Include="Graphic.hpp" />
     <ClInclude Include="Hack.hpp" />
     <ClInclude Include="HardOffsets.hpp" />
@@ -132,6 +134,7 @@
     <ClInclude Include="Selectable.hpp" />
     <ClInclude Include="sha1.hpp" />
     <ClInclude Include="Sprite.hpp" />
+    <ClInclude Include="SystemList.hpp" />
     <ClInclude Include="Text.hpp" />
     <ClInclude Include="Time.hpp" />
     <ClInclude Include="Type.hpp" />

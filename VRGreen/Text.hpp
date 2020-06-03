@@ -8,7 +8,7 @@ namespace UnityEngine::UI
 	{ 
 		NOIMPLEMENT(Text);
 
-		void SetText(std::string value);
+		void SetText(const std::string& value);
 	
 	};
 }

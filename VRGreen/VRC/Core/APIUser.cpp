@@ -80,3 +80,12 @@ std::string VRC::Core::APIUser::getVRCA()
 
 	return IL2CPP::StringChars(func(this));
 }
+
+std::string VRC::Core::APIUser::getLocation()
+{
+	using func_t = IL2CPP::String* (*)(VRC::Core::APIUser* apiuser);
+
+	func_t func = GetMethod<func_t>(0x5121E0);
+
+	return IL2CPP::StringChars(func(this));
+}

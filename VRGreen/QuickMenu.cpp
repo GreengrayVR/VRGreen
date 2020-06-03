@@ -15,3 +15,12 @@ VRC::Core::APIUser* QuickMenu::SelectedUser()
 {
 	return (VRC::Core::APIUser*)IL2CPP::GetField(this, "VRC.Core.APIUser");
 }
+
+void QuickMenu::OnPlayerSelectedByLaser(VRCPlayer* vrcplayer)
+{
+	using func_t = void (*)(QuickMenu* _this, VRCPlayer* vrcplayer);
+
+	func_t func = GetMethod<func_t>(0x1F516D0);
+
+	func(this, vrcplayer);
+}

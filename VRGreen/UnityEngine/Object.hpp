@@ -16,6 +16,8 @@ namespace UnityEngine
 
 	Object* Instantiate(Object* original, Transform* parent, bool instantiateInWorldSpace);
 
+	Object* Instantiate(Object* original, Transform* parent);
+
 	std::string GetName(Object* _this);
 
 	void SetName(Object* _this, std::string value);

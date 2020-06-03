@@ -24,5 +24,7 @@ namespace VRC::Core
 		std::string Id();
 
 		void SetId(const std::string& id);
+
+		static constexpr const char* SystemTypeName = "[VRC.Core.ApiAvatar,VRCCore-Standalone]";
 	};
 }

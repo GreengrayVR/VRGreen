@@ -12,7 +12,11 @@ extern HMODULE GameAssemblyHandle;
 
 namespace IL2CPP
 {
-	struct String : Object { NOIMPLEMENT(String); };
+	struct String : Object 
+	{ 
+		NOIMPLEMENT(String); 
+		static constexpr const char* SystemTypeName = "System.String";
+	};
 
 	struct Type;
 
@@ -110,7 +114,7 @@ namespace IL2CPP
 
 	Object* GetField(Object* obj, const char* name, bool AAAAAAAAAAAAAAAAAAAAAAAAAA = false);
 
-	void SetField(Object* obj, const char* name, int pos, void* value);
+	void SetField(Object* obj, const char* name, int pos, void* value, bool debug = false);
 
 	void SetField(Object* obj, const std::string& fieldType, const std::string& variabledName, void* value);
 

@@ -541,7 +541,7 @@ Object* IL2CPP::GetField(Object* obj, const char* name, bool AAAAAAAAAAAAAAAAAAA
 	return NULL;
 }
 
-void IL2CPP::SetField(Object* obj, const char* name, int pos, void* value)
+void IL2CPP::SetField(Object* obj, const char* name, int pos, void* value, bool debug)
 {
 	if (obj == nullptr)
 	{
@@ -558,10 +558,14 @@ void IL2CPP::SetField(Object* obj, const char* name, int pos, void* value)
 
 		char* fieldtypename = IL2CPP::TypeGetName(fieldType);
 
+		
 
 		if (std::string(fieldtypename) == name)
 		{
-
+			if (debug)
+			{
+				ConsoleUtils::Log(i, " ", fieldtypename, ": ", IL2CPP::FieldGetName(field));
+			}
 			i++;
 			if (i == pos)
 			{

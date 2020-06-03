@@ -2,7 +2,7 @@
 
 
 
-void UnityEngine::UI::Text::SetText(std::string value)
+void UnityEngine::UI::Text::SetText(const std::string& value)
 {
 	using func_t = void (*)(UnityEngine::UI::Text* _this, IL2CPP::String* value);
 

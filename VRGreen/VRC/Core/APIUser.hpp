@@ -29,7 +29,7 @@ namespace VRC::Core
 
 		std::string getVRCA();
 
-	
+		std::string getLocation();
 	};
 
 }

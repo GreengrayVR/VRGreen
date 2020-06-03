@@ -16,6 +16,19 @@
 
 using namespace UnityEngine;
 
+inline std::string FormatMyName2(VRC::Player* player)
+{
+	auto apiuser = player->GetAPIUser();
+	auto userid = apiuser->getId();
+	bool isFriend = VRC::Core::APIUser::isFriendsWith(userid);
+
+	if (userid == VRC::Core::APIUser::currentUser()->getId())
+		return std::string("<color=#ee82ee>" + apiuser->displayName() + "</color>");
+	else if (isFriend)
+		return std::string("<color=yellow>" + apiuser->displayName() + "</color>");
+	else
+		return apiuser->displayName();
+}
 
 void VRCQuickMenu::ShowUserInteractMenu1()
 {
@@ -24,11 +37,13 @@ void VRCQuickMenu::ShowUserInteractMenu1()
 	if (Variables::userInteractMenu1)
 	{
 		Vector3 v{ 1,1,1 };
-		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/ShowAvatarStatsButton")->SetLocalScale(&v); // 
-		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/ShowAuthorButton")->SetLocalScale(&v); // 
-		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/ViewPlaylistsButton")->SetLocalScale(&v); // 
-		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/CloneAvatarButton")->SetLocalScale(&v); //
+		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/ShowAvatarStatsButton")->SetLocalScale(&v);
+		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/ShowAuthorButton")->SetLocalScale(&v);
+		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/ViewPlaylistsButton")->SetLocalScale(&v);
+		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/CloneAvatarButton")->SetLocalScale(&v);
 		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/ReportAbuseButton")->SetLocalScale(&v);
+		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/ReportAbuseButton")->SetLocalScale(&v);
+		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/SingleButton2220(2,-1)")->SetLocalScale(&v);
 
 		Vector3 v2{ 0,0,0 };
 		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/FriendButton")->SetLocalScale(&v2);
@@ -36,7 +51,6 @@ void VRCQuickMenu::ShowUserInteractMenu1()
 		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/BlockButton")->SetLocalScale(&v2);
 		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/ViewAvatarThreeToggle")->SetLocalScale(&v2);
 		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/MuteButton")->SetLocalScale(&v2);
-		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/MicOffButton")->SetLocalScale(&v2);
 		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/KickButton")->SetLocalScale(&v2);
 		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/WarnButton")->SetLocalScale(&v2);
 		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/SingleButton2120(3,-1)")->SetLocalScale(&v2);
@@ -44,11 +58,12 @@ void VRCQuickMenu::ShowUserInteractMenu1()
 	else
 	{
 		Vector3 v{ 0,0,0 };
-		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/ShowAvatarStatsButton")->SetLocalScale(&v); // 
-		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/ShowAuthorButton")->SetLocalScale(&v); // 
-		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/ViewPlaylistsButton")->SetLocalScale(&v); // 
-		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/CloneAvatarButton")->SetLocalScale(&v); //
+		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/ShowAvatarStatsButton")->SetLocalScale(&v);
+		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/ShowAuthorButton")->SetLocalScale(&v);
+		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/ViewPlaylistsButton")->SetLocalScale(&v);
+		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/CloneAvatarButton")->SetLocalScale(&v);
 		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/ReportAbuseButton")->SetLocalScale(&v);
+		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/SingleButton2220(2,-1)")->SetLocalScale(&v);
 
 		Vector3 v2{ 1,1,1 };
 		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/FriendButton")->SetLocalScale(&v2);
@@ -56,7 +71,6 @@ void VRCQuickMenu::ShowUserInteractMenu1()
 		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/BlockButton")->SetLocalScale(&v2);
 		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/ViewAvatarThreeToggle")->SetLocalScale(&v2);
 		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/MuteButton")->SetLocalScale(&v2);
-		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/MicOffButton")->SetLocalScale(&v2);
 		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/KickButton")->SetLocalScale(&v2);
 		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/WarnButton")->SetLocalScale(&v2);
 		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/SingleButton2120(3,-1)")->SetLocalScale(&v2);
@@ -71,7 +85,7 @@ void VRCQuickMenu::ShowUIElements2()
 	{
 		auto btnName = GetName(btn->getGameObject());
 
-		if (btnName == "ToggleButton133(-2,0)" ||btnName == "ToggleButton132(-1,-1)" ||btnName == "ToggleButton131(-2,-1)" ||btnName == "SingleButton1130(3,-1)" || btnName == "ToggleButton123(-3,0)" || btnName == "SingleButton1120(3,-1)" || btnName == "SingleButton116(1,-2)" || btnName == "ToggleButton115(-1,-2)" || btnName == "ToggleButton114(-3,-2)" || btnName == "ToggleButton113(-1,0)" || btnName == "ToggleButton112(-1,-1)" || btnName == "ToggleButton111(-3,-1)" || btnName == "ToggleButton110(-2,-1)" || btnName == "ToggleButton121(-1,0)" || btnName == "ToggleButton122(-2,0)")
+		if (btnName == "ToggleButton137(-2,-2)" ||btnName == "ToggleButton136(-3,-2)" ||btnName == "SingleButton135(0,-1)" ||btnName == "ToggleButton134(-1,0)" ||btnName == "ToggleButton133(-2,0)" ||btnName == "ToggleButton132(-1,-1)" ||btnName == "ToggleButton131(-2,-1)" ||btnName == "SingleButton1130(3,-1)" || btnName == "ToggleButton123(-3,0)" || btnName == "SingleButton1120(3,-1)" || btnName == "SingleButton116(1,-2)" || btnName == "ToggleButton115(-1,-2)" || btnName == "ToggleButton114(-3,-2)" || btnName == "ToggleButton113(-1,0)" || btnName == "ToggleButton112(-1,-1)" || btnName == "ToggleButton111(-3,-1)" || btnName == "ToggleButton110(-2,-1)" || btnName == "ToggleButton121(-1,0)" || btnName == "ToggleButton122(-2,0)")
 		{
 			if (Variables::uiElementsPage2)
 			{
@@ -90,6 +104,10 @@ void VRCQuickMenu::ShowUIElements2()
 				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleButton131(-2,-1)")->get_gameObject()->SetActive(true);
 				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleButton132(-1,-1)")->get_gameObject()->SetActive(true);
 				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleButton133(-2,0)")->get_gameObject()->SetActive(true);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleButton134(-1,0)")->get_gameObject()->SetActive(true);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/SingleButton135(0,-1)")->get_gameObject()->SetActive(true);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleButton136(-3,-2)")->get_gameObject()->SetActive(true);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleButton137(-2,-2)")->get_gameObject()->SetActive(true);
 				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/SingleButton1140(3,0)")->get_gameObject()->SetActive(true);
 			}
 			else
@@ -110,6 +128,10 @@ void VRCQuickMenu::ShowUIElements2()
 				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleButton131(-2,-1)")->get_gameObject()->SetActive(false);
 				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleButton132(-1,-1)")->get_gameObject()->SetActive(false);
 				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleButton133(-2,0)")->get_gameObject()->SetActive(false);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleButton134(-1,0)")->get_gameObject()->SetActive(false);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/SingleButton135(0,-1)")->get_gameObject()->SetActive(false);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleButton136(-3,-2)")->get_gameObject()->SetActive(false);
+				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/ToggleButton137(-2,-2)")->get_gameObject()->SetActive(false);
 				QuickMenu::Instance()->get_transform()->Find("UIElementsMenu/SingleButton1140(3,0)")->get_gameObject()->SetActive(false);
 			}
 		}
@@ -307,7 +329,7 @@ void VRCQuickMenu::SetupButtons()
 	QuickMenuButtons.push_back(emojiSpamButton);
 	emojiSpamButton->setActive(false);
 
-	auto changePedistalsButton = new SingleButton("UIElementsMenu", 124, 0, -1, "Change\nPedistals", CreateDetour([=]()
+	auto changePedistalsButton = new SingleButton("UIElementsMenu", 124, 0, -1, "Change\nPedestals", CreateDetour([=]()
 	{
 		Misc::ChangeAllPedistals();
 	}), "cant be sober");
@@ -349,7 +371,7 @@ void VRCQuickMenu::SetupButtons()
 	auto antiWorldTriggersButton = new ToggleButton("UIElementsMenu", 128, -2, -2, "Anti\nWorld Triggers", CreateDetour([=]()
 	{
 		Variables::antiWorldTriggers = true;
-	}), "NO", CreateDetour([=]()
+	}), "OFF", CreateDetour([=]()
 	{
 		Variables::antiWorldTriggers = false;
 	}), "sup4ik autist");
@@ -384,12 +406,12 @@ void VRCQuickMenu::SetupButtons()
 	auto rpcBlockNonFriendsButton = new ToggleButton("UIElementsMenu", 131, -2, -1, "RPC-Block\nNon-Friends", CreateDetour([=]()
 	{
 		Variables::rpcBlockNonFriends = true;
-		Misc::SerializeAll();
+		//Misc::SerializeAll();
 
 	}), "OFF", CreateDetour([=]()
 	{
 		Variables::rpcBlockNonFriends = false;
-		Misc::SerializeAll();
+		//Misc::SerializeAll();
 	}), "my ass");
 	QuickMenuButtons.push_back(rpcBlockNonFriendsButton);
 	rpcBlockNonFriendsButton->setActive(false);
@@ -415,6 +437,45 @@ void VRCQuickMenu::SetupButtons()
 	fakePingButton->setActive(false);
 	fakePingButton->btnOn->SetActive(true);
 	fakePingButton->btnOff->SetActive(false);
+
+	auto audioCrashBtn = new ToggleButton("UIElementsMenu", 134, -1, 0, "Audio\nCrash", CreateDetour([=]()
+	{
+		Misc::ChangeAvatar("avtr_a9219b9e-b5ad-47b8-9135-09e9d1666dbc");
+	}), "OFF", CreateDetour([=]()
+	{
+		Misc::ChangeAvatar("avtr_61bb01ab-8363-4f12-9cda-3b6931dd2c43");
+	}), "suck my fat weiner");
+	QuickMenuButtons.push_back(audioCrashBtn);
+	audioCrashBtn->setActive(false);
+
+	auto selectYourselfButton = new SingleButton("UIElementsMenu", 135, 0, -1, "Select\nYourself", CreateDetour([=]()
+	{
+		Misc::SelectYourself();
+	}), "fuck theres a lot of buttons idk what to say");
+	QuickMenuButtons.push_back(selectYourselfButton);
+	selectYourselfButton->setActive(false);
+
+	auto disablePlayersButton = new ToggleButton("UIElementsMenu", 136, -3, -2, "Disable\nPlayers", CreateDetour([=]()
+	{
+		Misc::SerializeAll();
+	}), "OFF", CreateDetour([=]()
+	{
+		Misc::SerializeAll();
+	}), "head hurts");
+	QuickMenuButtons.push_back(disablePlayersButton);
+	disablePlayersButton->setActive(false);
+
+	auto portalKOSButton = new ToggleButton("UIElementsMenu", 137, -2, -2, "Portal\nKOS", CreateDetour([=]() // TODO: Fix bug with uninitialized buttons in quickmenu
+	{
+		Variables::portalKOS = true;
+	}), "OFF", CreateDetour([=]()
+	{
+		Variables::portalKOS = false;
+	}), "Sup4ik#1111 <- add him uwu");
+	QuickMenuButtons.push_back(portalKOSButton);
+	portalKOSButton->setActive(false);
+	portalKOSButton->btnOn->SetActive(true);
+	portalKOSButton->btnOff->SetActive(false);
 #pragma endregion
 
 
@@ -488,6 +549,29 @@ void VRCQuickMenu::SetupButtons()
 		ConsoleUtils::VRLog(apiuser->displayName() + " valume is now " + std::to_string(speakerVolume));
 	}), "so much");
 	QuickMenuButtons.push_back(soundVolumeDown);
+
+	auto ButtonAddPortalKOS = new SingleButton("UserInteractMenu", 2220, 2, -1, "Add to\nPortal KOS", CreateDetour([=]()
+		{
+			auto apiuser = QuickMenu::Instance()->SelectedUser();
+			std::string displayName = apiuser->displayName();
+			std::string userid = apiuser->getId();
+
+			if (Variables::portalKOSList.find(userid) == Variables::portalKOSList.end())
+			{
+				Variables::portalKOSList.insert(userid);
+				ConsoleUtils::Log(red, displayName, " added to Portal KOS");
+				ConsoleUtils::VRLog(FormatMyName2(VRC::PlayerManager::GetPlayer(userid)) + " <color=red>added to Portal KOS</color>");
+			}
+			else
+			{
+				Variables::portalKOSList.erase(userid);
+				ConsoleUtils::Log(green, displayName, " removed from Portal KOS");
+				ConsoleUtils::VRLog(FormatMyName2(VRC::PlayerManager::GetPlayer(userid)) + " <color=red>removed from Portal KOS</color>");
+			}
+		}), "fuck niggas");
+	QuickMenuButtons.push_back(ButtonAddPortalKOS);
+	v = { 0,0,0 };
+	ButtonAddPortalKOS->getGameObject()->GetTransform()->SetLocalScale(&v);
 #pragma endregion
 }
 
