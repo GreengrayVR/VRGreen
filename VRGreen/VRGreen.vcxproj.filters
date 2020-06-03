@@ -261,6 +261,9 @@
     <ClCompile Include="ExtendedAvatars.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
+    <ClCompile Include="utf.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IL2CPP\IL2CPP.hpp">
@@ -502,6 +505,9 @@
     </ClInclude>
     <ClInclude Include="VRCSocialMenu.hpp">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utf.hpp">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

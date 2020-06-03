@@ -1,5 +1,6 @@
 #include "IL2CPP.hpp"
 #include "ConsoleUtils.hpp"
+#include "utf.hpp"
 
 using namespace IL2CPP;
 
@@ -22,11 +23,21 @@ IL2CPP::String* IL2CPP::StringNew(std::string str)
 	return func(str.c_str());
 }
 
-std::string IL2CPP::utf16_to_utf8(std::u16string str)
+std::string IL2CPP::utf16_to_utf8(const char16_t* str)
 {
-	std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> convertor;
-	return convertor.to_bytes(str);
+	std::size_t size = 0; 
+	while (str[size]) 
+		++size;
+
+	std::string sstr(size * 4 + 4, 0);
+	
+	size_t newSize = utf::detail::utf16To8(str, str + size, sstr.begin(), sstr.end());
+	sstr.resize(newSize);
+	return sstr;
 }
+
+using GetCharsFunc_t = const char16_t* (*)(String* str_t);
+inline static GetCharsFunc_t GetCharsFunc2 = nullptr;
 
 std::string IL2CPP::StringChars(String* str)
 {
@@ -36,11 +47,10 @@ std::string IL2CPP::StringChars(String* str)
 		return "stringchars nullptr";
 	}
 
-	using GetCharsFunc_t = const char16_t* (*)(String* str_t);
+	if(GetCharsFunc2 == nullptr)
+		GetCharsFunc2 = (GetCharsFunc_t)GetProcAddress(::GameAssemblyHandle, "il2cpp_string_chars"); // _0 possibly
 
-	GetCharsFunc_t GetCharsFunc = (GetCharsFunc_t)GetProcAddress(::GameAssemblyHandle, "il2cpp_string_chars"); // _0 possibly
-
-	return utf16_to_utf8(GetCharsFunc(str));
+	return utf16_to_utf8(GetCharsFunc2(str));
 }
 
 void* IL2CPP::ResolveCall(const char* name) // il2cpp_resolve_icall
@@ -526,7 +536,7 @@ Object* IL2CPP::GetField(Object* obj, const char* name, bool AAAAAAAAAAAAAAAAAAA
 
 	void* iter = nullptr;
 
-	while (auto field = IL2CPP::GetFields(objClass, &iter))
+	while (auto field = IL2CPP::GetFields(objClass, &iter)) // TODO: check memory usage
 	{
 		const char* fieldName = IL2CPP::FieldGetName(field);
 

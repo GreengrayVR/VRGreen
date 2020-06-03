@@ -120,7 +120,7 @@ void Misc::KickUserRPC(UnityEngine::GameObject* modManager, const std::string& u
 UnityEngine::Color Misc::GetRainbow()
 {
 	using HSVToRGB_t = UnityEngine::Color (*)(float H, float S, float V); // TODO: HSVToRGB google and remake
-	HSVToRGB_t HSVToRGB = GetMethod<HSVToRGB_t>(HSVTORGB); //	
+	HSVToRGB_t HSVToRGB = GetMethod<HSVToRGB_t>(HSVTORGB);
 	
 
 	return HSVToRGB(std::fabsf(fmodf(((Time::time() + 1.f) * 0.1f), (1.f * 2)) - 1.f), 1.f, 1.f);

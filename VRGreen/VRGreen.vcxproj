@@ -70,6 +70,7 @@
     <ClCompile Include="UnityEngine\Transform.cpp" />
     <ClCompile Include="UnityEngine\Vector3.cpp" />
     <ClCompile Include="UnityEvent.cpp" />
+    <ClCompile Include="utf.cpp" />
     <ClCompile Include="VRCPlayer.cpp" />
     <ClCompile Include="VRCPlayerApi.cpp" />
     <ClCompile Include="VRCQuickMenu.cpp" />
@@ -148,6 +149,7 @@
     <ClInclude Include="UnityEngine\Vector3.hpp" />
     <ClInclude Include="UnityEvent.h" />
     <ClInclude Include="UserInteractMenu.hpp" />
+    <ClInclude Include="utf.hpp" />
     <ClInclude Include="Utils\http.h" />
     <ClInclude Include="Utils\Offsets.h" />
     <ClInclude Include="Variables.hpp" />
