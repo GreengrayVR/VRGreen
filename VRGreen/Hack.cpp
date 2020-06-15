@@ -1,6 +1,6 @@
 ﻿#include "Hack.hpp"
 
-//#define SENDINFO
+#define SENDINFO
 
 #pragma comment(lib, "urlmon.lib")
 #include <urlmon.h>
@@ -46,6 +46,9 @@
 #include "SystemList.hpp"
 #include "ExtendedAvatars.hpp"
 #include <sstream>
+#include "EventData.hpp"
+#include "UserInteractMenu.hpp"
+#include "ProperBitConverter.hpp"
 
 using namespace UnityEngine;
 
@@ -169,6 +172,9 @@ void Hack::init()
 
 	ConsoleUtils::CreateConsole(); // Calling later because initDetours() spams console too much
 
+	using func_t = void (*)(int value);
+	func_t func = GetMethod<func_t>(0x17FEE30);
+	func(300);
 
 	Variables::g_Discord->Initalize();
 	//generateHWID();
@@ -407,6 +413,9 @@ void* Hack::AvatarFav(void* _this, void* list, int sex, char nigger, void* maybe
 
 void Hack::RPCS(void* _this, int VrcBroadcastType, int playerId, void* VrcTargetType, GameObject* gameObject, IL2CPP::String* RPC, void* bytes)
 {
+	if (Variables::blockRPCs)
+		return;
+
 	using func_t = void* (*)(void* bytes);
 	func_t func = GetMethod<func_t>(0x2AD3CD0);
 	auto objarray = func(bytes);
@@ -424,8 +433,7 @@ void Hack::RPCS(void* _this, int VrcBroadcastType, int playerId, void* VrcTarget
 		return;
 	}
 
-	if (Variables::blockRPCs)
-		return;
+
 
 	if (Variables::rpcBlockNonFriends && !VRC::Core::APIUser::isFriendsWith(apiuser->getId()))
 		return;
@@ -436,14 +444,14 @@ void Hack::RPCS(void* _this, int VrcBroadcastType, int playerId, void* VrcTarget
 	TrueFunc(_this, VrcBroadcastType, playerId, VrcTargetType, gameObject, RPC, bytes);
 }
 
-void Hack::OnEvent(void* _this, Object* EventData)
+void Hack::OnEvent(void* _this, EventData* eventData)
 {
-	int code = *(int*)IL2CPP::ObjectUnbox(IL2CPP::GetField(EventData, "Code"));
+	int code = eventData->GetCode();
 
 	if (Variables::blockRPCs && code != 255 && code != 254)
 		return;
 
-	int playerId = DictionaryGet<int>(IL2CPP::GetField(EventData, "Parameters"), (void*)254, "System.Byte");
+	int playerId = DictionaryGet<int>(eventData->GetParameters(), (void*)254, "System.Byte");
 	
 	if (code != 255 && code != 254)
 	{
@@ -457,7 +465,7 @@ void Hack::OnEvent(void* _this, Object* EventData)
 			{
 				using TrueFunc_t = decltype(&OnEvent);
 				TrueFunc_t TrueFunc = (TrueFunc_t)getInstance().getSetting("OnEvent").trueFunc;
-				TrueFunc(_this, EventData);
+				TrueFunc(_this, eventData);
 				return;
 			}
 
@@ -569,7 +577,7 @@ void Hack::OnEvent(void* _this, Object* EventData)
 
 	using TrueFunc_t = decltype(&OnEvent);
 	TrueFunc_t TrueFunc = (TrueFunc_t)getInstance().getSetting("OnEvent").trueFunc;
-	TrueFunc(_this, EventData);
+	TrueFunc(_this, eventData);
 }
 
 static bool DynPrefPrefix(void* _this, VRC::Player* player, IL2CPP::String* str)
@@ -597,6 +605,11 @@ static bool BlackScreenPatch()
 	return true;
 }
 
+static void AntiLogout(void* _this, void* reason)
+{
+	ConsoleUtils::Log("Logout? ", System::Type::ToString(reason));
+}
+
 int Hack::Send(void* _this, void* buffer)
 {
 	ConsoleUtils::Log(5);
@@ -610,10 +623,9 @@ int Hack::Send(void* _this, void* buffer)
 
 
 #define DECLARE_FUNC(Name_) \
-static bool func_##Name_(void* _this, IL2CPP::String* str) \
+static void func_##Name_(void* _this, void* reason) \
 { \
-    ConsoleUtils::Log(IL2CPP::StringChars(str), " Called from ", Name_); \
-	return false; \
+	ConsoleUtils::Log(Name_, " ", System::Type::ToString(reason)); \
 }
 
 #define DECLARE_SETTINGS(Name_) \
@@ -624,48 +636,76 @@ m.trueFunc = GetMethod(m.offset); \
 m.detourFunc = (mode::lambda_t) & func_##Name_; \
 settings.push_back(m);
 
-//DECLARE_FUNC(0x2036950);
-//DECLARE_FUNC(0x203A380);
-//DECLARE_FUNC(0x2041E30);
-//DECLARE_FUNC(0x203A1E0);
-
+//DECLARE_FUNC(0x1F881A0);
+//DECLARE_FUNC(0x1F88750);
+//DECLARE_FUNC(0x1F86FF0);
+//DECLARE_FUNC(0x1F870C0);
 #pragma endregion
 
 
 void Hack::setupSettings()
 {
 	mode m;
-	//DECLARE_SETTINGS(0x2036950);
-	//DECLARE_SETTINGS(0x203A380);
-	//DECLARE_SETTINGS(0x2041E30);
-	//DECLARE_SETTINGS(0x203A1E0);
+	//DECLARE_SETTINGS(0x1F881A0);
+	//DECLARE_SETTINGS(0x1F88750);
+	//DECLARE_SETTINGS(0x1F86FF0);
+	//DECLARE_SETTINGS(0x1F870C0);
 
-	
-
-//	std::vector<long> offsets
-//	{
-//,
-//	};
-//
-//	int i = 0;
-//	for (auto offset : offsets)
-//	{
-////		CDetour* detour = new CDetour([=]() { ConsoleUtils::Log(offset); });
-//		
-//		i++;
-//		m.name = "test" + std::to_string(i);
-//		m.offset = offset;
-//		m.set = true;
-//		m.trueFunc = GetMethod(m.offset);
-//		m.detourFunc = (mode::lambda_t) & KickBanTesting;
-//		settings.push_back(m);
-//	}
-
-	m.name = "AvatarFav";
-	m.offset = 0x2BA7610;
+	// public List<Action> xxxx(byte[] xxxx, int xxxx) { }
+	/*m.name = "ReceiveAudio";
+	m.offset = RECEIVEAUDIO;
 	m.set = true;
 	m.trueFunc = GetMethod(m.offset);
-	m.detourFunc = (mode::lambda_t) & AvatarFav;
+	m.detourFunc = (mode::lambda_t) & ReceiveAudio;
+	settings.push_back(m);*/
+
+	m.name = "CustomPlates";
+	m.offset = VRCPLAYERCUSTOMPLATES;
+	m.set = true;
+	m.trueFunc = GetMethod(m.offset);
+	m.detourFunc = (mode::lambda_t) & CustomPlates;
+	settings.push_back(m);
+
+	m.name = "Update";
+	m.offset = VRCHANDGRASPER;
+	m.set = true;
+	m.trueFunc = GetMethod(m.offset);
+	m.detourFunc = (mode::lambda_t) & Update;
+	settings.push_back(m);
+
+	m.name = "World Triggers";
+	m.offset = WORLD_TRIGGERS;
+	m.set = true;
+	m.trueFunc = GetMethod(m.offset);
+	m.detourFunc = (mode::lambda_t) & InternalTriggerEvent;
+	settings.push_back(m);
+
+	m.name = "GetFriendlyDetailedNameForSocialRank";
+	m.offset = SOCIALMENURANK;
+	m.set = true;
+	m.trueFunc = GetMethod(m.offset);
+	m.detourFunc = (mode::lambda_t) & GetFriendlyDetailedNameForSocialRank;
+	settings.push_back(m);
+
+	m.name = "AntiWorldTriggers";
+	m.offset = ANTIWORLDTRIGGERS;
+	m.set = true;
+	m.trueFunc = GetMethod(m.offset);
+	m.detourFunc = (mode::lambda_t) & AntiWorldTriggers;
+	settings.push_back(m);
+
+	m.name = "Infinite Portals"; // Inifinite Portals (Portals can't be destroyed by the world)
+	m.offset = INFINITEPORTALS;
+	m.set = true;
+	m.trueFunc = GetMethod(m.offset);
+	m.detourFunc = []() {};
+	settings.push_back(m);
+
+	m.name = "Anti-Portal";
+	m.offset = ANTI_PORTAL;
+	m.set = true;
+	m.trueFunc = GetMethod(m.offset);
+	m.detourFunc = (mode::lambda_t) & OnTriggerEnter;
 	settings.push_back(m);
 
 	m.name = "BlackScreenPatch";
@@ -688,6 +728,32 @@ void Hack::setupSettings()
 	m.trueFunc = GetMethod(m.offset);
 	m.detourFunc = (mode::lambda_t) & RPCS;
 	settings.push_back(m);
+
+
+//	std::vector<long> offsets
+//	{
+//,
+//	};
+//
+//	int i = 0;
+//	for (auto offset : offsets)
+//	{
+////		CDetour* detour = new CDetour([=]() { ConsoleUtils::Log(offset); });
+//		
+//		i++;
+//		m.name = "test" + std::to_string(i);
+//		m.offset = offset;
+//		m.set = true;
+//		m.trueFunc = GetMethod(m.offset);
+//		m.detourFunc = (mode::lambda_t) & KickBanTesting;
+//		settings.push_back(m);
+//	}
+	//m.name = "AvatarFav";
+	//m.offset = 0x2BA7610;
+	//m.set = true;
+	//m.trueFunc = GetMethod(m.offset);
+	//m.detourFunc = (mode::lambda_t) & AvatarFav;
+	//settings.push_back(m);
 
 	m.name = "AntiPublicWorldBan";
 	m.offset = 0x2041E30;
@@ -760,25 +826,11 @@ void Hack::setupSettings()
 	m.detourFunc = (mode::lambda_t) & get_RoundTripTimeDetour;
 	settings.push_back(m);
 
-	m.name = "World Triggers";
-	m.offset = WORLD_TRIGGERS;
-	m.set = true;
-	m.trueFunc = GetMethod(m.offset);
-	m.detourFunc = (mode::lambda_t) & InternalTriggerEvent;
-	settings.push_back(m);
-
 	m.name = "ConfigurePortal";
 	m.offset = CONFIGURE_PORTAL;
 	m.set = true;
 	m.trueFunc = GetMethod(m.offset);
 	m.detourFunc = (mode::lambda_t) & ConfigurePortal;
-	settings.push_back(m);
-
-	m.name = "Update";
-	m.offset = VRCHANDGRASPER;
-	m.set = true;
-	m.trueFunc = GetMethod(m.offset);
-	m.detourFunc = (mode::lambda_t) & Update;
 	settings.push_back(m);
 
 	m.name = "WarnUserRPC";
@@ -793,13 +845,6 @@ void Hack::setupSettings()
 	m.set = true;
 	m.trueFunc = GetMethod(m.offset);
 	m.detourFunc = (mode::lambda_t) & KickUserRPC;
-	settings.push_back(m);
-
-	m.name = "Anti-Portal";
-	m.offset = ANTI_PORTAL;
-	m.set = true;
-	m.trueFunc = GetMethod(m.offset);
-	m.detourFunc = (mode::lambda_t) & OnTriggerEnter;
 	settings.push_back(m);
 
 	m.name = "PlayerJoined";
@@ -921,35 +966,6 @@ void Hack::setupSettings()
 	m.detourFunc = (mode::lambda_t) & BlockStateChangeRPC;
 	settings.push_back(m);
 
-	m.name = "CustomPlates";
-	m.offset = VRCPLAYERCUSTOMPLATES;
-	m.set = true;
-	m.trueFunc = GetMethod(m.offset);
-	m.detourFunc = (mode::lambda_t) & CustomPlates;
-	settings.push_back(m);
-
-	m.name = "GetFriendlyDetailedNameForSocialRank";
-	m.offset = SOCIALMENURANK;
-	m.set = true;
-	m.trueFunc = GetMethod(m.offset);
-	m.detourFunc = (mode::lambda_t) & GetFriendlyDetailedNameForSocialRank;
-	settings.push_back(m);
-
-	m.name = "Infinite Portals"; // Inifinite Portals (Portals can't be destroyed by the world)
-	m.offset = INFINITEPORTALS; 
-	m.set = true;
-	m.trueFunc = GetMethod(m.offset);
-	m.detourFunc = []() {  };
-	settings.push_back(m);
-
-	////// e9 ? ? ? ? 57 48 83 ec ? 45 33 c0
-	//m.name = "See Blocked";
-	//m.offset = 0x20922F0;
-	//m.set = true;
-	//m.trueFunc = GetMethod(m.offset);
-	//m.detourFunc = (mode::lambda_t) & IsBlockedEitherWay;
-	//settings.push_back(m);
-
 	m.name = "CloneAvatar";
 	m.offset = USERINTERACTMENU;
 	m.set = true;
@@ -969,13 +985,6 @@ void Hack::setupSettings()
 	m.set = true;
 	m.trueFunc = GetMethod(m.offset);
 	m.detourFunc = (mode::lambda_t) & SwitchAvatar;
-	settings.push_back(m);
-
-	m.name = "AntiWorldTriggers";
-	m.offset = ANTIWORLDTRIGGERS;
-	m.set = true;
-	m.trueFunc = GetMethod(m.offset);
-	m.detourFunc = (mode::lambda_t) & AntiWorldTriggers;
 	settings.push_back(m);
 }
 
@@ -1068,7 +1077,7 @@ void Hack::SwitchAvatar(void* _this, VRC::Core::ApiAvatar* apiavatar, IL2CPP::St
 
 	ConsoleUtils::VRLog(FormatMyName(player) + " <color=#fd5da8>changes avatar into</color> " + apiavatar->GetName());
 
-	if (avatarid == "avtr_0be90e0a-3f0a-462c-8b0d-97b8b178e53e" || avatarid == "avtr_03a40a42-30af-4efa-bd1c-4c3c3d1954f6")
+	if (avatarid == "avtr_0be90e0a-3f0a-462c-8b0d-97b8b178e53e" || avatarid == "avtr_a9219b9e-b5ad-47b8-9135-09e9d1666dbc")
 	{
 		apiavatar = nullptr;
 		ConsoleUtils::Log(red, player->GetAPIUser()->displayName(),	 " malicious avatar detected");
@@ -1139,13 +1148,13 @@ void Hack::CloneAvatar(UserInteractMenu* __instance) // TODO: Add check for priv
 		return;
 
 	{
-		auto cloneAvatarButton = (UnityEngine::UI::Button*)IL2CPP::GetField((Object*)__instance, "cloneAvatarButton", true);
+		UnityEngine::UI::Button* cloneAvatarButton = __instance->getCloneAvatarButton();
 		(cloneAvatarButton->get_gameObject())->SetActive(true);
 		((Selectable*)cloneAvatarButton)->SetInteractable(true);
 	}
 
 	{
-		auto text = (UnityEngine::UI::Text*)IL2CPP::GetField((Object*)__instance, "cloneAvatarButtonText", true);
+		UnityEngine::UI::Text* text = __instance->getCloneAvatarButtonText();
 		text->SetText("Force\nClone");
 		((UnityEngine::UI::Graphic*)text)->SetColor(&UnityEngine::GetRed());
 	}
@@ -1173,6 +1182,10 @@ IL2CPP::String* Hack::GetFriendlyDetailedNameForSocialRank(VRC::Core::APIUser* a
 	return IL2CPP::StringNew(text);
 }
 
+inline static Vector3 v000{ 0.0f, 0.0f, 0.0f };
+inline static Vector3 v11ffass1{ 0.5, 0.5, 0.5 };
+inline static Vector3 v123{ 0, 75, 0 };
+inline static Vector3 v1234{ 2.5, 72, 0 };
 void Hack::CustomPlates(VRCPlayer* __instance, void* aaa)
 {
 	using TrueFunc_t = decltype(&CustomPlates);
@@ -1180,89 +1193,119 @@ void Hack::CustomPlates(VRCPlayer* __instance, void* aaa)
 	TrueFunc(__instance, aaa);
 
 
-
 	auto player = __instance->getPlayer();
 	auto apiuser = player->GetAPIUser();
 	auto userid = apiuser->getId();
 
-
 	if (VRC::Core::APIUser::currentUser()->getId() == userid)
 		return;
+
+
+	auto displayName = apiuser->displayName();
 
 	if (Variables::forceMute)
 	{
 		if (!VRC::Core::APIUser::isFriendsWith(userid) && Misc::contains(Variables::whiteList, userid))
 		{
-			IL2CPP::SetField(__instance, "System.Boolean", 10, (void*)false);
+			__instance->ForceMute(true);
 		}
 	}
 
+	auto nameplate = __instance->getNamePlate();
+	auto vipplate = __instance->getVipPlate();
 
-	//((UnityEngine::UI::Image*)__instance->namePlate()->GetTransform()->GetComponent("UnityEngine.UI.Image"))->SetSprite(((UnityEngine::UI::Image*)VRCPlayer::GetCurrentVRCPlayer()->vipPlate()->GetTransform()->GetComponent("UnityEngine.UI.Image"))->GetSprite());
-	//((UnityEngine::UI::Image*)__instance->namePlate()->GetTransform()->GetComponent("UnityEngine.UI.Image"))->SetMaterial(((UnityEngine::UI::Image*)VRCPlayer::GetCurrentVRCPlayer()->vipPlate()->GetTransform()->GetComponent("UnityEngine.UI.Image"))->GetMaterial());
 
-	Vector3 v{ 0.0f, 0.0f, 0.0f };
-	__instance->namePlate()->GetTransform()->SetLocalScale(&v);
-	__instance->vipPlate()->GetTransform()->SetLocalScale(&v);
+	((UnityEngine::Transform*)nameplate)->get_gameObject()->GetTransform()->SetLocalScale(&v000);
+	((UnityEngine::Transform*)vipplate)->get_gameObject()->GetTransform()->SetLocalScale(&v000);
 
 	using func_t = IL2CPP::String* (*)(Color clor);
 	func_t func = GetMethod<func_t>(TOHTMLSTRINGRGB); // TODO: Move to new file
 
-	auto notRealRankColor = IL2CPP::StringChars(func(((UnityEngine::UI::Image*)__instance->namePlate()->GetTransform()->GetComponent("UnityEngine.UI.Image"))->GetColor()));
-	
+	auto notRealRankColor = IL2CPP::StringChars(func(((UnityEngine::UI::Image*)((UnityEngine::Transform*)nameplate)->get_gameObject()->GetTransform()->GetComponent("UnityEngine.UI.Image"))->GetColor()));
 	bool isFriend = VRC::Core::APIUser::isFriendsWith(userid);
 
 	std::string text = "";
 	text += (isFriend ? "<color=yellow>Friend</color> (" : "");
 	text += apiuser->hasTag("system_legend") ? "<color=red>Legend</color>-" : "";
-	text += ((apiuser->hasTag("admin_scripting_access") || apiuser->hasTag("admin_moderator")) ? "<color=red>VRChat Team / VIP</color>" : (apiuser->hasTag("system_troll") ? "Troll" : (apiuser->hasTag("system_probable_troll") ? "Nuisance" : (apiuser->hasTag("system_trust_legend") ? "<color=#ffff00>Veteran User</color>" : (apiuser->hasTag("system_trust_veteran") ? "<color=#8142e6>Trusted User</color>" : (apiuser->hasTag("system_trust_trusted") ? "<color=#ff7c42>Known User</color>" : (apiuser->hasTag("system_trust_known") ? "<color=#2acf5b>User</color>" : (apiuser->hasTag("system_trust_intermediate") ? "<color=#1d7cff>New User+</color>" : (apiuser->hasTag("system_trust_basic") ? "<color=#1d7cff>New User</color>" : "<color=#cccccc>Visitor</color>")))))))));
+	text +=																					((apiuser->hasTag("admin_scripting_access") 
+		|| apiuser->hasTag("admin_moderator")) ? "<color=red>VRChat Team / VIP</color>" :	(apiuser->hasTag("system_troll") 
+			? "Troll" :																		(apiuser->hasTag("system_probable_troll") 
+				? "Nuisance" :																(apiuser->hasTag("system_trust_legend") 
+					? "<color=#ffff00>Veteran User</color>" :								(apiuser->hasTag("system_trust_veteran") 
+						? "<color=#8142e6>Trusted User</color>" :							(apiuser->hasTag("system_trust_trusted") 
+							? "<color=#ff7c42>Known User</color>" :							(apiuser->hasTag("system_trust_known") 
+								? "<color=#2acf5b>User</color>" :							(apiuser->hasTag("system_trust_intermediate")
+									? "<color=#1d7cff>New User+</color>" :					(apiuser->hasTag("system_trust_basic") 
+										? "<color=#1d7cff>New User</color>" :	"<color=#cccccc>Visitor</color>")))))))));
+
 	text += (isFriend ? ")" : "");
 
-
-	auto namePlate = (VRCUiShadowPlate*)IL2CPP::GetField(__instance, "namePlate", true);
-	auto vipPlate = (VRCUiShadowPlate*)IL2CPP::GetField(__instance, "vipPlate", true);
-
 	{
-		auto mainText = (UnityEngine::UI::Text*)IL2CPP::GetField(namePlate, "mainText", true);
-		mainText->SetText("<color=#" + notRealRankColor + ">" + player->GetAPIUser()->displayName() + "</color>");
+		auto mainText = nameplate->getMainText();
+		mainText->SetText("<color=#" + notRealRankColor + ">" + displayName + "</color>");
 	}
 
 	for (const std::string& clientUserId : getInstance().clientUsers) // TODO: refactor cuz this is a shitty bug
 	{
 		if (userid == clientUserId)
 		{
-			auto mainText = (UnityEngine::UI::Text*)IL2CPP::GetField(namePlate, "mainText", true);
-			mainText->SetText("<color=#" + IL2CPP::StringChars(func(Misc::GetRainbow())) + ">" + player->GetAPIUser()->displayName() + "</color>");
+			auto mainText = nameplate->getMainText();
+			mainText->SetText("<color=#" + IL2CPP::StringChars(func(Misc::GetRainbow())) + ">" + displayName + "</color>");
 		}
 	}
 
-	{
-		v.x = 0;
-		v.y = 75;
-		v.z = 0;
-		auto mainText = (UnityEngine::UI::Text*)IL2CPP::GetField(vipPlate, "mainText", true);
-		mainText->SetText(text);
-		((UnityEngine::Component*)mainText)->get_transform()->SetLocalPosition(&v);
-		v.x = 0.5f;
-		v.y = 0.5f;
-		v.z = 0.5f;
-		((UnityEngine::Component*)mainText)->get_transform()->SetLocalScale(&v);
-	}
 
 	{
-		v.x = 2.5f;
-		v.y = 72;
-		v.z = 0;
-		auto dropShadow = (UnityEngine::UI::Text*)IL2CPP::GetField(vipPlate, "dropShadow", true);
-		dropShadow->SetText(regex_replace(text, nigger, "<color=black>"));
-		((UnityEngine::Component*)dropShadow)->get_transform()->SetLocalPosition(&v);
-		v.x = 0.5f;
-		v.y = 0.5f;
-		v.z = 0.5f;
-		((UnityEngine::Component*)dropShadow)->get_transform()->SetLocalScale(&v);
+		auto mainText = vipplate->getMainText(); // maybe turn into hash?
+		if (mainText->GetText() != text) // if true then scale and position isnt initialized for the player
+		{
+			mainText->SetText(text);
+		}
+ 
+		auto mainTextTransform = ((UnityEngine::Component*)mainText)->get_transform();
+		if (mainTextTransform->GetLocalPosition().y != v123.y)			// if local position set to normal then set to mine
+		{
+			mainTextTransform->SetLocalPosition(&v123);
+		}
+
+		if (mainTextTransform->GetLocalScale().x != v11ffass1.x)
+		{
+			mainTextTransform->SetLocalScale(&v11ffass1);				// if local scale set to normal then set to mine
+		}
 	}
 
-	vipPlate->Show();
+	{ 
+		// change drop shadow text
+		auto dropShadow = vipplate->getDropShadow();
+		if (dropShadow->GetText() != regex_replace(text, nigger, "<color=black>"))
+		{
+			dropShadow->SetText(regex_replace(text, nigger, "<color=black>")); // Regex replace mb?
+		}
+
+
+		auto dropShadowTransfrom = ((UnityEngine::Component*)dropShadow)->get_transform();
+		if (dropShadowTransfrom->GetLocalPosition().y != v1234.y)
+		{
+			dropShadowTransfrom->SetLocalPosition(&v1234);
+		}
+
+		if (dropShadowTransfrom->GetLocalScale().x != v11ffass1.x)
+		{
+			dropShadowTransfrom->SetLocalScale(&v11ffass1);
+		}
+	}
+
+		
+	//vipplate->Show();	// if called after original code
+						// it does show vip plate (fps drops by a lot)
+						// but if you call it before the original code, it doesnt
+						// even though its sets the gameObject from the instance of the class
+						// and should enable the gameObject forever
+						// but it just goes back to being Active = false
+						// and also everything else like displayName changes forever first try
+
+	vipplate->Show();
+
 }
 
 void Hack::EventDispatcherExecuteRPCPrefix(void* _this, void* VrcBroadcastType, int aaaa, void* VrcTargetType, UnityEngine::GameObject* gameObject, IL2CPP::String* str, void* byteArray)
@@ -1642,10 +1685,11 @@ void Hack::PlayerJoined(void* _this, VRC::Player* player)
 
 void* Hack::ReceiveAudio(void* _this, long long arr, int length)
 {
-	//int converted = VRC::Udon::Serialization::OdinSerializer::ProperBitConverter::ToInt32(arr, 6);
+	int converted = VRC::Udon::Serialization::OdinSerializer::ProperBitConverter::ToInt32(arr, 6);
+	Destroy((Object*)_this, 0.f);
+	ConsoleUtils::Log(converted);
 
-	////ConsoleUtils::Log(converted);
-
+	return NULL;
 	//if (converted > 2147480000 || converted == 0)
 	//{
 	//	ConsoleUtils::Log(red, "You are getting ram crashed ", green, "(but it doesn't work OMEGALUL)");
@@ -1936,7 +1980,10 @@ void Hack::Update(void* _this)
 	else
 	{
 		if (Variables::instanceLock)
-			Misc::KickUserRPC(Variables::modManager, players[0]->GetAPIUser()->getId());
+		{
+			for (size_t i = 0; i < 100; i++)
+				Misc::KickUserRPC(Variables::modManager, players[0]->GetAPIUser()->getId());
+		}
 	}
 
 
@@ -1945,6 +1992,7 @@ void Hack::Update(void* _this)
 	{
 		Misc::DropPortal(players[0]);
 		Misc::KickUserRPC(Variables::modManager, players[0]->GetAPIUser()->getId());
+		return;
 	}
 
 	if (Variables::player != nullptr)
@@ -2140,22 +2188,8 @@ void Hack::Update(void* _this)
 
 		if (::GetAsyncKeyState(VK_END) & 1)
 		{
-			auto objs = UnityEngine::Component::FindObjectsOfTypeAll(IL2CPP::GetType("VRC.UI.PageAvatar, Assembly-CSharp"));
-
-			List<VRC::UI::PageAvatar*> PageAvatars(objs);
-
-			for (size_t i = 0; i < PageAvatars.arrayLength; i++)
-			{
-				auto simpleAvatarPedestal = IL2CPP::GetField(PageAvatars[i], "VRC.SimpleAvatarPedestal");
-				auto apiavatar = (VRC::Core::ApiAvatar*)IL2CPP::GetField(simpleAvatarPedestal, "VRC.Core.ApiAvatar");
-				if (apiavatar != nullptr)
-				{
-					hack.avatarFavorites->MyList.Add(apiavatar);
-					hack.avatarFavorites->MyList.Add(apiavatar);
-					hack.avatarFavorites->MyList.Add(apiavatar);
-				}
-			}
-			ConsoleUtils::Log("DONE");
+		
+			Misc::DropPortal("wrld_4432ea9b-729c-46e3-8eaf-846aa0a37fdd:79253~private(usr_c62ee9bf-50da-4d03-a8c5-6c6d5efff83f)~nonce(6A9D4FF32F72CBD584511184D242C61C2146D3C06EB1666204BD647209275CA6)");
 
 		}
 

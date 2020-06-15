@@ -1,15 +1,10 @@
 #pragma once
+#include "IL2CPP/IL2CPP.hpp"
 
-//namespace VRC::Udon::Serialization::OdinSerializer
-//{
-//	struct ProperBitConverter
-//	{
-//		inline static int ToInt32(long long arr, int index) // public static uint ToUInt32(byte[] buffer, int index) { }
-//		{
-//			using ToInt32_t = int(*)(long long, int);
-//			ToInt32_t ToInt32 = GetMethod<ToInt32_t>(TOINT32);
-//
-//			return ToInt32(arr, index);
-//		}
-//	};
-//}
+namespace VRC::Udon::Serialization::OdinSerializer
+{
+	struct ProperBitConverter
+	{
+		static int ToInt32(long long arr, int index); // public static uint ToUInt32(byte[] buffer, int index)
+	};
+}

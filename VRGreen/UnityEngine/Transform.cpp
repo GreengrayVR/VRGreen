@@ -60,6 +60,15 @@ void UnityEngine::Transform::SetLocalScale(Vector3* value)
 	func(this, value);
 }
 
+UnityEngine::Vector3 UnityEngine::Transform::GetLocalScale()
+{
+	using func_t = UnityEngine::Vector3(*)(Transform* _this);
+
+	func_t func = GetMethod<func_t>(0x18D0C80);
+
+	return func(this);
+}
+
 UnityEngine::Transform* UnityEngine::Transform::GetChild(int index)
 {
 	if (this == nullptr)

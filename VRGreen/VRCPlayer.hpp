@@ -17,12 +17,13 @@ struct VRCPlayer : UnityEngine::Component
 
 	long long get_steamId();
 
-	UnityEngine::GameObject* namePlate();
-
-	UnityEngine::GameObject* vipPlate();
-
 	VRC::Core::ApiAvatar* GetApiAvatar(); // TODO: move in VRCPlayer
 
+	void ForceMute(bool value);
+
+	VRCUiShadowPlate* getNamePlate();
+
+	VRCUiShadowPlate* getVipPlate();
 };
 
 struct USpeaker : Object { NOIMPLEMENT(USpeaker); };

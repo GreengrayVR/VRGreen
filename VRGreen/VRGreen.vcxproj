@@ -41,6 +41,7 @@
     <ClCompile Include="DiscordRPC\discord-rpc-master\src\rpc_connection.cpp" />
     <ClCompile Include="DiscordRPC\discord-rpc-master\src\serialization.cpp" />
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="EventData.cpp" />
     <ClCompile Include="ExtendedAvatars.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Graphic.cpp" />
@@ -55,6 +56,7 @@
     <ClCompile Include="ModerationManager.cpp" />
     <ClCompile Include="PageAvatar.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="ProperBitConverter.cpp" />
     <ClCompile Include="QuickMenu.cpp" />
     <ClCompile Include="Ray.cpp" />
     <ClCompile Include="Renderer.cpp" />
@@ -70,6 +72,7 @@
     <ClCompile Include="UnityEngine\Transform.cpp" />
     <ClCompile Include="UnityEngine\Vector3.cpp" />
     <ClCompile Include="UnityEvent.cpp" />
+    <ClCompile Include="UserInteractMenu.cpp" />
     <ClCompile Include="utf.cpp" />
     <ClCompile Include="VRCPlayer.cpp" />
     <ClCompile Include="VRCPlayerApi.cpp" />
@@ -102,6 +105,7 @@
     <ClInclude Include="DiscordRPC\discord-rpc-master\src\backoff.h" />
     <ClInclude Include="DiscordRPC\discord-rpc-master\src\rpc_connection.h" />
     <ClInclude Include="DiscordRPC\discord-rpc-master\src\serialization.h" />
+    <ClInclude Include="EventData.hpp" />
     <ClInclude Include="ExtendedAvatars.hpp" />
     <ClInclude Include="Graphic.hpp" />
     <ClInclude Include="Hack.hpp" />
@@ -220,20 +224,20 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>C:\Program Files (x86)\Steam\steamapps\common\VRChat\</OutDir>
+    <OutDir>T:\VRChat\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>C:\Program Files (x86)\Steam\steamapps\common\VRChat\</OutDir>
+    <OutDir>T:\VRChat\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>C:\Program Files (x86)\Steam\steamapps\common\VRChat\</OutDir>
+    <OutDir>T:\VRChat\</OutDir>
     <IncludePath>T:\IL2CPP\VRGreen\VRGreen\DiscordRPC\discord-rpc-master\src;T:\IL2CPP\VRGreen\VRGreen\DiscordRPC\discord-rpc-master\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>C:\Program Files (x86)\Steam\steamapps\common\VRChat\</OutDir>
+    <OutDir>T:\VRChat\</OutDir>
     <IncludePath>T:\IL2CPP\VRGreen\VRGreen\DiscordRPC\discord-rpc-master\src;T:\IL2CPP\VRGreen\VRGreen\DiscordRPC\discord-rpc-master\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

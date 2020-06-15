@@ -113,7 +113,11 @@ namespace IL2CPP
 
 	Object* GetField(Object* obj, const char* name, bool AAAAAAAAAAAAAAAAAAAAAAAAAA = false);
 
-	void SetField(Object* obj, const char* name, int pos, void* value, bool debug = false);
+	int32_t ResolveFieldOffset(Object* obj, const char* name, int pos);
+
+	int32_t ResolveFieldOffset(Object* obj, const char* name);
+
+	void SetField(Object* obj, const char* name, int pos, void* value);
 
 	void SetField(Object* obj, const std::string& fieldType, const std::string& variabledName, void* value);
 

@@ -28,16 +28,6 @@ long long VRCPlayer::get_steamId()
 	return func(this);
 }
 
-UnityEngine::GameObject* VRCPlayer::namePlate()
-{
-	return ((UnityEngine::Transform*)IL2CPP::GetField(this, "namePlate", true))->get_gameObject();
-}
-
-UnityEngine::GameObject* VRCPlayer::vipPlate()
-{
-	return ((UnityEngine::Transform*)IL2CPP::GetField(this, "vipPlate", true))->get_gameObject();
-}
-
 VRC::Core::ApiAvatar* VRCPlayer::GetApiAvatar()
 {
 	if (this == nullptr)
@@ -48,4 +38,34 @@ VRC::Core::ApiAvatar* VRCPlayer::GetApiAvatar()
 	func_t func = GetMethod<func_t>(GETAPIAVATAR);
 
 	return func(this);
+}
+
+inline static int32_t forceMuteOffset = -3;
+
+void VRCPlayer::ForceMute(bool value)
+{
+	if (forceMuteOffset == -3)
+		forceMuteOffset = IL2CPP::ResolveFieldOffset(this, "System.Boolean", 10);
+
+	SetField(this, forceMuteOffset, !value);
+}
+
+inline static int32_t namePlateOffset = -3;
+
+VRCUiShadowPlate* VRCPlayer::getNamePlate()
+{
+	if (namePlateOffset == -3)
+		namePlateOffset = IL2CPP::ResolveFieldOffset(this, "namePlate");
+
+	return GetField<VRCUiShadowPlate*>(this, namePlateOffset);
+}
+
+inline static int32_t vipPlateOffset = -3;
+
+VRCUiShadowPlate* VRCPlayer::getVipPlate()
+{
+	if (vipPlateOffset == -3)
+		vipPlateOffset = IL2CPP::ResolveFieldOffset(this, "vipPlate");
+
+	return GetField<VRCUiShadowPlate*>(this, vipPlateOffset);
 }

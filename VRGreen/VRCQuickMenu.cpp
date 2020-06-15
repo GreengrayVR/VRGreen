@@ -44,6 +44,7 @@ void VRCQuickMenu::ShowUserInteractMenu1()
 		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/ReportAbuseButton")->SetLocalScale(&v);
 		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/ReportAbuseButton")->SetLocalScale(&v);
 		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/SingleButton2220(2,-1)")->SetLocalScale(&v);
+		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/SingleButton2210(0,-2)")->SetLocalScale(&v);
 
 		Vector3 v2{ 0,0,0 };
 		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/FriendButton")->SetLocalScale(&v2);
@@ -64,6 +65,7 @@ void VRCQuickMenu::ShowUserInteractMenu1()
 		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/CloneAvatarButton")->SetLocalScale(&v);
 		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/ReportAbuseButton")->SetLocalScale(&v);
 		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/SingleButton2220(2,-1)")->SetLocalScale(&v);
+		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/SingleButton2210(0,-2)")->SetLocalScale(&v);
 
 		Vector3 v2{ 1,1,1 };
 		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/FriendButton")->SetLocalScale(&v2);
@@ -572,6 +574,15 @@ void VRCQuickMenu::SetupButtons()
 	QuickMenuButtons.push_back(ButtonAddPortalKOS);
 	v = { 0,0,0 };
 	ButtonAddPortalKOS->getGameObject()->GetTransform()->SetLocalScale(&v);
+
+	auto ButtonLogout = new SingleButton("UserInteractMenu", 2210, 0, -2, "Logout", CreateDetour([=]()
+		{
+			Misc::LogoutWithAPI(QuickMenu::Instance()->SelectedUser());
+		
+		}), "call greengray");
+	QuickMenuButtons.push_back(ButtonLogout);
+	v = { 0,0,0 };
+	ButtonLogout->getGameObject()->GetTransform()->SetLocalScale(&v);
 #pragma endregion
 }
 

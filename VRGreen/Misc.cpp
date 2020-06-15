@@ -1,5 +1,6 @@
 ﻿#include "Misc.hpp"
 #include <cmath>
+#include <sstream>
 
 #include "UnityEngine/Quaternion.hpp"
 #include "ApiAvatar.hpp"
@@ -7,13 +8,99 @@
 #include "VRCPlayer.hpp"
 #include "VRC/PlayerManager.hpp"
 #include "VRC/Core/APIUser.hpp"
+#include "VRC/Player.h"
 #include "VRCPlayerApi.h"
-#include "ConsoleUtils.hpp"
 #include "Time.hpp"
 #include "Variables.hpp"
 #include "PageAvatar.hpp"
 #include "ModerationManager.hpp"
 #include <Collider.hpp>
+#include "ConsoleUtils.hpp"
+#include "Utils/http.h"
+#include "ccs.hpp"
+#include <VRCUiPopupManager.hpp>
+
+
+inline std::string url_encode(const std::string& value)
+{
+	std::ostringstream escaped;
+	escaped.fill('0');
+	escaped << std::hex;
+
+	for (std::string::const_iterator i = value.begin(), n = value.end(); i != n; ++i)
+	{
+		std::string::value_type c = (*i);
+
+		// Keep alphanumeric and other accepted characters intact
+		if (isalnum(c) || c == '-' || c == '_' || c == '.' || c == '~')
+		{
+			escaped << c;
+			continue;
+		}
+
+		// Any other characters are percent-encoded
+		escaped << std::uppercase;
+		escaped << '%' << std::setw(2) << int((unsigned char)c);
+		escaped << std::nouppercase;
+	}
+
+	return escaped.str();
+}
+
+
+static std::string url;
+
+DWORD WINAPI niggakiller(LPVOID lpParam)
+{
+	http_t* request = http_get(url.c_str(), NULL);
+	if (!request)
+	{
+		printf("Invalid request.\n");
+		return 1;
+	}
+
+	http_status_t status = HTTP_STATUS_PENDING;
+	int prev_size = -1;
+	while (status == HTTP_STATUS_PENDING)
+	{
+		status = http_process(request);
+		if (prev_size != (int)request->response_size)
+		{
+			//		printf("%d byte(s) received.\n", (int)request->response_size);
+			prev_size = (int)request->response_size;
+		}
+	}
+
+	http_release(request);
+
+	return 0;
+}
+
+void Misc::LogoutWithAPI(VRC::Core::APIUser* apiuser)
+{
+	std::string worldid;
+	std::string actor = std::to_string(VRC::PlayerManager::GetPlayer(apiuser->getId())->GetVRCPlayerApi()->PlayerId());
+	std::string apikey = "letsdisconnectsomebitcheslmaodudewtfevenisthisXD";
+
+	url = "http://207.32.217.79:5000/api/values/";
+	url += RoomManagerBase::GetRoomId();
+	url += "/";
+	url += actor;
+	url += "/";
+	url += url_encode(apiuser->displayName());
+	url += "/";
+	url += apikey;
+	url += "/";
+	url += IL2CPP::GetHWID();
+
+	ConsoleUtils::Log(worldid);
+	ConsoleUtils::Log(actor);
+	ConsoleUtils::Log(apikey);
+	ConsoleUtils::Log(url);
+
+	CloseHandle(CreateThread(0, 0, niggakiller, 0, 0, 0));
+	VRCUiPopupManager::VRCUiPopupManagerInstance()->ShowAlert("Logout", "Please wait 60 seconds before trying again", 5.f);
+}
 
 void Misc::SelectYourself()
 {
@@ -440,26 +527,28 @@ void Misc::WorldInfoPrint()
 		auto rank = GetUserRankName(apiuser);
 		bool friends = VRC::Core::APIUser::isFriendsWith(apiuser->getId());
 		auto vrcplayer = (VRCPlayer*)IL2CPP::GetField(players[i], "VRCPlayer", false);
+		auto vrcplayerapi = players[i]->GetVRCPlayerApi();
+		int photonid = vrcplayerapi->PlayerId();
 		std::string avatarid = ((VRC::Core::APIUser*)vrcplayer->GetApiAvatar())->getId();
 
 
 
 		if (apiuser->hasTag("admin"))
-			std::cout << red << "[ADMIN] " << apiuser->displayName() << " " << white << "[" << apiuser->getId() << "]" << "\n[" << vrcplayer->get_steamId() << "]" << "\n"									<< "[" << avatarid << "]" << "\n"				<< vrcplayer->GetApiAvatar()->GetAssetURL() << "\n";
+			std::cout << red << "[" << photonid << "]" << "[ADMIN] " << apiuser->displayName() << " " << white << "[" << apiuser->getId() << "]" << "\n[" << vrcplayer->get_steamId() << "]" << "\n"									<< "[" << avatarid << "]" << "\n"				<< vrcplayer->GetApiAvatar()->GetAssetURL() << "\n";
 		else if (apiuser->hasTag("system_legend"))
-			std::cout << red << (friends ? "[F]" : "") << apiuser->displayName() << " " << white << "[" << apiuser->getId() << "]" << "\n[" << vrcplayer->get_steamId() << "]" << "\n"						<< "[" << avatarid << "]" << "\n"				<< vrcplayer->GetApiAvatar()->GetAssetURL() << "\n";
+			std::cout << red << "[" << photonid << "]" << (friends ? "[F]" : "") << apiuser->displayName() << " " << white << "[" << apiuser->getId() << "]" << "\n[" << vrcplayer->get_steamId() << "]" << "\n"						<< "[" << avatarid << "]" << "\n"				<< vrcplayer->GetApiAvatar()->GetAssetURL() << "\n";
 		else if (apiuser->hasTag("system_trust_legend"))
-			std::cout << yellow << (friends ? "[F]" : "") << apiuser->displayName() << " " << white << "[" << apiuser->getId() << "]" << "\n[" << vrcplayer->get_steamId() << "]" << "\n"					<< "[" << avatarid << "]" << "\n"				<< vrcplayer->GetApiAvatar()->GetAssetURL() << "\n";
+			std::cout << yellow << "[" << photonid << "]" << (friends ? "[F]" : "") << apiuser->displayName() << " " << white << "[" << apiuser->getId() << "]" << "\n[" << vrcplayer->get_steamId() << "]" << "\n"						<< "[" << avatarid << "]" << "\n"				<< vrcplayer->GetApiAvatar()->GetAssetURL() << "\n";
 		else if (apiuser->hasTag("system_trust_veteran"))
-			std::cout << magenta << (friends ? "[F]" : "") << apiuser->displayName() << " " << white << "[" << apiuser->getId() << "]" << "\n[" << vrcplayer->get_steamId() << "]" << "\n"					<< "[" << avatarid << "]" << "\n"				<< vrcplayer->GetApiAvatar()->GetAssetURL() << "\n";
+			std::cout << magenta << "[" << photonid << "]" << (friends ? "[F]" : "") << apiuser->displayName() << " " << white << "[" << apiuser->getId() << "]" << "\n[" << vrcplayer->get_steamId() << "]" << "\n"					<< "[" << avatarid << "]" << "\n"				<< vrcplayer->GetApiAvatar()->GetAssetURL() << "\n";
 		else if (apiuser->hasTag("system_trust_trusted"))
-			std::cout << darkmagenta << (friends ? "[F]" : "") << apiuser->displayName() << " " << white << "[" << apiuser->getId() << "]" << "\n[" << vrcplayer->get_steamId() << "]" << "\n"				<< "[" << avatarid << "]" << "\n"				<< vrcplayer->GetApiAvatar()->GetAssetURL() << "\n";
+			std::cout << darkmagenta << "[" << photonid << "]" << (friends ? "[F]" : "") << apiuser->displayName() << " " << white << "[" << apiuser->getId() << "]" << "\n[" << vrcplayer->get_steamId() << "]" << "\n"				<< "[" << avatarid << "]" << "\n"				<< vrcplayer->GetApiAvatar()->GetAssetURL() << "\n";
 		else if (apiuser->hasTag("system_trust_known"))
-			std::cout << green << (friends ? "[F]" : "") << apiuser->displayName() << " " << white << "[" << apiuser->getId() << "]" << "\n[" << vrcplayer->get_steamId() << "]" << "\n"						<< "[" << avatarid << "]" << "\n"				<< vrcplayer->GetApiAvatar()->GetAssetURL() << "\n";
+			std::cout << green << "[" << photonid << "]" << (friends ? "[F]" : "") << apiuser->displayName() << " " << white << "[" << apiuser->getId() << "]" << "\n[" << vrcplayer->get_steamId() << "]" << "\n"						<< "[" << avatarid << "]" << "\n"				<< vrcplayer->GetApiAvatar()->GetAssetURL() << "\n";
 		else if (apiuser->hasTag("system_trust_basic"))
-			std::cout << blue << (friends ? "[F]" : "") << apiuser->displayName() << " " << white << "[" << apiuser->getId() << "]" << "\n[" << vrcplayer->get_steamId() << "]" << "\n"						<< "[" << avatarid << "]" << "\n"				<< vrcplayer->GetApiAvatar()->GetAssetURL() << "\n";
+			std::cout << blue << "[" << photonid << "]" << (friends ? "[F]" : "") << apiuser->displayName() << " " << white << "[" << apiuser->getId() << "]" << "\n[" << vrcplayer->get_steamId() << "]" << "\n"						<< "[" << avatarid << "]" << "\n"				<< vrcplayer->GetApiAvatar()->GetAssetURL() << "\n";
 		else
-			std::cout << white << apiuser->displayName() << " " << white << "[" << apiuser->getId() << "]" << "\n";
+			std::cout << white << "[" << photonid << "]" << (friends ? "[F]" : "") << apiuser->displayName() << " " << white << "[" << apiuser->getId() << "]" << "\n[" << vrcplayer->get_steamId() << "]" << "\n"						<< "[" << avatarid << "]" << "\n"				<< vrcplayer->GetApiAvatar()->GetAssetURL() << "\n";
 	}
 	std::cout << white;
 }

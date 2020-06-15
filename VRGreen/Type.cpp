@@ -44,15 +44,18 @@ System::MethodInfo* System::Type::GetMethod(const std::string& name)
 std::string System::Type::ToString(void* object)
 {
 	if (object == nullptr)
-	{
 		return "ey men what are u doin";
-	}
 
 	using func_t = IL2CPP::String* (*)(void* object);
 
 	func_t func = ::GetMethod<func_t>(0x30DC100);
 
-	return IL2CPP::StringChars(func(object));
+	auto x = func(object);
+
+	if (x == nullptr)
+		return "ey wtf dud";
+
+	return IL2CPP::StringChars(x);
 }
 
 void* System::Type::EmptyTypes()

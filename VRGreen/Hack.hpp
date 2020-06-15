@@ -31,6 +31,7 @@
 
 struct UserInteractMenu;
 struct VRCPlayer;
+struct EventData;
 namespace VRC { struct Player; }
 namespace VRC::Core { struct APIUser; struct ApiAvatar; }
 namespace UnityEngine { struct GameObject; }
@@ -84,7 +85,7 @@ private:
 	void setupSettings();
 
 	static void RPCS(void* _this, int VrcBroadcastType, int xxx, void* VrcTargetType, UnityEngine::GameObject* gameObject, IL2CPP::String* RPC, void* bytes);
-	static void OnEvent(void* _this, Object* EventData);
+	static void OnEvent(void* _this, EventData* eventData);
 	static bool test1(void* _this, VRC::Player* player, int broadcastType, void* gameObject, bool xxx);
 	static void AntiWorldTriggers(void* _this, VRC::SDKBase::VRC_EventHandler* eventHandler, void* VRC_EventHandler_VrcEvent, int VRC_EventHandler_VrcBroadcastType, int instagatorId, float xxx);
 	static void SwitchAvatar(void* _this, VRC::Core::ApiAvatar* apiavatar, IL2CPP::String* fuzzy, float betterthen, void* tsumiki);

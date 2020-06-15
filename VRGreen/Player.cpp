@@ -24,14 +24,28 @@ VRC::Player* VRC::Player::CurrentPlayer()
 	return func();
 }
 
+inline static int32_t apiuserOffset = -3;
+
 VRC::Core::APIUser* VRC::Player::GetAPIUser()
 {
-	return (Core::APIUser*)IL2CPP::GetField(this, "VRC.Core.APIUser");
+	if (this == nullptr) return nullptr;
+
+	if (apiuserOffset == -3)
+		apiuserOffset = IL2CPP::ResolveFieldOffset(this, "VRC.Core.APIUser");
+
+	return GetField<VRC::Core::APIUser*>(this, apiuserOffset);
 }
+
+inline static int32_t vrcplayerOffset = -3;
 
 VRCPlayer* VRC::Player::GetVRCPlayer()
 {
-	return (VRCPlayer*)IL2CPP::GetField(this, "VRCPlayer");
+	if (this == nullptr) return nullptr;
+
+	if (vrcplayerOffset == -3)
+		vrcplayerOffset = IL2CPP::ResolveFieldOffset(this, "VRCPlayer");
+
+	return GetField<VRCPlayer*>(this, vrcplayerOffset);
 }
 
 UnityEngine::Transform* VRC::Player::BoneTransform()

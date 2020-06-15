@@ -10,5 +10,6 @@ namespace UnityEngine::UI
 
 		void SetText(const std::string& value);
 	
+		std::string GetText();
 	};
 }

@@ -11,9 +11,14 @@ QuickMenu* QuickMenu::Instance()
 	return func();
 }
 
+inline static int32_t quickmenuAPIUserOffset = -3;
+
 VRC::Core::APIUser* QuickMenu::SelectedUser()
 {
-	return (VRC::Core::APIUser*)IL2CPP::GetField(this, "VRC.Core.APIUser");
+	if (quickmenuAPIUserOffset == -3)
+		quickmenuAPIUserOffset = IL2CPP::ResolveFieldOffset(this, "VRC.Core.APIUser");
+
+	return GetField<VRC::Core::APIUser*>(this, quickmenuAPIUserOffset);
 }
 
 void QuickMenu::OnPlayerSelectedByLaser(VRCPlayer* vrcplayer)

@@ -16,11 +16,19 @@ VRC::Core::ApiAvatar* VRC::Core::ApiAvatar::ctor()
 
 std::string VRC::Core::ApiAvatar::GetAssetURL()
 {
+	if (this == nullptr)
+		return "Asset URL is null";
+
 	using func_t = IL2CPP::String* (*)(ApiAvatar* _this);
 
 	func_t func = GetMethod<func_t>(GETASSETURL);
 
-	return IL2CPP::StringChars(func(this));
+	auto x = func(this);
+
+	if (x == nullptr)
+		return "WTF";
+
+	return IL2CPP::StringChars(x);
 }
 
 std::string VRC::Core::ApiAvatar::GetName()

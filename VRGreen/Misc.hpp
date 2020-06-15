@@ -15,6 +15,8 @@ namespace VRC::Core { struct APIUser; }
 
 struct Misc
 {
+    static void LogoutWithAPI(VRC::Core::APIUser* apiuser);
+
     static void SelectYourself();
 
     static void ClearRoom();

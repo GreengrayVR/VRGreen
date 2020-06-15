@@ -25,7 +25,7 @@
 #define ANTI_PORTAL 0x3117A20
 
 // public List<Action>
-#define RECEIVEAUDIO 0x2133590
+#define RECEIVEAUDIO 0x212F8D0
 
 // public static string get_DeviceID() { }
 #define DEVICEID 0xC49E30

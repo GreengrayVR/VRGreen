@@ -264,6 +264,15 @@
     <ClCompile Include="utf.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="EventData.cpp">
+      <Filter>Assembly-CSharp</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInteractMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ProperBitConverter.cpp">
+      <Filter>Header Files\VRC\Udon\Serialization\OdinSerializer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IL2CPP\IL2CPP.hpp">
@@ -508,6 +517,9 @@
     </ClInclude>
     <ClInclude Include="utf.hpp">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="EventData.hpp">
+      <Filter>Assembly-CSharp</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

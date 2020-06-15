@@ -545,13 +545,80 @@ Object* IL2CPP::GetField(Object* obj, const char* name, bool AAAAAAAAAAAAAAAAAAA
 		//ConsoleUtils::Log(fieldName);
 
 		if (std::string(fieldName) == name || std::string(fieldTypeName) == name)
+		{
+			IL2CPP::Free(fieldTypeName);
 			return IL2CPP::FieldGetValueObject(field, obj);
+		}
+
+		IL2CPP::Free(fieldTypeName);
 	}
 
 	return NULL;
 }
 
-void IL2CPP::SetField(Object* obj, const char* name, int pos, void* value, bool debug)
+int32_t IL2CPP::ResolveFieldOffset(Object* obj, const char* name)
+{
+	if (obj == nullptr)
+	{
+		ConsoleUtils::Log("ResolveFieldOffset is nullptr");
+		return -3;
+	}
+
+	IL2CPP::Class* objClass = IL2CPP::ObjectGetClass(obj);
+
+	void* iter = nullptr;
+
+	while (auto field = IL2CPP::GetFields(objClass, &iter)) // TODO: check memory usage
+	{
+		const char* fieldName = IL2CPP::FieldGetName(field);
+
+		IL2CPP::Type* fieldType = IL2CPP::FieldGetType(field);
+		char* fieldTypeName = IL2CPP::TypeGetName(fieldType);
+
+		if (std::string(fieldName) == name || std::string(fieldTypeName) == name)
+		{
+			IL2CPP::Free(fieldTypeName);
+			return *(int32_t*)((uint8_t*)field + 24);
+		}
+
+		IL2CPP::Free(fieldTypeName);
+	}
+
+	return -2;
+}
+
+int32_t IL2CPP::ResolveFieldOffset(Object* obj, const char* name, int pos)
+{
+	if (obj == nullptr)
+	{
+		ConsoleUtils::Log("ResolveFieldOffset is nullptr");
+		return -3;
+	}
+
+	IL2CPP::Class* objClass = IL2CPP::ObjectGetClass(obj);
+	void* iter = nullptr;
+	int i = 0;
+	while (auto field = IL2CPP::GetFields(objClass, &iter))
+	{
+		auto fieldType = IL2CPP::FieldGetType(field);
+
+		char* fieldtypename = IL2CPP::TypeGetName(fieldType);
+
+		if (std::string(fieldtypename) == name)
+		{
+			i++;
+			if (i == pos)
+			{
+				IL2CPP::Free(fieldtypename);
+				return *(int32_t*)((uint8_t*)field + 24); 
+			}
+		}
+		IL2CPP::Free(fieldtypename);
+	}
+	return -2; // If offset is -1, then it's thread static
+}
+
+void IL2CPP::SetField(Object* obj, const char* name, int pos, void* value)
 {
 	if (obj == nullptr)
 	{
@@ -568,14 +635,8 @@ void IL2CPP::SetField(Object* obj, const char* name, int pos, void* value, bool 
 
 		char* fieldtypename = IL2CPP::TypeGetName(fieldType);
 
-		
-
 		if (std::string(fieldtypename) == name)
 		{
-			if (debug)
-			{
-				ConsoleUtils::Log(i, " ", fieldtypename, ": ", IL2CPP::FieldGetName(field));
-			}
 			i++;
 			if (i == pos)
 			{

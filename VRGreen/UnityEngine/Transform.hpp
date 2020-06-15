@@ -32,6 +32,8 @@ namespace UnityEngine
 
 		void SetLocalScale(Vector3* value);
 
+		Vector3 GetLocalScale();
+
 		Transform* GetChild(int index);
 
 		int ChildCount();

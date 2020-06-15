@@ -82,3 +82,14 @@ void *GetMethod(std::ptrdiff_t Offset);
 void *GetMethod(std::ptrdiff_t Offset, const char* assemblyName);
 
 
+template <typename T>
+T GetField(void* obj, std::ptrdiff_t Offset)
+{
+	return *(T*)((std::uint8_t*)obj + Offset);
+}
+
+template <typename T>
+void SetField(void* obj, std::ptrdiff_t Offset, T val)
+{
+	*(T*)((std::uint8_t*)obj + Offset) = val;
+}
