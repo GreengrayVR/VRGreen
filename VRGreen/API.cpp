@@ -15,7 +15,7 @@ void VRC::Core::API::SendPostRequest(std::string endpoint, void* responseContain
 {
 	using func_t = void (*)(IL2CPP::String*, void*, void*, void*);
 
-	func_t func = GetMethod<func_t>(0xC48F80);
+	func_t func = GetMethod<func_t>(0x4D2530);
 
 	func(IL2CPP::StringNew(endpoint), responseContainer, Dictionary_string_object, credentials);
 }

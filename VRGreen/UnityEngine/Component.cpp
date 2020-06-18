@@ -71,7 +71,7 @@ Object* UnityEngine::Component::GetComponentInChildren(const std::string& type)
 
 	using func_t = Object * (*)(Component* _this, System::Type* type);
 
-	func_t func = GetMethod<func_t>(0x180C2A0);
+	func_t func = GetMethod<func_t>(COMPONENT_GETCOMPONENTINCHILDREN_TYPE_T);
 
 	return func(this, System::Type::GetType(type));
 }

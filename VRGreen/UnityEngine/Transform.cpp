@@ -64,7 +64,7 @@ UnityEngine::Vector3 UnityEngine::Transform::GetLocalScale()
 {
 	using func_t = UnityEngine::Vector3(*)(Transform* _this);
 
-	func_t func = GetMethod<func_t>(0x18D0C80);
+	func_t func = GetMethod<func_t>(TRANSFORM_GETLOCALSCALE);
 
 	return func(this);
 }

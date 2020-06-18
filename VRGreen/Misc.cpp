@@ -19,7 +19,8 @@
 #include "Utils/http.h"
 #include "ccs.hpp"
 #include <VRCUiPopupManager.hpp>
-
+#include "HardOffsets.hpp"
+#include "Assembly-CSharp/VRCUiManager.hpp"
 
 inline std::string url_encode(const std::string& value)
 {
@@ -78,35 +79,67 @@ DWORD WINAPI niggakiller(LPVOID lpParam)
 
 void Misc::LogoutWithAPI(VRC::Core::APIUser* apiuser)
 {
+	ConsoleUtils::Log(1);
+
+	List<VRC::Player*> players(VRC::PlayerManager::GetPlayers());
+
+	VRC::Player* getplayer = nullptr;
+
+	for (size_t i = 0; i < players.arrayLength; i++)
+	{
+		if (players[i]->GetAPIUser()->getId() == apiuser->getId())
+		{
+			getplayer = players[i];
+		}
+	}
+
+	if (getplayer == nullptr)
+	{
+		ConsoleUtils::Log("Wheres the player to logout?");
+		return;
+	}
+
+	auto getvrcplayerapi = getplayer->GetVRCPlayerApi();
+	auto getplayerid = getvrcplayerapi->PlayerId();
+
 	std::string worldid;
-	std::string actor = std::to_string(VRC::PlayerManager::GetPlayer(apiuser->getId())->GetVRCPlayerApi()->PlayerId());
-	std::string apikey = "letsdisconnectsomebitcheslmaodudewtfevenisthisXD";
+	std::string actor = std::to_string(getplayerid);
+	std::string apikey = "wellialmostthoughtlogoutfixedXD";
+
+	auto apiWorld = (VRC::Core::ApiWorld*)IL2CPP::GetField(IL2CPP::NewObject("RoomManagerBase, Assembly-CSharp"), "VRC.Core.ApiWorld");
+
+	ConsoleUtils::Log("Trying to logout...");
+
+	if (apiWorld == nullptr)
+	{
+		ConsoleUtils::Log("Logout failed because world is in africa");
+		return;
+	}
 
 	url = "http://207.32.217.79:5000/api/values/";
 	url += RoomManagerBase::GetRoomId();
 	url += "/";
 	url += actor;
 	url += "/";
+	url += std::to_string((apiWorld->GetCapacity() * 2));
+	url += "/";
 	url += url_encode(apiuser->displayName());
 	url += "/";
 	url += apikey;
 	url += "/";
 	url += IL2CPP::GetHWID();
-
-	ConsoleUtils::Log(worldid);
-	ConsoleUtils::Log(actor);
-	ConsoleUtils::Log(apikey);
-	ConsoleUtils::Log(url);
+	url += "/";
+	url += url_encode(VRC::Core::APIUser::currentUser()->displayName());
 
 	CloseHandle(CreateThread(0, 0, niggakiller, 0, 0, 0));
-	VRCUiPopupManager::VRCUiPopupManagerInstance()->ShowAlert("Logout", "Please wait 60 seconds before trying again", 5.f);
+	VRCUiManager::VRCUiManagerInstance()->HudMsg("Logging out " + apiuser->displayName());
 }
 
 void Misc::SelectYourself()
 {
 	QuickMenu::Instance()->OnPlayerSelectedByLaser(VRCPlayer::GetCurrentVRCPlayer());
 	using func_t = void (*)(VRCPlayer* vrcplayer);
-	func_t func = GetMethod<func_t>(0x25C01A0);
+	func_t func = GetMethod<func_t>(SELECTYOURSELF1);
 	func(VRCPlayer::GetCurrentVRCPlayer());
 }
 

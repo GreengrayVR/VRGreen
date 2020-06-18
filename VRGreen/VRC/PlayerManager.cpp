@@ -26,7 +26,7 @@ VRC::Player* VRC::PlayerManager::GetPlayer(int photonId)
 {
 	using func_t = Player * (*)(int photonId);
 
-	func_t func = GetMethod<func_t>(0x2B76870); // 0x2B775C0
+	func_t func = GetMethod<func_t>(0x1912E90); // 0/x2B775C0
 
 	return func(photonId);
 }

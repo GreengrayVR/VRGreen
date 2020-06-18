@@ -172,10 +172,6 @@ void Hack::init()
 
 	ConsoleUtils::CreateConsole(); // Calling later because initDetours() spams console too much
 
-	using func_t = void (*)(int value);
-	func_t func = GetMethod<func_t>(0x17FEE30);
-	func(300);
-
 	Variables::g_Discord->Initalize();
 	//generateHWID();
 }
@@ -417,7 +413,7 @@ void Hack::RPCS(void* _this, int VrcBroadcastType, int playerId, void* VrcTarget
 		return;
 
 	using func_t = void* (*)(void* bytes);
-	func_t func = GetMethod<func_t>(0x2AD3CD0);
+	func_t func = GetMethod<func_t>(RPCS_INTERNAL_FUNC);
 	auto objarray = func(bytes);
 
 
@@ -646,11 +642,13 @@ settings.push_back(m);
 void Hack::setupSettings()
 {
 	mode m;
+	
+
+#pragma region commentsrandom
 	//DECLARE_SETTINGS(0x1F881A0);
 	//DECLARE_SETTINGS(0x1F88750);
 	//DECLARE_SETTINGS(0x1F86FF0);
 	//DECLARE_SETTINGS(0x1F870C0);
-
 	// public List<Action> xxxx(byte[] xxxx, int xxxx) { }
 	/*m.name = "ReceiveAudio";
 	m.offset = RECEIVEAUDIO;
@@ -659,75 +657,12 @@ void Hack::setupSettings()
 	m.detourFunc = (mode::lambda_t) & ReceiveAudio;
 	settings.push_back(m);*/
 
-	m.name = "CustomPlates";
-	m.offset = VRCPLAYERCUSTOMPLATES;
-	m.set = true;
-	m.trueFunc = GetMethod(m.offset);
-	m.detourFunc = (mode::lambda_t) & CustomPlates;
-	settings.push_back(m);
-
-	m.name = "Update";
-	m.offset = VRCHANDGRASPER;
-	m.set = true;
-	m.trueFunc = GetMethod(m.offset);
-	m.detourFunc = (mode::lambda_t) & Update;
-	settings.push_back(m);
-
-	m.name = "World Triggers";
-	m.offset = WORLD_TRIGGERS;
-	m.set = true;
-	m.trueFunc = GetMethod(m.offset);
-	m.detourFunc = (mode::lambda_t) & InternalTriggerEvent;
-	settings.push_back(m);
-
-	m.name = "GetFriendlyDetailedNameForSocialRank";
-	m.offset = SOCIALMENURANK;
-	m.set = true;
-	m.trueFunc = GetMethod(m.offset);
-	m.detourFunc = (mode::lambda_t) & GetFriendlyDetailedNameForSocialRank;
-	settings.push_back(m);
-
-	m.name = "AntiWorldTriggers";
-	m.offset = ANTIWORLDTRIGGERS;
-	m.set = true;
-	m.trueFunc = GetMethod(m.offset);
-	m.detourFunc = (mode::lambda_t) & AntiWorldTriggers;
-	settings.push_back(m);
-
-	m.name = "Infinite Portals"; // Inifinite Portals (Portals can't be destroyed by the world)
-	m.offset = INFINITEPORTALS;
-	m.set = true;
-	m.trueFunc = GetMethod(m.offset);
-	m.detourFunc = []() {};
-	settings.push_back(m);
-
-	m.name = "Anti-Portal";
-	m.offset = ANTI_PORTAL;
-	m.set = true;
-	m.trueFunc = GetMethod(m.offset);
-	m.detourFunc = (mode::lambda_t) & OnTriggerEnter;
-	settings.push_back(m);
-
-	m.name = "BlackScreenPatch";
-	m.offset = 0x35A62D0;
-	m.set = true;
-	m.trueFunc = GetMethod(m.offset);
-	m.detourFunc = (mode::lambda_t) & BlackScreenPatch;
-	settings.push_back(m);
-
-	m.name = "BlackScreenPatch2";
-	m.offset = 0x35A3070;
-	m.set = true;
-	m.trueFunc = GetMethod(m.offset);
-	m.detourFunc = (mode::lambda_t) & BlackScreenPatch;
-	settings.push_back(m);
-
-	m.name = "RPCS";
-	m.offset = RPCDISPATCHER;
-	m.set = true;
-	m.trueFunc = GetMethod(m.offset);
-	m.detourFunc = (mode::lambda_t) & RPCS;
-	settings.push_back(m);
+	//m.name = "RPCS";
+	//m.offset = RPCDISPATCHER;
+	//m.set = true;
+	//m.trueFunc = GetMethod(m.offset);
+	//m.detourFunc = (mode::lambda_t) & RPCS;
+	//settings.push_back(m);
 
 
 //	std::vector<long> offsets
@@ -755,29 +690,112 @@ void Hack::setupSettings()
 	//m.detourFunc = (mode::lambda_t) & AvatarFav;
 	//settings.push_back(m);
 
-	m.name = "AntiPublicWorldBan";
-	m.offset = 0x2041E30;
-	m.set = true;
-	m.trueFunc = GetMethod(m.offset);
-	m.detourFunc = (mode::lambda_t) & AntiPublicWorldBan;
-	settings.push_back(m);	
+	//m.name = "AntiPublicWorldBan";
+	//m.offset = ANTIPUBLICBAN;
+	//m.set = true;
+	//m.trueFunc = GetMethod(m.offset);
+	//m.detourFunc = (mode::lambda_t) & AntiPublicWorldBan;
+	//settings.push_back(m);
 
-	m.name = "Send";
-	m.offset = 0x132EB10;
+
+
+	//m.name = "IsBlockedEitherWay";
+	//m.offset = 0x203C1D0;
+	//m.set = true;
+	//m.trueFunc = GetMethod(m.offset);
+	//m.detourFunc = (mode::lambda_t) & IsBlockedEitherWay;
+	//settings.push_back(m);
+
+#pragma endregion
+
+	m.name = "PlayEmoteRPC";
+	m.offset = PLAYEMOTERPC;
 	m.set = true;
 	m.trueFunc = GetMethod(m.offset);
-	m.detourFunc = (mode::lambda_t) & Send;
+	m.detourFunc = (mode::lambda_t) & PlayEmoteRPC;
 	settings.push_back(m);
-	
+
+	m.name = "GetFriendlyDetailedNameForSocialRank";
+	m.offset = SOCIALMENURANK;
+	m.set = true;
+	m.trueFunc = GetMethod(m.offset);
+	m.detourFunc = (mode::lambda_t) & GetFriendlyDetailedNameForSocialRank;
+	settings.push_back(m);
+
+	m.name = "CustomPlates";
+	m.offset = VRCPLAYERCUSTOMPLATES;
+	m.set = true;
+	m.trueFunc = GetMethod(m.offset);
+	m.detourFunc = (mode::lambda_t) & CustomPlates;
+	settings.push_back(m);
+
+	m.name = "Update";
+	m.offset = VRCHANDGRASPER;
+	m.set = true;
+	m.trueFunc = GetMethod(m.offset);
+	m.detourFunc = (mode::lambda_t) & Update;
+	settings.push_back(m);
+
+	m.name = "SpawnEmojiRPC";
+	m.offset = SPAWNEMOJIRPC;
+	m.set = true;
+	m.trueFunc = GetMethod(m.offset);
+	m.detourFunc = (mode::lambda_t) & SpawnEmojiRPC;
+	settings.push_back(m);
+
+	m.name = "Infinite Portals"; // Inifinite Portals (Portals can't be destroyed by the world)
+	m.offset = INFINITEPORTALS;
+	m.set = true;
+	m.trueFunc = GetMethod(m.offset);
+	m.detourFunc = []() {};
+	settings.push_back(m);
+
+	m.name = "World Triggers";
+	m.offset = WORLD_TRIGGERS;
+	m.set = true;
+	m.trueFunc = GetMethod(m.offset);
+	m.detourFunc = (mode::lambda_t) & InternalTriggerEvent;
+	settings.push_back(m);
+
+	m.name = "AntiWorldTriggers";
+	m.offset = ANTIWORLDTRIGGERS;
+	m.set = true;
+	m.trueFunc = GetMethod(m.offset);
+	m.detourFunc = (mode::lambda_t) & AntiWorldTriggers;
+	settings.push_back(m);
+
+
+
+	m.name = "Anti-Portal";
+	m.offset = ANTI_PORTAL;
+	m.set = true;
+	m.trueFunc = GetMethod(m.offset);
+	m.detourFunc = (mode::lambda_t) & OnTriggerEnter;
+	settings.push_back(m);
+
+	//m.name = "BlackScreenPatch";
+	//m.offset = BLACKSCREENPATCH1;
+	//m.set = true;
+	//m.trueFunc = GetMethod(m.offset);
+	//m.detourFunc = (mode::lambda_t) & BlackScreenPatch;
+	//settings.push_back(m);
+
+	//m.name = "BlackScreenPatch2";
+	//m.offset = BLACKSCREENPATCH2;
+	//m.set = true;
+	//m.trueFunc = GetMethod(m.offset);
+	//m.detourFunc = (mode::lambda_t) & BlackScreenPatch;
+	//settings.push_back(m);
+
 	m.name = "DynPrefPrefix";
-	m.offset = 0x2467730;
+	m.offset = OBJECTINSTANTIATION_RPC;
 	m.set = true;
 	m.trueFunc = GetMethod(m.offset);
 	m.detourFunc = (mode::lambda_t) & DynPrefPrefix;
 	settings.push_back(m);
 
 	m.name = "OnEvent";
-	m.offset = 0x2355650;
+	m.offset = ONEVENTPATCH;
 	m.set = true;
 	m.trueFunc = GetMethod(m.offset);
 	m.detourFunc = (mode::lambda_t) & OnEvent;
@@ -790,14 +808,6 @@ void Hack::setupSettings()
 	m.detourFunc = (mode::lambda_t) & SendRequest;
 	settings.push_back(m);
 
-	//m.name = "IsBlockedEitherWay";
-	//m.offset = 0x203C1D0;
-	//m.set = true;
-	//m.trueFunc = GetMethod(m.offset);
-	//m.detourFunc = (mode::lambda_t) & IsBlockedEitherWay;
-	//settings.push_back(m);
-
-	// private void xxx(bool xxx = False) { }
 	m.name = "KickPatch1";
 	m.offset = KICKPATCH1;
 	m.set = true;
@@ -806,7 +816,7 @@ void Hack::setupSettings()
 	settings.push_back(m);
 
 	m.name = "Serialize"; 
-	m.offset = 0x247CCF0;
+	m.offset = MOVEMENT_SERIALIZE;
 	m.set = true;
 	m.trueFunc = GetMethod(m.offset);
 	m.detourFunc = (mode::lambda_t) & Serialize;
@@ -854,7 +864,7 @@ void Hack::setupSettings()
 	m.detourFunc = (mode::lambda_t) & PlayerJoined;
 	settings.push_back(m);
 
-	m.name = "PlayerLeft"; // 0x29F78B0
+	m.name = "PlayerLeft";
 	m.offset = PLAYERLEFT;
 	m.set = true;
 	m.trueFunc = GetMethod(m.offset);
@@ -924,13 +934,6 @@ void Hack::setupSettings()
 	m.detourFunc = (mode::lambda_t) & ShowUserAvatarChangedRPC;
 	settings.push_back(m);
 
-	m.name = "SpawnEmojiRPC";
-	m.offset = SPAWNEMOJIRPC;
-	m.set = true;
-	m.trueFunc = GetMethod(m.offset);
-	m.detourFunc = (mode::lambda_t) & SpawnEmojiRPC;
-	settings.push_back(m);
-
 	m.name = "ShowSocialRankRPC";
 	m.offset = SHOWSOCIALRANKRPC;
 	m.set = true;
@@ -943,13 +946,6 @@ void Hack::setupSettings()
 	m.set = true;
 	m.trueFunc = GetMethod(m.offset);
 	m.detourFunc = (mode::lambda_t) & GotoRoomTargetUserRPC;
-	settings.push_back(m);
-
-	m.name = "PlayEmoteRPC";
-	m.offset = PLAYEMOTERPC;
-	m.set = true;
-	m.trueFunc = GetMethod(m.offset);
-	m.detourFunc = (mode::lambda_t) & PlayEmoteRPC;
 	settings.push_back(m);
 
 	m.name = "GotoRoomRPC";
@@ -1218,10 +1214,9 @@ void Hack::CustomPlates(VRCPlayer* __instance, void* aaa)
 	((UnityEngine::Transform*)nameplate)->get_gameObject()->GetTransform()->SetLocalScale(&v000);
 	((UnityEngine::Transform*)vipplate)->get_gameObject()->GetTransform()->SetLocalScale(&v000);
 
-	using func_t = IL2CPP::String* (*)(Color clor);
-	func_t func = GetMethod<func_t>(TOHTMLSTRINGRGB); // TODO: Move to new file
 
-	auto notRealRankColor = IL2CPP::StringChars(func(((UnityEngine::UI::Image*)((UnityEngine::Transform*)nameplate)->get_gameObject()->GetTransform()->GetComponent("UnityEngine.UI.Image"))->GetColor()));
+
+	auto notRealRankColor = ((UnityEngine::UI::Image*)((UnityEngine::Transform*)nameplate)->get_gameObject()->GetTransform()->GetComponent("UnityEngine.UI.Image"))->GetColor();
 	bool isFriend = VRC::Core::APIUser::isFriendsWith(userid);
 
 	std::string text = "";
@@ -1242,7 +1237,7 @@ void Hack::CustomPlates(VRCPlayer* __instance, void* aaa)
 
 	{
 		auto mainText = nameplate->getMainText();
-		mainText->SetText("<color=#" + notRealRankColor + ">" + displayName + "</color>");
+		mainText->SetColor(&notRealRankColor);
 	}
 
 	for (const std::string& clientUserId : getInstance().clientUsers) // TODO: refactor cuz this is a shitty bug
@@ -1250,13 +1245,14 @@ void Hack::CustomPlates(VRCPlayer* __instance, void* aaa)
 		if (userid == clientUserId)
 		{
 			auto mainText = nameplate->getMainText();
-			mainText->SetText("<color=#" + IL2CPP::StringChars(func(Misc::GetRainbow())) + ">" + displayName + "</color>");
+			mainText->SetColor(&Misc::GetRainbow());
 		}
 	}
 
 
 	{
 		auto mainText = vipplate->getMainText(); // maybe turn into hash?
+		mainText->SetSupportRichText(true);
 		if (mainText->GetText() != text) // if true then scale and position isnt initialized for the player
 		{
 			mainText->SetText(text);
@@ -1277,6 +1273,7 @@ void Hack::CustomPlates(VRCPlayer* __instance, void* aaa)
 	{ 
 		// change drop shadow text
 		auto dropShadow = vipplate->getDropShadow();
+		dropShadow->SetSupportRichText(true);
 		if (dropShadow->GetText() != regex_replace(text, nigger, "<color=black>"))
 		{
 			dropShadow->SetText(regex_replace(text, nigger, "<color=black>")); // Regex replace mb?
@@ -1643,7 +1640,7 @@ void Hack::PlayerLeft(void* _this, VRC::Player* player)
 		}
 		else
 		{
-			VRCUiManager::VRCUiManagerInstance()->HudMsg(player->ToString() + " left");
+			//VRCUiManager::VRCUiManagerInstance()->HudMsg(player->ToString() + " left");
 			ConsoleUtils::VRLog("<color=yellow>" + FormatMyName(player) + "</color>" + " <color=red>left</color>");
 		}
 	}
@@ -1667,7 +1664,7 @@ void Hack::PlayerJoined(void* _this, VRC::Player* player)
 		}
 		else
 		{
-			VRCUiManager::VRCUiManagerInstance()->HudMsg(player->ToString() + " joined");
+			//VRCUiManager::VRCUiManagerInstance()->HudMsg(player->ToString() + " joined");
 			ConsoleUtils::VRLog("<color=yellow>" + FormatMyName(player) + "</color>" + " <color=green>joined</color>");
 		}
 	}
@@ -2188,9 +2185,9 @@ void Hack::Update(void* _this)
 
 		if (::GetAsyncKeyState(VK_END) & 1)
 		{
-		
-			Misc::DropPortal("wrld_4432ea9b-729c-46e3-8eaf-846aa0a37fdd:79253~private(usr_c62ee9bf-50da-4d03-a8c5-6c6d5efff83f)~nonce(6A9D4FF32F72CBD584511184D242C61C2146D3C06EB1666204BD647209275CA6)");
+			auto apiWorld = (VRC::Core::ApiWorld*)IL2CPP::GetField(IL2CPP::NewObject("RoomManagerBase, Assembly-CSharp"), "VRC.Core.ApiWorld");
 
+			ConsoleUtils::Log(apiWorld->GetCapacity());
 		}
 
 		if (::GetAsyncKeyState(VK_HOME) & 1)
@@ -2245,7 +2242,7 @@ void Hack::Update(void* _this)
 						List<Object*> finalArray((IL2CPP::Array*)_array);
 						
 						using func_t = Vector3(*)(Object* _this);
-						func_t func = GetMethod<func_t>(0x24670);
+						func_t func = GetMethod<func_t>(0x2DAB0);
 						
 						Vector3 v3 = func(finalArray[1]);
 

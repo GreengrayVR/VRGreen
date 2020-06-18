@@ -137,7 +137,10 @@ void VRCSocialMenu::SetupButtons()
 	{
 		auto currentSelectedUser = CurrentUser();
 		if (currentSelectedUser == nullptr)
+		{
+			ConsoleUtils::Log("this APIUser is in africa");
 			return;
+		}
 
 		List<VRC::Player*> players(VRC::PlayerManager::GetPlayers());
 

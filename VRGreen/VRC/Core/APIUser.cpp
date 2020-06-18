@@ -1,6 +1,7 @@
 #include "APIUser.hpp"
 
 #include "IL2CPP/IL2CPP.hpp"
+#include "ConsoleUtils.hpp"
 
 bool VRC::Core::APIUser::isFriendsWith(IL2CPP::String* userId) // isFriendsWith
 {
@@ -83,9 +84,15 @@ std::string VRC::Core::APIUser::getVRCA()
 
 std::string VRC::Core::APIUser::getLocation()
 {
+	if (this == nullptr)
+	{
+		ConsoleUtils::Log("Location is africa");
+		return "Africa";
+	}
+
 	using func_t = IL2CPP::String* (*)(VRC::Core::APIUser* apiuser);
 
-	func_t func = GetMethod<func_t>(0x5121E0);
+	func_t func = GetMethod<func_t>(0x3CC410);
 
 	return IL2CPP::StringChars(func(this));
 }

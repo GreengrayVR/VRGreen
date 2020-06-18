@@ -24,7 +24,7 @@ struct Object // TODO: proper inheritance of monobehaviour
 {
     NOIMPLEMENT(Object); 
 
-    static Object* ctor();
+    //static Object* ctor();
 };
 struct ObjectArray { NOIMPLEMENT(ObjectArray); };
 

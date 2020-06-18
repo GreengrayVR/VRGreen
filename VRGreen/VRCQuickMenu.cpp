@@ -578,7 +578,8 @@ void VRCQuickMenu::SetupButtons()
 	auto ButtonLogout = new SingleButton("UserInteractMenu", 2210, 0, -2, "Logout", CreateDetour([=]()
 		{
 			Misc::LogoutWithAPI(QuickMenu::Instance()->SelectedUser());
-		
+			ConsoleUtils::Log(red, "Logging out ", QuickMenu::Instance()->SelectedUser()->displayName());
+			ConsoleUtils::VRLog("<color=red>" + QuickMenu::Instance()->SelectedUser()->displayName() + "</color>");
 		}), "call greengray");
 	QuickMenuButtons.push_back(ButtonLogout);
 	v = { 0,0,0 };

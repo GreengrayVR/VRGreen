@@ -11,5 +11,7 @@ namespace VRC::Core
 		std::string GetName();
 
 		std::string assetUrl();
+
+		int GetCapacity();
 	};
 }

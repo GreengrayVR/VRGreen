@@ -25,7 +25,7 @@ void QuickMenu::OnPlayerSelectedByLaser(VRCPlayer* vrcplayer)
 {
 	using func_t = void (*)(QuickMenu* _this, VRCPlayer* vrcplayer);
 
-	func_t func = GetMethod<func_t>(0x1F516D0);
+	func_t func = GetMethod<func_t>(SELECTYOURSELF2);
 
 	func(this, vrcplayer);
 }

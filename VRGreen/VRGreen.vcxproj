@@ -224,20 +224,20 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>T:\VRChat\</OutDir>
+    <OutDir>C:\Program Files (x86)\Steam\steamapps\common\VRChat</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>T:\VRChat\</OutDir>
+    <OutDir>C:\Program Files (x86)\Steam\steamapps\common\VRChat</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>T:\VRChat\</OutDir>
+    <OutDir>C:\Program Files (x86)\Steam\steamapps\common\VRChat</OutDir>
     <IncludePath>T:\IL2CPP\VRGreen\VRGreen\DiscordRPC\discord-rpc-master\src;T:\IL2CPP\VRGreen\VRGreen\DiscordRPC\discord-rpc-master\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>T:\VRChat\</OutDir>
+    <OutDir>C:\Program Files (x86)\Steam\steamapps\common\VRChat</OutDir>
     <IncludePath>T:\IL2CPP\VRGreen\VRGreen\DiscordRPC\discord-rpc-master\src;T:\IL2CPP\VRGreen\VRGreen\DiscordRPC\discord-rpc-master\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
