@@ -22,6 +22,15 @@ IL2CPP::Array* VRC::PlayerManager::GetPlayers()
 	return func();
 }
 
+float VRC::PlayerManager::GetDistanceBetween(Player* from, Player* to)
+{
+	using func_t = float (*)(Player* from, Player* to);
+
+	func_t func = GetMethod<func_t>(0x19119E0); // or 0/x29854B0
+
+	return func(from, to);
+}
+
 VRC::Player* VRC::PlayerManager::GetPlayer(int photonId)
 {
 	using func_t = Player * (*)(int photonId);

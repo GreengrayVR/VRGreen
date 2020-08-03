@@ -28,6 +28,15 @@ long long VRCPlayer::get_steamId()
 	return func(this);
 }
 
+int VRCPlayer::GetPing()
+{
+	using func_t = short (*)(VRCPlayer* _this);
+
+	func_t func = GetMethod<func_t>(0x185D460); // or 0x185D460
+
+	return func(this);
+}
+
 VRC::Core::ApiAvatar* VRCPlayer::GetApiAvatar()
 {
 	if (this == nullptr)

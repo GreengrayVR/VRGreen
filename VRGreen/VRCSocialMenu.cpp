@@ -24,6 +24,20 @@
 
 using namespace UnityEngine;
 
+inline std::string FormatMyName2(VRC::Player* player)
+{
+	auto apiuser = player->GetAPIUser();
+	auto userid = apiuser->getId();
+	bool isFriend = VRC::Core::APIUser::isFriendsWith(userid);
+
+	if (userid == VRC::Core::APIUser::currentUser()->getId())
+		return std::string("<color=#ee82ee>" + apiuser->displayName() + "</color>");
+	else if (isFriend)
+		return std::string("<color=yellow>" + apiuser->displayName() + "</color>");
+	else
+		return apiuser->displayName();
+}
+
 VRC::Core::APIUser* VRCSocialMenu::CurrentUser()
 {
 	return (VRC::Core::APIUser*)IL2CPP::GetField((Object*)VRCUiPage::GetPage("UserInterface/MenuContent/Screens/UserInfo"), "VRC.Core.APIUser");
@@ -188,9 +202,24 @@ void VRCSocialMenu::SetupButtons()
 		ShellExecute(0, 0, Misc::wchar_t_ptr(url), 0, 0, SW_SHOW);
 	})));
 
-	SocialButtons.push_back(CreateButton("Teleport\npickups", -235, -625, new CDetour([=]()
+	SocialButtons.push_back(CreateButton("RPC-Block", -235, -625, new CDetour([=]()
 	{
-	
+				auto userid = CurrentUser()->getId();
+				auto displayName = CurrentUser()->displayName();
+
+				if (Variables::rpcBlocked.find(userid) == Variables::rpcBlocked.end())
+				{
+					Variables::rpcBlocked.insert(userid);
+					ConsoleUtils::Log(red, displayName, " added to RPC-Block list");
+					ConsoleUtils::VRLog(FormatMyName2(VRC::PlayerManager::GetPlayer(userid)) + " <color=green>added to RPC-Block list</color>");
+				}
+				else
+				{
+					Variables::rpcBlocked.erase(userid);
+					ConsoleUtils::Log(green, displayName, " removed from RPC-Block list");
+					ConsoleUtils::VRLog(FormatMyName2(VRC::PlayerManager::GetPlayer(userid)) + " <color=red>removed from RPC-Block list</color>");
+				}
+
 	})));
 
 	SocialButtons.push_back(CreateButton("Steam\nPage", -390, -625, new CDetour([=]()

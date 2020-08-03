@@ -45,6 +45,7 @@ void VRCQuickMenu::ShowUserInteractMenu1()
 		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/ReportAbuseButton")->SetLocalScale(&v);
 		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/SingleButton2220(2,-1)")->SetLocalScale(&v);
 		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/SingleButton2210(0,-2)")->SetLocalScale(&v);
+		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/SingleButton2230(1,-2)")->SetLocalScale(&v);
 
 		Vector3 v2{ 0,0,0 };
 		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/FriendButton")->SetLocalScale(&v2);
@@ -65,6 +66,7 @@ void VRCQuickMenu::ShowUserInteractMenu1()
 		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/CloneAvatarButton")->SetLocalScale(&v);
 		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/ReportAbuseButton")->SetLocalScale(&v);
 		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/SingleButton2220(2,-1)")->SetLocalScale(&v);
+		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/SingleButton2230(1,-2)")->SetLocalScale(&v);
 		QuickMenu::Instance()->get_transform()->Find("UserInteractMenu/SingleButton2210(0,-2)")->SetLocalScale(&v);
 
 		Vector3 v2{ 1,1,1 };
@@ -339,20 +341,22 @@ void VRCQuickMenu::SetupButtons()
 	changePedistalsButton->setActive(false);
 
 
-	auto instaneLockButton = new ToggleButton("UIElementsMenu", 125, -2, -1, "Instance Lock", CreateDetour([=]()
+	auto instaneLockButton = new ToggleButton("UIElementsMenu", 125, -2, -1, "Custom\nPlates", CreateDetour([=]()
 	{
-		Variables::instanceLock = true;
+		Variables::customPlates = true;
 	}), "OFF", CreateDetour([=]()
 		{
-			Variables::instanceLock = false;
-		}), "i beat my dick to lolis");
+			Variables::customPlates = false;
+		}), "makes the fps go higher");
 	QuickMenuButtons.push_back(instaneLockButton);
 	instaneLockButton->setActive(false);
+	instaneLockButton->btnOn->SetActive(true);
+	instaneLockButton->btnOff->SetActive(false);
+
 
 	auto worldDesyncButton = new ToggleButton("UIElementsMenu", 126, -1, -1, "World Desync", CreateDetour([=]()
 	{
-		if (VRC::SDKBase::Networking::GoToRoom(RoomManagerBase::GetRoomId()))
-			Variables::portalLag = true;
+		Variables::portalLag = true;
 	}), "OFF", CreateDetour([=]()
 	{
 		Variables::portalLag = false;
@@ -405,7 +409,7 @@ void VRCQuickMenu::SetupButtons()
 	QuickMenuButtons.push_back(pickupButton);
 	pickupButton->setActive(false);
 
-	auto rpcBlockNonFriendsButton = new ToggleButton("UIElementsMenu", 131, -2, -1, "RPC-Block\nNon-Friends", CreateDetour([=]()
+	auto rpcBlockNonFriendsButton = new ToggleButton("UIElementsMenu", 131, -2, -1, "RPC-Block\nVisitors", CreateDetour([=]()
 	{
 		Variables::rpcBlockNonFriends = true;
 		//Misc::SerializeAll();
@@ -562,7 +566,7 @@ void VRCQuickMenu::SetupButtons()
 			{
 				Variables::portalKOSList.insert(userid);
 				ConsoleUtils::Log(red, displayName, " added to Portal KOS");
-				ConsoleUtils::VRLog(FormatMyName2(VRC::PlayerManager::GetPlayer(userid)) + " <color=red>added to Portal KOS</color>");
+				ConsoleUtils::VRLog(FormatMyName2(VRC::PlayerManager::GetPlayer(userid)) + " <color=green>added to Portal KOS</color>");
 			}
 			else
 			{
@@ -575,15 +579,50 @@ void VRCQuickMenu::SetupButtons()
 	v = { 0,0,0 };
 	ButtonAddPortalKOS->getGameObject()->GetTransform()->SetLocalScale(&v);
 
-	auto ButtonLogout = new SingleButton("UserInteractMenu", 2210, 0, -2, "Logout", CreateDetour([=]()
+	auto ButtonLogout = new SingleButton("UserInteractMenu", 2210, 0, -2, "RPC-Block", CreateDetour([=]()
 		{
-			Misc::LogoutWithAPI(QuickMenu::Instance()->SelectedUser());
-			ConsoleUtils::Log(red, "Logging out ", QuickMenu::Instance()->SelectedUser()->displayName());
-			ConsoleUtils::VRLog("<color=red>" + QuickMenu::Instance()->SelectedUser()->displayName() + "</color>");
+			auto userid = QuickMenu::Instance()->SelectedUser()->getId();
+			auto displayName = QuickMenu::Instance()->SelectedUser()->displayName();
+
+				if (Variables::rpcBlocked.find(userid) == Variables::rpcBlocked.end())
+				{
+					Variables::rpcBlocked.insert(userid);
+					ConsoleUtils::Log(red, displayName, " added to RPC-Block list");
+					ConsoleUtils::VRLog(FormatMyName2(VRC::PlayerManager::GetPlayer(userid)) + " <color=green>added to RPC-Block list</color>");
+				}
+				else
+				{
+					Variables::rpcBlocked.erase(userid);
+					ConsoleUtils::Log(green, displayName, " removed from RPC-Block list");
+					ConsoleUtils::VRLog(FormatMyName2(VRC::PlayerManager::GetPlayer(userid)) + " <color=red>removed from RPC-Block list</color>");
+				}
 		}), "call greengray");
 	QuickMenuButtons.push_back(ButtonLogout);
 	v = { 0,0,0 };
 	ButtonLogout->getGameObject()->GetTransform()->SetLocalScale(&v);
+
+	auto ButtonLogoutKOS = new SingleButton("UserInteractMenu", 2230, 1, -2, "Add to\nLogout KOS", CreateDetour([=]()
+		{
+			auto apiuser = QuickMenu::Instance()->SelectedUser();
+			std::string displayName = apiuser->displayName();
+			std::string userid = apiuser->getId();
+
+			if (Variables::logoutKOSList.find(userid) == Variables::logoutKOSList.end())
+			{
+				Variables::logoutKOSList.insert(userid);
+				ConsoleUtils::Log(red, displayName, " added to Logout KOS");
+				ConsoleUtils::VRLog(FormatMyName2(VRC::PlayerManager::GetPlayer(userid)) + " <color=red>added to Logout KOS</color>");
+			}
+			else
+			{
+				Variables::logoutKOSList.erase(userid);
+				ConsoleUtils::Log(green, displayName, " removed from Logout KOS");
+				ConsoleUtils::VRLog(FormatMyName2(VRC::PlayerManager::GetPlayer(userid)) + " <color=red>removed from Logout KOS</color>");
+			}
+		}), "call greengray");
+	QuickMenuButtons.push_back(ButtonLogoutKOS);
+	v = { 0,0,0 };
+	ButtonLogoutKOS->getGameObject()->GetTransform()->SetLocalScale(&v);
 #pragma endregion
 }
 

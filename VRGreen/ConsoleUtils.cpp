@@ -49,8 +49,6 @@ void ConsoleUtils::CreateConsole()
 	std::cout << gray << "gray";
 	std::cout << white << ", ";
 	std::cout << green << "kerrytazi";
-	std::cout << white << ", ";
-	std::cout << green << "abbez ";
 	std::cout << white << "and ";
 	std::cout << green << "Sypherr";
 	std::cout << white << ".\n";

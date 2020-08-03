@@ -424,7 +424,7 @@
 #define SWITCHAVATARRPC 0x18733F0
 
 // public override void TriggerEvent(VRC_EventHandler ( class VRC_EventDispatcherRFC : VRC_EventDispatcher )
-#define ANTIWORLDTRIGGERS 0x19C9980
+#define ANTIWORLDTRIGGERS 0x19D8410
 
 // public Component GetComponentInChildren(Type type) { } ( public sealed class GameObject : Object )
 #define GETCOMPONENTINCHILDREN_GAMEOBJECT 0xF62BD0

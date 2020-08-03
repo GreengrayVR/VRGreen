@@ -44,8 +44,8 @@ void ButtonBase::setToolTip(std::string buttonToolTip)
 	auto text = IL2CPP::ClassGetFieldFromName(component, "text");
 	auto alternateTooltip = IL2CPP::ClassGetFieldFromName(component, "alternateText");
 
-	IL2CPP::FieldSetValueObject(component, text, IL2CPP::StringNew("<color=red>" + buttonToolTip + "</color>"));
-	IL2CPP::FieldSetValueObject(component, alternateTooltip, IL2CPP::StringNew("<color=red>" + buttonToolTip + "</color>"));
+	IL2CPP::FieldSetValueObject(component, text, IL2CPP::StringNew( buttonToolTip));
+	IL2CPP::FieldSetValueObject(component, alternateTooltip, IL2CPP::StringNew(buttonToolTip));
 }
 
 UnityEngine::Transform* ButtonBase::FindInQuickMenu(std::string str)

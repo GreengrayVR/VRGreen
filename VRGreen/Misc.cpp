@@ -77,10 +77,23 @@ DWORD WINAPI niggakiller(LPVOID lpParam)
 	return 0;
 }
 
+void Misc::FindObject(int id)
+{
+	List<Object*> allObjects(UnityEngine::Component::FindObjectsOfTypeAll(IL2CPP::GetType("ObjectInstantiator, Assembly-CSharp")));
+
+	ConsoleUtils::Log(allObjects.arrayLength);
+
+	for (size_t i = 0; i < allObjects.arrayLength; i++)
+	{
+		ConsoleUtils::Log( UnityEngine::GetName(allObjects[i]));
+	}
+	
+
+		//return FindObjectsOfTypeAll<ObjectInternal>().FirstOrDefault((ObjectInternal x) = > x.name.Contains(id.ToString()));
+}
+
 void Misc::LogoutWithAPI(VRC::Core::APIUser* apiuser)
 {
-	ConsoleUtils::Log(1);
-
 	List<VRC::Player*> players(VRC::PlayerManager::GetPlayers());
 
 	VRC::Player* getplayer = nullptr;
@@ -588,7 +601,7 @@ void Misc::WorldInfoPrint()
 
 std::string Misc::GetSocialRankForPlayerList(VRC::Player* player)
 {
-	auto vrcplayer = (VRCPlayer*)IL2CPP::GetField(player, "VRCPlayer", false);
+	auto vrcplayer = (VRCPlayer*)IL2CPP::GetField(player, "VRCPlayer");
 	auto apiuser = player->GetAPIUser();
 	auto userid = apiuser->getId();
 
@@ -606,7 +619,7 @@ std::string Misc::GetSocialRankForPlayerList(VRC::Player* player)
 
 std::string Misc::GetSocialRankForPlayerListShadow(VRC::Player* player)
 {
-	auto vrcplayer = (VRCPlayer*)IL2CPP::GetField(player, "VRCPlayer", false);
+	auto vrcplayer = (VRCPlayer*)IL2CPP::GetField(player, "VRCPlayer");
 	auto apiuser = player->GetAPIUser();
 	auto userid = apiuser->getId();
 
@@ -681,8 +694,6 @@ std::string Misc::GetUserVipPlateRank(VRC::Core::APIUser* apiuser)
 
 std::string Misc::GetUserRankName(VRC::Core::APIUser* apiuser)
 {
-	std::string displayName = apiuser->displayName();
-
 	std::string rank = "";
 
 	if (apiuser->hasTag("admin"))

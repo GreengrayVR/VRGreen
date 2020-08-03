@@ -255,9 +255,6 @@
     <ClCompile Include="ModerationManager.cpp">
       <Filter>Assembly-CSharp</Filter>
     </ClCompile>
-    <ClCompile Include="Type.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ExtendedAvatars.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
@@ -267,11 +264,14 @@
     <ClCompile Include="EventData.cpp">
       <Filter>Assembly-CSharp</Filter>
     </ClCompile>
-    <ClCompile Include="UserInteractMenu.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ProperBitConverter.cpp">
       <Filter>Header Files\VRC\Udon\Serialization\OdinSerializer</Filter>
+    </ClCompile>
+    <ClCompile Include="Type.cpp">
+      <Filter>Assembly-CSharp\System\Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInteractMenu.cpp">
+      <Filter>Assembly-CSharp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -521,5 +521,35 @@
     <ClInclude Include="EventData.hpp">
       <Filter>Assembly-CSharp</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Hashtable.hpp">
+      <Filter>Assembly-CSharp</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resource.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+    <ResourceCompile Include="Resource2.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="SerializeOn.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="SerializeOff.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="wave2.bin">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

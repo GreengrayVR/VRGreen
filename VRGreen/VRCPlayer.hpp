@@ -17,6 +17,8 @@ struct VRCPlayer : UnityEngine::Component
 
 	long long get_steamId();
 
+	int GetPing();
+
 	VRC::Core::ApiAvatar* GetApiAvatar(); // TODO: move in VRCPlayer
 
 	void ForceMute(bool value);

@@ -544,6 +544,13 @@ Object* IL2CPP::GetField(Object* obj, const char* name, bool AAAAAAAAAAAAAAAAAAA
 		char* fieldTypeName = IL2CPP::TypeGetName(fieldType);
 		//ConsoleUtils::Log(fieldName);
 
+		if (AAAAAAAAAAAAAAAAAAAAAAAAAA)
+		{
+			int aaa = *(int*)IL2CPP::ObjectUnbox(IL2CPP::FieldGetValueObject(field, obj));
+			ConsoleUtils::Log(aaa);
+			continue;
+		}
+
 		if (std::string(fieldName) == name || std::string(fieldTypeName) == name)
 		{
 			IL2CPP::Free(fieldTypeName);
@@ -553,7 +560,7 @@ Object* IL2CPP::GetField(Object* obj, const char* name, bool AAAAAAAAAAAAAAAAAAA
 		IL2CPP::Free(fieldTypeName);
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 int32_t IL2CPP::ResolveFieldOffset(Object* obj, const char* name)

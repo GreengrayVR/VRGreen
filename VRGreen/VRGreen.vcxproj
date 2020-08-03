@@ -110,6 +110,7 @@
     <ClInclude Include="Graphic.hpp" />
     <ClInclude Include="Hack.hpp" />
     <ClInclude Include="HardOffsets.hpp" />
+    <ClInclude Include="Hashtable.hpp" />
     <ClInclude Include="HighlightsFX.hpp" />
     <ClInclude Include="IEnumerator.hpp" />
     <ClInclude Include="Image.hpp" />
@@ -135,6 +136,8 @@
     <ClInclude Include="RaycastHit.hpp" />
     <ClInclude Include="RectTransform.hpp" />
     <ClInclude Include="Renderer.hpp" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="resource1.h" />
     <ClInclude Include="RoomManagerBase.hpp" />
     <ClInclude Include="Selectable.hpp" />
     <ClInclude Include="sha1.hpp" />
@@ -169,6 +172,17 @@
     <ClInclude Include="VRC\PlayerManager.hpp" />
     <ClInclude Include="VRC\SDKBase\Networking.hpp" />
     <ClInclude Include="VRC_EventHandler.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resource.rc" />
+    <ResourceCompile Include="Resource2.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="SerializeOff.wav" />
+    <Media Include="SerializeOn.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="wave2.bin" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

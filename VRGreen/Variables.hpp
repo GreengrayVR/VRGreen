@@ -26,6 +26,7 @@ struct Variables // TODO: move to Hack.hpp
 	inline static bool worldTriggers;
 	inline static bool friendRequestSent;
 	inline static bool fakePing;
+	inline static bool customPlates;
 	inline static bool blockRPCs;
 	inline static bool rpcBlockNonFriends;
 	inline static bool instanceLock;
@@ -42,6 +43,7 @@ struct Variables // TODO: move to Hack.hpp
 	inline static bool esp;
 	inline static float flySpeed;
 	inline static std::list<std::string> whiteList;
+	inline static std::set<std::string> logoutKOSList;
 	inline static std::set<std::string> portalKOSList;
 	inline static std::set<std::string> photonBots;
 	inline static std::set<std::string> rpcBlocked;

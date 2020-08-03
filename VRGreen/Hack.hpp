@@ -23,6 +23,7 @@
 #include "Type.hpp"
 #include "UnityEngine/Vector3.hpp"
 #include "ExtendedAvatars.hpp"
+#include "UnityEngine/Quaternion.hpp"
 
 #include "detours/detours.h"
 
@@ -35,7 +36,7 @@ struct EventData;
 namespace VRC { struct Player; }
 namespace VRC::Core { struct APIUser; struct ApiAvatar; }
 namespace UnityEngine { struct GameObject; }
-namespace VRC::SDKBase { struct VRC_EventHandler; }
+namespace VRC::SDKBase { struct VRC_EventHandler; struct VRCPlayerApi; }
 
 class Hack
 {
@@ -55,6 +56,11 @@ public:
 
 	static void* AvatarFav(void* _this, void* list, int sex, char nigger, void* maybe);
 
+	template <typename T>
+	static T DictionaryGet(void* dict, void* value, const std::string& typeName);
+
+	template <typename T>
+	static T DictionaryGet(void* dict, void* value);
 private:
 
 	struct mode;
@@ -84,10 +90,20 @@ private:
 	void disableDetours();
 	void setupSettings();
 
-	static void RPCS(void* _this, int VrcBroadcastType, int xxx, void* VrcTargetType, UnityEngine::GameObject* gameObject, IL2CPP::String* RPC, void* bytes);
+	static void* SaveWorlds(void* _this, void* params);
+	static void RPCS(void* _this, int xxx, int VrcTargetType, UnityEngine::GameObject* gameObject, IL2CPP::String* RPC, void* bytes);
+	static void _InstantiateObject(void* _this, IL2CPP::String* name, UnityEngine::Vector3 position, UnityEngine::Quaternion rotation, int num, VRC::Player* player);
+	static void TeleportRPC(void* _this, UnityEngine::Vector3 position, UnityEngine::Quaternion rotation, void* SpawnOrientation, bool xxx, bool xxx1, VRC::Player* player);
+	static void TakeOwnership(void* _this, VRC::SDKBase::VRCPlayerApi* vrcplayerapi);
+	static void AddURL(void* _this, IL2CPP::String* url);
 	static void OnEvent(void* _this, EventData* eventData);
+	static void* TransportProtocolGet(void* _this);
+	static void  TransportProtocolSet(void* _this, int value);
+	static void   RoundTripTimePhoton(void* _this, void* data, int length);
+	static void   DisconnectReason(void* _this, int reason);
+	static void DestroyObject(void* _this, int xxx);
 	static bool test1(void* _this, VRC::Player* player, int broadcastType, void* gameObject, bool xxx);
-	static void AntiWorldTriggers(void* _this, VRC::SDKBase::VRC_EventHandler* eventHandler, void* VRC_EventHandler_VrcEvent, int VRC_EventHandler_VrcBroadcastType, int instagatorId, float xxx);
+	static void* AntiWorldTriggers(void* _this, VRC::Player* player, VRC::SDKBase::VRC_EventHandler* eventHandler, void* VRC_EventHandler_VrcEvent, int VRC_EventHandler_VrcBroadcastType, int instagatorId, float xxx);
 	static void SwitchAvatar(void* _this, VRC::Core::ApiAvatar* apiavatar, IL2CPP::String* fuzzy, float betterthen, void* tsumiki);
 	static void OfflineMode(IL2CPP::String* target, void* responseContainer, void* requestParams, void* credentials);
 	static void ReceiveVoteToKickInitiation(void* _this, IL2CPP::String* player2, VRC::Player* player);
@@ -137,8 +153,6 @@ private:
 	static void testReturnStrings(std::vector<ptrdiff_t>& vector);
 	static std::string getEmoji(int i);
 
-	template <typename T>
-	static T DictionaryGet(void* dict, void* value, const std::string& typeName);
 };
 
 template <typename T>
@@ -158,6 +172,27 @@ T Hack::DictionaryGet(void* dict, void* value, const std::string& typeName)
 
 	if (objarray[1] != nullptr)
 		return (T)(*(T*)IL2CPP::ObjectUnbox(objarray[1]));
+	else
+		return NULL;
+}
+
+template <typename T>
+T Hack::DictionaryGet(void* dict, void* value)
+{
+	auto method = System::Type::GetType(dict)->GetMethod("TryGetValue");
+
+	auto arraylist = System::Collections::ArrayList::ctor();
+	arraylist->Add((Object*)value);
+	arraylist->Add(nullptr);
+
+	auto array_ = arraylist->ToArray();
+
+	method->Invoke(dict, array_);
+
+	List<IL2CPP::String*> objarray((IL2CPP::Array*)array_);
+
+	if (objarray[1] != nullptr)
+		return (T)objarray[1];
 	else
 		return NULL;
 }
