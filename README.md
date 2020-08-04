@@ -20,6 +20,8 @@ qwanath, Sup4ik, Miinc, Magic3000, Umelitex (Анимешник),
 Dreamy, Zanfery, Miku, Ex, kerrytazi, 
 ARTËM, shelley, BlaBlaName, CherrIx, 
 Fiass, Precise, BlazeBest (Shelllter), VIPO777
+###### Latvians:
+Seinaru, Raikiri
 
 
 # A letter to yaekith
